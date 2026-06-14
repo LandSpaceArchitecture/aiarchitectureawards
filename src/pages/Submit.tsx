@@ -205,32 +205,29 @@ export default function Submit() {
   };
 
   const calculateTotal = () => {
-    if (selectedCategories.length === 0) return 0;
-    
-    // Determine base entry fee based on current date
+    return calculateTotalForCategories(selectedCategories);
+  };
+
+  // Pure function — takes categories explicitly, doesn't depend on form state.
+  // Used in finishSubmissionAfterPayment where form state may not be ready yet.
+  const calculateTotalForCategories = (categories: string[]) => {
+    if (!categories || categories.length === 0) return 0;
+
     const now = new Date();
     const earlyDeadline = new Date("2026-07-04");
     const standardDeadline = new Date("2026-07-16");
     const lateDeadline = new Date("2026-07-30");
-    
-    let baseEntryFee = 30; // Default Standard
+
+    let baseEntryFee = 30;
     if (now <= earlyDeadline) baseEntryFee = 20;
     else if (now <= standardDeadline) baseEntryFee = 30;
     else if (now <= lateDeadline) baseEntryFee = 40;
 
-    // Prices for each category
-    const categoryPrices = selectedCategories.map(catId => {
-      if (catId === 'animation') return 35;
-      return baseEntryFee;
-    });
-
-    // The first category is the most expensive one
+    const categoryPrices = categories.map(catId =>
+      catId === 'animation' ? 35 : baseEntryFee
+    );
     const firstCategoryPrice = categoryPrices.length > 0 ? Math.max(...categoryPrices) : 0;
-    
-    // Additional categories are $10 each
-    const additionalCount = selectedCategories.length - 1;
-    const additionalPrice = additionalCount * 10;
-    
+    const additionalPrice = (categories.length - 1) * 10;
     return firstCategoryPrice + additionalPrice;
   };
 
@@ -373,7 +370,8 @@ export default function Submit() {
       const categoriesText = (data.categories || [])
         .map((c: string) => CATEGORIES.find(cat => cat.id === c)?.title || c)
         .join(", ");
-      const totalFee = calculateTotal();
+      // Calculate from data.categories directly — form state may not be ready after Stripe redirect
+      const totalFee = calculateTotalForCategories(data.categories || []);
       const entryType = getEntryType();
 
       fetch("/api/send-email", {
