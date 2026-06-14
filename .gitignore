@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build output
+build/
+dist/
+
+# Testing
+coverage/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Env files (keep .env.example)
+.env*
+!.env.example
+
+# Editor / IDE
+.vscode/
+.idea/
+.claude/
+
+# Local artifacts
+Gemini_Generated_Image_*.png
+*.tmp

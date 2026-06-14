@@ -1,0 +1,48 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of the platform, including admins.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "The user's unique ID." },
+        "email": { "type": "string", "format": "email", "description": "The user's email address." },
+        "displayName": { "type": "string", "description": "The user's display name." },
+        "role": { "type": "string", "enum": ["user", "admin"], "description": "The user's role." }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Submission": {
+      "title": "Submission",
+      "description": "A project submission for the awards.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "The user ID of the author." },
+        "project_title": { "type": "string", "description": "The title of the project." },
+        "category": { "type": "array", "items": { "type": "string" }, "description": "The categories of the project." },
+        "short_description": { "type": "string", "description": "A short summary of the project." },
+        "full_description": { "type": "string", "description": "A detailed description of the project." },
+        "author_name": { "type": "string", "description": "The name of the author." },
+        "email": { "type": "string", "format": "email", "description": "The author's email." },
+        "country": { "type": "string", "description": "The author's country." },
+        "image_urls": { "type": "array", "items": { "type": "string" }, "description": "List of image URLs." },
+        "video_url": { "type": "string", "description": "Optional video URL." },
+        "submission_status": { "type": "string", "enum": ["submitted", "shortlisted", "winner"], "description": "The current status of the submission." },
+        "payment_status": { "type": "string", "enum": ["pending", "completed"], "description": "The payment status." },
+        "created_at": { "type": "string", "format": "date-time", "description": "The time the submission was created." },
+        "is_featured": { "type": "boolean", "description": "Whether the project is featured on the home page." }
+      },
+      "required": ["uid", "project_title", "category", "short_description", "full_description", "author_name", "email", "country", "image_urls", "submission_status", "payment_status", "created_at"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile documents."
+    },
+    "/submissions/{submissionId}": {
+      "schema": "Submission",
+      "description": "Project submission documents."
+    }
+  }
+}

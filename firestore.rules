@@ -1,0 +1,121 @@
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Collection: users
+// Document ID: {userId}
+// Fields:
+//   - uid: string (required) - The user's unique ID.
+//   - email: string (required, email) - The user's email address.
+//   - displayName: string (optional) - The user's display name.
+//   - role: string (required, enum: ['user', 'admin']) - The user's role.
+//
+// Collection: submissions
+// Document ID: {submissionId}
+// Fields:
+//   - uid: string (required) - The user ID of the author.
+//   - project_title: string (required) - The title of the project.
+//   - category: list (required) - The categories of the project.
+//   - short_description: string (required) - A short summary of the project.
+//   - full_description: string (required) - A detailed description of the project.
+//   - author_name: string (required) - The name of the author.
+//   - email: string (required, email) - The author's email.
+//   - country: string (required) - The author's country.
+//   - other_credits: string (optional) - Additional credits.
+//   - image_urls: list (required) - List of image URLs.
+//   - video_url: string (optional) - Optional video URL.
+//   - submission_status: string (required, enum: ['submitted', 'shortlisted', 'winner']) - The current status.
+//   - payment_status: string (required, enum: ['pending', 'completed']) - The payment status.
+//   - created_at: timestamp (required) - The time the submission was created.
+//   - is_featured: bool (optional) - Whether the project is featured.
+//
+// ===============================================================
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+         (request.auth.token.email == "pipicorgisketch@gmail.com" && request.auth.token.email_verified == true));
+    }
+
+    function isValidEmail(email) {
+      return email is string &&
+        email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'email', 'role']) &&
+             data.uid == request.auth.uid &&
+             isValidEmail(data.email) &&
+             data.role in ['user', 'admin'] &&
+             data.uid.size() > 0 && data.uid.size() < 128;
+    }
+
+    function isValidSubmission(data) {
+      return data.keys().hasAll(['uid', 'project_title', 'category', 'short_description', 'full_description', 'author_name', 'email', 'country', 'image_urls', 'submission_status', 'payment_status', 'created_at']) &&
+             data.uid is string &&
+             data.project_title is string && data.project_title.size() > 0 && data.project_title.size() < 200 &&
+             data.category is list && data.category.size() > 0 &&
+             data.short_description is string && data.short_description.size() > 0 && data.short_description.size() < 1000 &&
+             data.full_description is string && data.full_description.size() > 0 && data.full_description.size() < 20000 &&
+             data.author_name is string && data.author_name.size() > 0 && data.author_name.size() < 200 &&
+             isValidEmail(data.email) &&
+             data.country is string && data.country.size() > 0 && data.country.size() < 100 &&
+             data.image_urls is list && data.image_urls.size() > 0 && data.image_urls.size() <= 10 &&
+             data.submission_status in ['submitted', 'shortlisted', 'winner'] &&
+             data.payment_status in ['pending', 'completed'] &&
+             data.created_at is timestamp &&
+             (!('is_featured' in data) || data.is_featured is bool) &&
+             (!('other_credits' in data) || (data.other_credits is string && data.other_credits.size() < 2000)) &&
+             (!('video_url' in data) || (data.video_url is string && data.video_url.size() < 500));
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isAuthenticated() && isOwner(userId) && isValidUser(request.resource.data) && (request.resource.data.role == 'user' || isAdmin());
+      allow update: if isAdmin();
+    }
+
+    match /submissions/{submissionId} {
+      allow read: if true; // Gallery is public
+      allow create: if isAuthenticated() && 
+                      request.resource.data.uid == request.auth.uid && 
+                      isValidSubmission(request.resource.data) &&
+                      request.resource.data.submission_status == 'submitted' &&
+                      (!('is_featured' in request.resource.data) || request.resource.data.is_featured == false); // Users cannot set featured status
+      allow update: if isAdmin() || 
+                      (isAuthenticated() && 
+                       resource.data.uid == request.auth.uid && 
+                       isValidSubmission(request.resource.data) && 
+                       request.resource.data.uid == resource.data.uid &&
+                       request.resource.data.submission_status == resource.data.submission_status &&
+                       request.resource.data.payment_status == resource.data.payment_status &&
+                       request.resource.data.is_featured == resource.data.is_featured); // Users cannot change featured status
+      allow delete: if isAdmin();
+    }
+    
+    // Default deny
+    match /{path=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sun Path Study — Architecture & Landscape Design</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; }
+    body {
+      background: #06080f;
+      color: #d8e4f0;
+      font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+      display: flex;
+    }
+
+    /* ── 3D View ── */
+    #view {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    #view canvas { display: block; }
+
+    #view-title {
+      position: absolute;
+      top: 16px;
+      left: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.28);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+    #view-title em { color: rgba(255,155,55,0.65); font-style: normal; }
+
+    #hint {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10.5px;
+      color: rgba(255,255,255,0.16);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    /* ── Panel ── */
+    #panel {
+      width: 285px;
+      flex-shrink: 0;
+      background: #0b0e18;
+      border-left: 1px solid #192030;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    #panel::-webkit-scrollbar { width: 3px; }
+    #panel::-webkit-scrollbar-thumb { background: #253048; border-radius: 2px; }
+
+    .pblock { padding: 15px 14px; border-bottom: 1px solid #151e2e; }
+
+    /* header */
+    #p-head { padding: 17px 14px 13px; border-bottom: 1px solid #151e2e; }
+    #p-head h1 { font-size: 15px; font-weight: 700; color: #eef2ff; letter-spacing: 0.2px; }
+    #p-head p  { font-size: 10.5px; color: #3a4d6a; margin-top: 3px; letter-spacing: 0.5px; }
+
+    /* section label */
+    .sec {
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #2e4060;
+      margin-bottom: 10px;
+    }
+
+    /* info cards */
+    .icrow { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 7px; }
+    .ic {
+      background: #070a12;
+      border: 1px solid #172030;
+      border-radius: 7px;
+      padding: 9px 11px;
+    }
+    .ic-l { font-size: 8.5px; text-transform: uppercase; letter-spacing: 1px; color: #2e4a68; margin-bottom: 4px; }
+    .ic-v { font-size: 18px; font-weight: 700; color: #ccd8f0; line-height: 1; }
+    .ic-v.sun { color: #f0a040; }
+    .ic-u { font-size: 10px; color: #3a5070; margin-left: 1px; }
+
+    /* time big */
+    #time-big {
+      font-size: 30px;
+      font-weight: 800;
+      color: #f09838;
+      text-align: center;
+      letter-spacing: 3px;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 7px;
+    }
+
+    /* inputs */
+    input[type=range] {
+      width: 100%;
+      accent-color: #f0883e;
+      cursor: pointer;
+      height: 4px;
+    }
+    input[type=number], input[type=date] {
+      width: 100%;
+      background: #070a12;
+      border: 1px solid #1c2840;
+      border-radius: 6px;
+      color: #b8cce8;
+      padding: 6px 9px;
+      font-size: 12.5px;
+      outline: none;
+      -moz-appearance: textfield;
+    }
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+    input:focus { border-color: #f0883e80; }
+    .lbl { font-size: 10.5px; color: #3a5070; margin-bottom: 4px; display: block; }
+
+    /* buttons */
+    .brow { display: flex; gap: 5px; flex-wrap: wrap; }
+    .btn {
+      flex: 1;
+      min-width: 56px;
+      padding: 6px 6px;
+      background: #0e1525;
+      border: 1px solid #1c2840;
+      border-radius: 6px;
+      color: #6880a8;
+      font-size: 10px;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.1s, border-color 0.1s, color 0.1s;
+      white-space: nowrap;
+    }
+    .btn:hover { background: #162035; border-color: #f0883e50; color: #d09060; }
+    .btn.on { background: #f0883e18; border-color: #f0883e60; color: #f0a050; }
+    .btn-play {
+      background: #f0883e;
+      border-color: #f0883e;
+      color: #0a0c14;
+      font-weight: 700;
+    }
+    .btn-play:hover { background: #ffaa60; border-color: #ffaa60; color: #0a0c14; }
+
+    .lgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+
+    .range-ticks {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      color: #253040;
+      margin-top: 2px;
+    }
+
+    /* legend */
+    .legrow { display: flex; align-items: center; gap: 9px; font-size: 10.5px; color: #4a6080; margin-bottom: 6px; }
+    .leg-l  { width: 20px; height: 2px; border-radius: 1px; flex-shrink: 0; }
+    .leg-d  { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+    #d-loc { font-size: 11px; color: #e09050; text-align: center; margin-top: 8px; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<div id="view">
+  <div id="view-title">Sun Path <em>/ 3D Study</em></div>
+  <div id="hint">Drag to orbit &nbsp;·&nbsp; Scroll to zoom &nbsp;·&nbsp; Right-drag to pan</div>
+</div>
+
+<div id="panel">
+  <div id="p-head">
+    <h1>☀&thinsp; Sun Path Study</h1>
+    <p>Architecture &amp; Landscape Design</p>
+  </div>
+
+  <!-- Solar Data -->
+  <div class="pblock">
+    <div class="sec">Solar Data</div>
+    <div class="icrow">
+      <div class="ic">
+        <div class="ic-l">Altitude</div>
+        <div class="ic-v sun" id="d-alt">—<span class="ic-u">°</span></div>
+      </div>
+      <div class="ic">
+        <div class="ic-l">Azimuth</div>
+        <div class="ic-v sun" id="d-az">—<span class="ic-u">°</span></div>
+      </div>
+    </div>
+    <div class="icrow">
+      <div class="ic">
+        <div class="ic-l">Sunrise</div>
+        <div class="ic-v" id="d-rise" style="font-size:14px">—</div>
+      </div>
+      <div class="ic">
+        <div class="ic-l">Sunset</div>
+        <div class="ic-v" id="d-set" style="font-size:14px">—</div>
+      </div>
+    </div>
+    <div class="ic" style="margin-bottom:0">
+      <div class="ic-l">Day Length</div>
+      <div class="ic-v" id="d-len" style="font-size:14px">—</div>
+    </div>
+  </div>
+
+  <!-- Location -->
+  <div class="pblock">
+    <div class="sec">Location</div>
+    <div class="brow" style="margin-bottom:6px">
+      <button class="btn on" id="loc-new-york"  onclick="setCity('New York',40.71,-74.01)">New York</button>
+      <button class="btn"    id="loc-london"     onclick="setCity('London',51.51,-0.13)">London</button>
+      <button class="btn"    id="loc-paris"      onclick="setCity('Paris',48.85,2.35)">Paris</button>
+    </div>
+    <div class="brow" style="margin-bottom:10px">
+      <button class="btn" id="loc-tokyo"   onclick="setCity('Tokyo',35.69,139.69)">Tokyo</button>
+      <button class="btn" id="loc-sydney"  onclick="setCity('Sydney',-33.87,151.21)">Sydney</button>
+      <button class="btn" id="loc-dubai"   onclick="setCity('Dubai',25.20,55.27)">Dubai</button>
+    </div>
+    <div class="lgrid">
+      <div>
+        <label class="lbl">Latitude °</label>
+        <input type="number" id="inp-lat" value="40.71" min="-90" max="90" step="0.5" onchange="onLocChange()">
+      </div>
+      <div>
+        <label class="lbl">Longitude °</label>
+        <input type="number" id="inp-lon" value="-74.01" min="-180" max="180" step="0.5" onchange="onLocChange()">
+      </div>
+    </div>
+    <div id="d-loc">New York, USA</div>
+  </div>
+
+  <!-- Date -->
+  <div class="pblock">
+    <div class="sec">Date</div>
+    <input type="date" id="inp-date" onchange="onDateChange()">
+    <div class="brow" style="margin-top:9px">
+      <button class="btn" onclick="setSpecial('summer')">☀ Summer</button>
+      <button class="btn" onclick="setSpecial('winter')">❄ Winter</button>
+      <button class="btn" onclick="setSpecial('equinox')">⚖ Equinox</button>
+      <button class="btn" onclick="setSpecial('today')">Today</button>
+    </div>
+  </div>
+
+  <!-- Time -->
+  <div class="pblock">
+    <div class="sec">Time of Day</div>
+    <div id="time-big">12:00</div>
+    <input type="range" id="inp-time" min="0" max="1439" value="720" step="1" oninput="onTimeChange()">
+    <div class="range-ticks">
+      <span>00</span><span>06</span><span>12</span><span>18</span><span>24</span>
+    </div>
+    <div class="brow" style="margin-top:10px">
+      <button class="btn btn-play" id="btn-play" onclick="togglePlay()">▶&thinsp; Play</button>
+      <button class="btn" onclick="jumpTime(6)">6 am</button>
+      <button class="btn" onclick="jumpTime(12)">Noon</button>
+      <button class="btn" onclick="jumpTime(18)">6 pm</button>
+    </div>
+    <div style="margin-top:11px">
+      <label class="lbl">Speed: <span id="spd-lbl">2×</span></label>
+      <input type="range" id="inp-speed" min="1" max="8" value="2" step="1" oninput="onSpeedChange()">
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="pblock">
+    <div class="sec">Sun Path Legend</div>
+    <div class="legrow"><div class="leg-l" style="background:#FF6B35"></div>Summer Solstice (Jun 21)</div>
+    <div class="legrow"><div class="leg-l" style="background:#5BA4CF"></div>Winter Solstice (Dec 21)</div>
+    <div class="legrow"><div class="leg-l" style="background:#F5C518"></div>Equinox (Mar / Sep 21)</div>
+    <div class="legrow"><div class="leg-l" style="background:rgba(255,255,255,0.75)"></div>Current Date (white)</div>
+    <div class="legrow"><div class="leg-d" style="background:#FFE566;box-shadow:0 0 5px #ff9900"></div>Sun Position</div>
+    <div class="legrow"><div class="leg-l" style="background:#F09038;height:1px;border-top:1px dashed #F09038"></div>Shadow Direction</div>
+  </div>
+
+  <!-- Display Toggles -->
+  <div class="pblock" style="border-bottom:none">
+    <div class="sec">Display</div>
+    <div class="brow">
+      <button class="btn on" id="tog-dome"   onclick="togFeat('dome')">Dome</button>
+      <button class="btn on" id="tog-grid"   onclick="togFeat('grid')">Grid</button>
+      <button class="btn on" id="tog-shadow" onclick="togFeat('shadow')">Shadow</button>
+      <button class="btn on" id="tog-annual" onclick="togFeat('annual')">Annual</button>
+    </div>
+    <div class="brow" style="margin-top:5px">
+      <button class="btn on" id="tog-hours"  onclick="togFeat('hours')">Hour Marks</button>
+      <button class="btn on" id="tog-north"  onclick="togFeat('north')">N Arrow</button>
+    </div>
+  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// ───────────────────────────────────────────────────────
+//  STATE
+// ───────────────────────────────────────────────────────
+const S = {
+  lat: 40.71, lon: -74.01,
+  date: new Date(),
+  hour: 12,
+  playing: false,
+  speed: 2,
+  showDome: true, showGrid: true, showShadow: true,
+  showAnnual: true, showHours: true, showNorth: true,
+};
+
+// ───────────────────────────────────────────────────────
+//  SOLAR MATH
+// ───────────────────────────────────────────────────────
+function doy(d) {
+  return Math.round((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
+}
+function decl(day) {
+  return 23.45 * Math.sin((360 / 365) * (day - 81) * Math.PI / 180);
+}
+function eqt(day) {
+  const B = (360 / 365) * (day - 81) * Math.PI / 180;
+  return 9.87 * Math.sin(2*B) - 7.53 * Math.cos(B) - 1.5 * Math.sin(B);
+}
+function solarPos(lat, lon, date, hour) {
+  const d   = doy(date);
+  const dec = decl(d);
+  const et  = eqt(d);
+  const sh  = hour + (et + 4 * lon) / 60;
+  const ha  = 15 * (sh - 12);
+  const φ = lat * Math.PI / 180;
+  const δ = dec * Math.PI / 180;
+  const H = ha  * Math.PI / 180;
+  const sinA = Math.sin(φ)*Math.sin(δ) + Math.cos(φ)*Math.cos(δ)*Math.cos(H);
+  const altR = Math.asin(Math.max(-1, Math.min(1, sinA)));
+  const alt  = altR * 180 / Math.PI;
+  const y    = -Math.sin(H);
+  const x    = Math.tan(δ)*Math.cos(φ) - Math.sin(φ)*Math.cos(H);
+  let az     = Math.atan2(y, x) * 180 / Math.PI;
+  if (az < 0) az += 360;
+  return { alt, az };
+}
+function sunriseSunset(lat, lon, date) {
+  const d   = doy(date);
+  const dec = decl(d);
+  const et  = eqt(d);
+  const φ   = lat * Math.PI / 180;
+  const δ   = dec * Math.PI / 180;
+  const c   = (Math.sin(-0.8333 * Math.PI/180) - Math.sin(φ)*Math.sin(δ)) /
+              (Math.cos(φ)*Math.cos(δ));
+  if (c >  1) return { rise: null, set: null, polar: 'night' };
+  if (c < -1) return { rise: null, set: null, polar: 'day'   };
+  const ha0  = Math.acos(c) * 180 / Math.PI;
+  const noon = 12 - lon/15 - et/60;
+  const tz   = Math.round(lon / 15);
+  return { rise: noon - ha0/15 + tz, set: noon + ha0/15 + tz, polar: null };
+}
+function fmt(h) {
+  if (h === null) return '—';
+  const t  = ((h % 24) + 24) % 24;
+  const hh = Math.floor(t);
+  const mm = Math.floor((t - hh) * 60);
+  return `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;
+}
+
+// ───────────────────────────────────────────────────────
+//  THREE.JS SCENE
+// ───────────────────────────────────────────────────────
+const R   = 55;
+const viewEl = document.getElementById('view');
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+viewEl.appendChild(renderer.domElement);
+
+const scene  = new THREE.Scene();
+scene.background = new THREE.Color(0x050810);
+
+const camera = new THREE.PerspectiveCamera(42, 1, 0.5, 800);
+camera.position.set(68, 62, 72);
+
+const ctrl = new OrbitControls(camera, renderer.domElement);
+ctrl.enableDamping = true;
+ctrl.dampingFactor = 0.06;
+ctrl.minPolarAngle = 0;
+ctrl.maxPolarAngle = Math.PI / 2 + 0.08;
+ctrl.minDistance = 20;
+ctrl.maxDistance = 220;
+ctrl.target.set(0, 8, 0);
+
+// Lights
+scene.add(new THREE.AmbientLight(0x0a1530, 3));
+scene.add(new THREE.HemisphereLight(0x1a2a50, 0x060c18, 1));
+
+// ── Ground
+const ground = new THREE.Mesh(
+  new THREE.CircleGeometry(R * 1.05, 128),
+  new THREE.MeshStandardMaterial({ color: 0x04070e, roughness: 1 })
+);
+ground.rotation.x = -Math.PI / 2;
+ground.receiveShadow = true;
+scene.add(ground);
+
+// ── Grid
+const gridGroup = new THREE.Group();
+const grid = new THREE.GridHelper(R * 2, 22, 0x0c1928, 0x0a1525);
+gridGroup.add(grid);
+scene.add(gridGroup);
+
+// ── Horizon ring
+const hRing = new THREE.Mesh(
+  new THREE.TorusGeometry(R, 0.22, 8, 128),
+  new THREE.MeshBasicMaterial({ color: 0x1a2f50 })
+);
+hRing.rotation.x = Math.PI / 2;
+hRing.position.y = 0.12;
+scene.add(hRing);
+
+// ── Sky dome (wireframe hemisphere)
+const domeMesh = new THREE.Mesh(
+  new THREE.SphereGeometry(R, 48, 24, 0, Math.PI*2, 0, Math.PI/2),
+  new THREE.MeshBasicMaterial({ color: 0x0a1830, wireframe: true, transparent: true, opacity: 0.13 })
+);
+scene.add(domeMesh);
+
+// ── Altitude rings (30°, 60°)
+const altRingGrp = new THREE.Group();
+[30, 60].forEach(alt => {
+  const r = R * Math.cos(alt * Math.PI/180);
+  const y = R * Math.sin(alt * Math.PI/180);
+  const m = new THREE.Mesh(
+    new THREE.TorusGeometry(r, 0.12, 6, 64),
+    new THREE.MeshBasicMaterial({ color: 0x162540, transparent: true, opacity: 0.55 })
+  );
+  m.rotation.x = Math.PI/2;
+  m.position.y = y;
+  altRingGrp.add(m);
+  // altitude label sprite
+  const sp = makeLabel(`${alt}°`, '#2a4060', 64, 32, 14);
+  sp.scale.set(5, 2.5, 1);
+  sp.position.set(r + 2, y + 0.5, 0);
+  altRingGrp.add(sp);
+});
+scene.add(altRingGrp);
+
+// ── Azimuth spokes (every 30°)
+const azSpokeGrp = new THREE.Group();
+for (let az = 0; az < 360; az += 30) {
+  const azR = az * Math.PI/180;
+  const geo = new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(0, 0.1, 0),
+    new THREE.Vector3(R * Math.sin(azR), 0.1, -R * Math.cos(azR))
+  ]);
+  azSpokeGrp.add(new THREE.Line(geo,
+    new THREE.LineBasicMaterial({ color: 0x0d1a2e, transparent: true, opacity: 0.7 })
+  ));
+}
+scene.add(azSpokeGrp);
+
+// ── Compass labels
+function makeLabel(text, color, cw, ch, fs) {
+  const cv = document.createElement('canvas');
+  cv.width = cw || 128; cv.height = ch || 64;
+  const c = cv.getContext('2d');
+  c.font = `bold ${fs || 44}px Arial`;
+  c.fillStyle = color || '#ffffff';
+  c.textAlign = 'center';
+  c.textBaseline = 'middle';
+  c.fillText(text, cv.width/2, cv.height/2);
+  const tex = new THREE.CanvasTexture(cv);
+  const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false });
+  const spr = new THREE.Sprite(mat);
+  spr.scale.set(9, 4.5, 1);
+  return spr;
+}
+
+[
+  { t:'N', az:0,   col:'#e05050' },
+  { t:'S', az:180, col:'#607090' },
+  { t:'E', az:90,  col:'#607090' },
+  { t:'W', az:270, col:'#607090' },
+].forEach(({ t, az, col }) => {
+  const spr = makeLabel(t, col);
+  const a = az * Math.PI/180;
+  const r = R + 7;
+  spr.position.set(r*Math.sin(a), 2.8, -r*Math.cos(a));
+  scene.add(spr);
+});
+
+// Azimuth degree labels every 30°
+for (let az = 0; az < 360; az += 30) {
+  if (az % 90 === 0) continue;
+  const spr = makeLabel(`${az}°`, '#2a4060', 72, 36, 22);
+  spr.scale.set(5, 2.5, 1);
+  const a = az * Math.PI/180;
+  const r = R + 3.5;
+  spr.position.set(r*Math.sin(a), 0.5, -r*Math.cos(a));
+  scene.add(spr);
+}
+
+// ── North arrow on ground
+const northArrow = new THREE.Group();
+const arrowMat = new THREE.MeshBasicMaterial({ color: 0xe05050 });
+const arrowBody = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 8, 8), arrowMat);
+arrowBody.position.set(0, 0.3, -R * 0.6 + 4);
+arrowBody.rotation.z = Math.PI/2;
+const arrowHead = new THREE.Mesh(new THREE.ConeGeometry(0.9, 2.5, 8), arrowMat);
+arrowHead.position.set(0, 0.3, -R * 0.6 - 1.25 + 4);
+arrowHead.rotation.x = -Math.PI/2;
+northArrow.add(arrowBody, arrowHead);
+// rotate arrow to point north (already at -Z)
+scene.add(northArrow);
+
+// ── Sun path group (rebuilt on param change)
+const pathGrp = new THREE.Group();
+scene.add(pathGrp);
+
+// ── Hour mark group (rebuilt with paths)
+const hourGrp = new THREE.Group();
+scene.add(hourGrp);
+
+// ── Sun sphere + glow
+const sunSph = new THREE.Mesh(
+  new THREE.SphereGeometry(2, 20, 20),
+  new THREE.MeshBasicMaterial({ color: 0xFFE566 })
+);
+scene.add(sunSph);
+
+const sunGlowSph = new THREE.Mesh(
+  new THREE.SphereGeometry(4.2, 16, 16),
+  new THREE.MeshBasicMaterial({ color: 0xFF9930, transparent: true, opacity: 0.22, depthWrite: false })
+);
+scene.add(sunGlowSph);
+
+const sunLight = new THREE.DirectionalLight(0xFFF4D8, 1.4);
+sunLight.castShadow = true;
+scene.add(sunLight);
+
+// ── Shadow ray on ground
+let shadowLineGeo = new THREE.BufferGeometry();
+const shadowLineMesh = new THREE.Line(shadowLineGeo,
+  new THREE.LineBasicMaterial({ color: 0xFF8830, transparent: true, opacity: 0.55 })
+);
+scene.add(shadowLineMesh);
+
+const shadowTip = new THREE.Mesh(
+  new THREE.CircleGeometry(1.1, 16),
+  new THREE.MeshBasicMaterial({ color: 0xFF8830, transparent: true, opacity: 0.5, side: THREE.DoubleSide })
+);
+shadowTip.rotation.x = -Math.PI/2;
+shadowTip.position.y = 0.06;
+scene.add(shadowTip);
+
+// ───────────────────────────────────────────────────────
+//  CONVERT sun position → 3D point on dome
+// ───────────────────────────────────────────────────────
+function sun3D(alt, az, r) {
+  const aR = alt * Math.PI/180;
+  const zR = az  * Math.PI/180;
+  return new THREE.Vector3(
+     r * Math.cos(aR) * Math.sin(zR),
+     r * Math.sin(aR),
+    -r * Math.cos(aR) * Math.cos(zR)
+  );
+}
+
+// ───────────────────────────────────────────────────────
+//  BUILD SUN PATH CURVES + HOUR MARKERS
+// ───────────────────────────────────────────────────────
+function clearGroup(g) {
+  while (g.children.length) {
+    const c = g.children[0];
+    c.geometry?.dispose();
+    c.material?.dispose();
+    g.remove(c);
+  }
+}
+
+function buildCurve(month, day, hexColor, opacity) {
+  const d = new Date(S.date.getFullYear(), month - 1, day);
+  const pts = [];
+  for (let h = 0; h <= 24; h += 0.15) {
+    const p = solarPos(S.lat, S.lon, d, h);
+    if (p.alt > 0) pts.push(sun3D(p.alt, p.az, R * 0.97));
+  }
+  if (pts.length < 2) return null;
+  return new THREE.Line(
+    new THREE.BufferGeometry().setFromPoints(pts),
+    new THREE.LineBasicMaterial({ color: hexColor, transparent: opacity < 1, opacity })
+  );
+}
+
+function rebuildPaths() {
+  clearGroup(pathGrp);
+  clearGroup(hourGrp);
+
+  // Annual paths
+  if (S.showAnnual) {
+    const annual = [
+      { m:6,  d:21, c:0xFF6B35 },
+      { m:12, d:21, c:0x5BA4CF },
+      { m:3,  d:21, c:0xF5C518 },
+    ];
+    annual.forEach(({ m, d, c }) => {
+      const l = buildCurve(m, d, c, 0.72);
+      if (l) pathGrp.add(l);
+    });
+  }
+
+  // Current date path (white, thicker visual via opacity)
+  const cur = buildCurve(S.date.getMonth()+1, S.date.getDate(), 0xffffff, 0.85);
+  if (cur) pathGrp.add(cur);
+
+  // Hour marks on current date
+  if (S.showHours) {
+    const hmMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    for (let h = 0; h <= 24; h++) {
+      const p = solarPos(S.lat, S.lon, S.date, h);
+      if (p.alt > 0.3) {
+        const dot = new THREE.Mesh(new THREE.SphereGeometry(0.55, 8, 8), hmMat);
+        dot.position.copy(sun3D(p.alt, p.az, R * 0.97));
+        hourGrp.add(dot);
+        // Hour label
+        if (h >= 5 && h <= 19 && h % 2 === 0) {
+          const sp = makeLabel(`${h}h`, '#b0c8e8', 64, 32, 20);
+          sp.scale.set(4, 2, 1);
+          const tp = sun3D(p.alt, p.az, R * 1.03);
+          sp.position.copy(tp);
+          hourGrp.add(sp);
+        }
+      }
+    }
+  }
+}
+
+// ───────────────────────────────────────────────────────
+//  UPDATE SUN + UI
+// ───────────────────────────────────────────────────────
+function update() {
+  const pos = solarPos(S.lat, S.lon, S.date, S.hour);
+  const { alt, az } = pos;
+  const above = alt > 0;
+
+  sunSph.visible     = above;
+  sunGlowSph.visible = above;
+  sunLight.intensity = above ? Math.max(0, (alt / 60)) * 1.6 : 0;
+
+  if (above) {
+    const p = sun3D(alt, az, R * 0.95);
+    sunSph.position.copy(p);
+    sunGlowSph.position.copy(p);
+    sunLight.position.copy(p);
+  }
+
+  // Shadow
+  if (S.showShadow && above) {
+    const maxLen = R * 0.88;
+    const len    = Math.min(maxLen, 1.6 / Math.tan(alt * Math.PI/180));
+    const oppAz  = (az + 180) * Math.PI/180;
+    const tip    = new THREE.Vector3(len * Math.sin(oppAz), 0.08, -len * Math.cos(oppAz));
+    shadowLineGeo.dispose();
+    shadowLineGeo = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(0, 0.3, 0), tip
+    ]);
+    shadowLineMesh.geometry = shadowLineGeo;
+    shadowLineMesh.visible  = true;
+    shadowTip.visible       = true;
+    shadowTip.position.set(tip.x, 0.06, tip.z);
+  } else {
+    shadowLineMesh.visible = false;
+    shadowTip.visible      = false;
+  }
+
+  // Atmosphere tint (sky gets bluer when sun is high)
+  const skyBlue = above ? Math.min(1, alt / 60) : 0;
+  scene.background = new THREE.Color(
+    0.02,
+    0.03 + skyBlue * 0.04,
+    0.06 + skyBlue * 0.1
+  );
+
+  // ── UI data
+  const ss = sunriseSunset(S.lat, S.lon, S.date);
+
+  document.getElementById('d-alt').innerHTML =
+    `${alt.toFixed(1)}<span class="ic-u">°</span>`;
+  document.getElementById('d-az').innerHTML =
+    `${az.toFixed(1)}<span class="ic-u">°</span>`;
+
+  if (ss.polar === 'day') {
+    document.getElementById('d-rise').textContent = 'Polar Day';
+    document.getElementById('d-set').textContent  = '—';
+    document.getElementById('d-len').textContent  = '24 h 0 m';
+  } else if (ss.polar === 'night') {
+    document.getElementById('d-rise').textContent = 'No Sunrise';
+    document.getElementById('d-set').textContent  = 'No Sunset';
+    document.getElementById('d-len').textContent  = '0 h 0 m';
+  } else {
+    document.getElementById('d-rise').textContent = fmt(ss.rise);
+    document.getElementById('d-set').textContent  = fmt(ss.set);
+    const len = ss.set - ss.rise;
+    document.getElementById('d-len').textContent  =
+      `${Math.floor(len)} h ${Math.floor((len % 1) * 60)} m`;
+  }
+
+  document.getElementById('time-big').textContent = fmt(S.hour);
+  document.getElementById('inp-time').value = Math.round(S.hour * 60) % 1440;
+}
+
+// ───────────────────────────────────────────────────────
+//  RESIZE
+// ───────────────────────────────────────────────────────
+function resize() {
+  const w = viewEl.clientWidth, h = viewEl.clientHeight;
+  renderer.setSize(w, h);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+resize();
+
+// ───────────────────────────────────────────────────────
+//  ANIMATION LOOP
+// ───────────────────────────────────────────────────────
+let prevTs = null;
+function animate(ts) {
+  requestAnimationFrame(animate);
+  const dt = prevTs !== null ? (ts - prevTs) / 1000 : 0;
+  prevTs = ts;
+  if (S.playing && dt > 0 && dt < 0.3) {
+    S.hour += dt * S.speed * 0.8; // speed 1 = 0.8h/sec
+    if (S.hour >= 24) S.hour -= 24;
+    update();
+  }
+  ctrl.update();
+  renderer.render(scene, camera);
+}
+
+// ───────────────────────────────────────────────────────
+//  INIT
+// ───────────────────────────────────────────────────────
+const today = new Date();
+S.date = today;
+document.getElementById('inp-date').value = today.toISOString().slice(0, 10);
+rebuildPaths();
+update();
+requestAnimationFrame(animate);
+
+// ───────────────────────────────────────────────────────
+//  UI CALLBACKS (attached to window for inline onclick)
+// ───────────────────────────────────────────────────────
+window.setCity = (name, lat, lon) => {
+  S.lat = lat; S.lon = lon;
+  document.getElementById('inp-lat').value = lat;
+  document.getElementById('inp-lon').value = lon;
+  document.getElementById('d-loc').textContent = name;
+  document.querySelectorAll('[id^="loc-"]').forEach(b => b.classList.remove('on'));
+  const btn = document.getElementById('loc-' + name.toLowerCase().replace(/ /g, '-'));
+  if (btn) btn.classList.add('on');
+  rebuildPaths(); update();
+};
+
+window.onLocChange = () => {
+  S.lat = parseFloat(document.getElementById('inp-lat').value) || 0;
+  S.lon = parseFloat(document.getElementById('inp-lon').value) || 0;
+  document.getElementById('d-loc').textContent =
+    `${S.lat.toFixed(2)}° N,  ${S.lon.toFixed(2)}° E`;
+  document.querySelectorAll('[id^="loc-"]').forEach(b => b.classList.remove('on'));
+  rebuildPaths(); update();
+};
+
+window.onDateChange = () => {
+  const v = document.getElementById('inp-date').value;
+  if (v) { S.date = new Date(v + 'T12:00:00'); rebuildPaths(); update(); }
+};
+
+window.setSpecial = (type) => {
+  const y = new Date().getFullYear();
+  const map = {
+    summer:  new Date(y,  5, 21),
+    winter:  new Date(y, 11, 21),
+    equinox: new Date(y,  2, 21),
+    today:   new Date(),
+  };
+  S.date = map[type];
+  document.getElementById('inp-date').value = S.date.toISOString().slice(0, 10);
+  rebuildPaths(); update();
+};
+
+window.onTimeChange = () => {
+  S.hour = parseInt(document.getElementById('inp-time').value) / 60;
+  update();
+};
+
+window.jumpTime = (h) => {
+  S.hour = h;
+  update();
+};
+
+window.togglePlay = () => {
+  S.playing = !S.playing;
+  const btn = document.getElementById('btn-play');
+  btn.textContent = S.playing ? '⏸  Pause' : '▶  Play';
+};
+
+window.onSpeedChange = () => {
+  const v = parseInt(document.getElementById('inp-speed').value);
+  S.speed = v;
+  const labels = ['', '0.5×', '1×', '2×', '4×', '6×', '8×', '12×', '20×'];
+  document.getElementById('spd-lbl').textContent = labels[v] || `${v}×`;
+};
+
+window.togFeat = (feat) => {
+  const map = {
+    dome:   'showDome',   grid:   'showGrid',
+    shadow: 'showShadow', annual: 'showAnnual',
+    hours:  'showHours',  north:  'showNorth',
+  };
+  const key = map[feat];
+  S[key] = !S[key];
+  document.getElementById('tog-' + feat).classList.toggle('on', S[key]);
+
+  // Apply visibility
+  domeMesh.visible     = S.showDome;
+  altRingGrp.visible   = S.showDome;
+  gridGroup.visible    = S.showGrid;
+  northArrow.visible   = S.showNorth;
+
+  if (feat === 'annual' || feat === 'hours') rebuildPaths();
+  if (feat === 'shadow') update();
+};
+</script>
+</body>
+</html>
