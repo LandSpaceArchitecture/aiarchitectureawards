@@ -9,6 +9,7 @@ import Admin from "./pages/Admin";
 import Jury from "./pages/Jury";
 import Login from "./pages/Login";
 import Gallery from "./pages/Gallery";
+import MySubmissions from "./pages/MySubmissions";
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
             <Route path="categories" element={<Categories />} />
             <Route path="gallery" element={<Gallery />} />
             <Route path="submit" element={<Submit />} />
+            <Route path="my-submissions" element={<MySubmissions />} />
             <Route path="project/:id" element={<ProjectDetail />} />
             <Route path="admin" element={<Admin />} />
             <Route path="jury" element={<Jury />} />

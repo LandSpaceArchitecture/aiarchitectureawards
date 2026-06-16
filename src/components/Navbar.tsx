@@ -74,10 +74,17 @@ export default function Navbar() {
 
               {user ? (
                 <div className="flex items-center space-x-3">
-                  <div className="flex items-center space-x-2 text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                  <Link
+                    to="/my-submissions"
+                    className={cn(
+                      "flex items-center space-x-2 text-[11px] font-bold uppercase tracking-widest transition-colors",
+                      location.pathname === "/my-submissions" ? "text-black" : "text-gray-400 hover:text-black"
+                    )}
+                    title="My Submissions"
+                  >
                     <User className="h-3.5 w-3.5" />
                     <span className="hidden lg:inline">{user.displayName?.split(' ')[0]}</span>
-                  </div>
+                  </Link>
                   <button
                     onClick={() => logout()}
                     className="text-gray-400 hover:text-black transition-colors"
@@ -168,16 +175,29 @@ export default function Navbar() {
               )}
 
               {user ? (
-                <button
-                  onClick={() => {
-                    logout();
-                    setIsOpen(false);
-                  }}
-                  className="flex w-full items-center space-x-3 px-3 py-2 text-sm font-medium uppercase tracking-widest text-gray-400"
-                >
-                  <LogOut className="h-4 w-4" />
-                  <span>Logout ({user.displayName?.split(' ')[0]})</span>
-                </button>
+                <>
+                  <Link
+                    to="/my-submissions"
+                    onClick={() => setIsOpen(false)}
+                    className={cn(
+                      "flex w-full items-center space-x-3 px-3 py-2 text-sm font-bold uppercase tracking-widest",
+                      location.pathname === "/my-submissions" ? "text-black" : "text-gray-400"
+                    )}
+                  >
+                    <User className="h-4 w-4" />
+                    <span>My Submissions</span>
+                  </Link>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsOpen(false);
+                    }}
+                    className="flex w-full items-center space-x-3 px-3 py-2 text-sm font-medium uppercase tracking-widest text-gray-400"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span>Logout ({user.displayName?.split(' ')[0]})</span>
+                  </button>
+                </>
               ) : (
                 <Link
                   to="/login"
