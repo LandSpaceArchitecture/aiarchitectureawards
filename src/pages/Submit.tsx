@@ -489,10 +489,10 @@ export default function Submit() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Link
-              to="/gallery"
+              to="/my-submissions"
               className="flex items-center justify-center space-x-4 border border-black py-6 text-[10px] font-bold uppercase tracking-[0.3em] text-black transition-all hover:bg-gray-50"
             >
-              <span>View Archive</span>
+              <span>View My Submissions</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
