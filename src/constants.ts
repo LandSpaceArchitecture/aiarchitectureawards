@@ -71,13 +71,12 @@ export const CATEGORIES = [
 ];
 
 export const KEY_DATES = [
-  { label: "Early Entry Deadline", date: "July 4, 2026" },
-  { label: "Standard Entry Deadline", date: "July 16, 2026" },
-  { label: "Late Entry Deadline", date: "July 30, 2026" },
-  { label: "Final Submission Deadline", date: "August 4, 2026" },
-  { label: "Jury Review Period", date: "August 5 – August 29, 2026" },
-  { label: "Winners Announcement", date: "September 3, 2026" },
-  { label: "Exhibition in London", date: "October / November 2026" },
+  { label: "Early Entry Deadline", date: "July 14, 2026" },
+  { label: "Standard Entry Deadline", date: "July 26, 2026" },
+  { label: "Late Entry Deadline", date: "August 9, 2026" },
+  { label: "Final Submission Deadline", date: "August 14, 2026" },
+  { label: "Jury Review Period", date: "August 15 – September 8, 2026" },
+  { label: "Winners Announcement", date: "September 13, 2026" },
 ];
 
 export const COUNTRIES = [

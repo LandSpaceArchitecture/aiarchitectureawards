@@ -14,9 +14,9 @@ function computeFeePaid(submission: Submission): number {
 
   // Determine base entry fee based on the actual submission date (not now)
   const submittedAt = submission.created_at ? new Date(submission.created_at) : new Date();
-  const earlyDeadline = new Date("2026-07-04");
-  const standardDeadline = new Date("2026-07-16");
-  const lateDeadline = new Date("2026-07-30");
+  const earlyDeadline = new Date("2026-07-14");
+  const standardDeadline = new Date("2026-07-26");
+  const lateDeadline = new Date("2026-08-09");
 
   let baseEntryFee = 30;
   if (submittedAt <= earlyDeadline) baseEntryFee = 20;

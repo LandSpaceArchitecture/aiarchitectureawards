@@ -32,7 +32,7 @@ export default function Footer() {
             <ul className="mt-6 space-y-4">
               <li><Link to="/categories" className="text-sm text-gray-500 hover:text-black">Categories</Link></li>
               <li><Link to="/submit" className="text-sm text-gray-500 hover:text-black">Submit Project</Link></li>
-              <li><Link to="/admin" className="text-sm text-gray-500 hover:text-black">Admin Dashboard</Link></li>
+              <li><Link to="/my-submissions" className="text-sm text-gray-500 hover:text-black">My Submissions</Link></li>
             </ul>
           </div>
 
@@ -40,10 +40,8 @@ export default function Footer() {
           <div>
             <h3 className="text-xs font-bold uppercase tracking-widest text-black">Support</h3>
             <ul className="mt-6 space-y-4">
-              <li><a href="#" className="text-sm text-gray-500 hover:text-black">FAQ</a></li>
-              <li><a href="#" className="text-sm text-gray-500 hover:text-black">Terms & Conditions</a></li>
-              <li><a href="#" className="text-sm text-gray-500 hover:text-black">Privacy Policy</a></li>
-              <li><a href="#" className="text-sm text-gray-500 hover:text-black">Contact Us</a></li>
+              <li><Link to="/faq" className="text-sm text-gray-500 hover:text-black">FAQ</Link></li>
+              <li><a href="mailto:info@aiarchitectureawards.com" className="text-sm text-gray-500 hover:text-black">Contact Us</a></li>
             </ul>
           </div>
         </div>

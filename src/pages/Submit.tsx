@@ -214,9 +214,9 @@ export default function Submit() {
     if (!categories || categories.length === 0) return 0;
 
     const now = new Date();
-    const earlyDeadline = new Date("2026-07-04");
-    const standardDeadline = new Date("2026-07-16");
-    const lateDeadline = new Date("2026-07-30");
+    const earlyDeadline = new Date("2026-07-14");
+    const standardDeadline = new Date("2026-07-26");
+    const lateDeadline = new Date("2026-08-09");
 
     let baseEntryFee = 30;
     if (now <= earlyDeadline) baseEntryFee = 20;
@@ -233,9 +233,9 @@ export default function Submit() {
 
   const getEntryType = () => {
     const now = new Date();
-    const earlyDeadline = new Date("2026-07-04");
-    const standardDeadline = new Date("2026-07-16");
-    const lateDeadline = new Date("2026-07-30");
+    const earlyDeadline = new Date("2026-07-14");
+    const standardDeadline = new Date("2026-07-26");
+    const lateDeadline = new Date("2026-08-09");
     
     if (now <= earlyDeadline) return "Early Entry";
     if (now <= standardDeadline) return "Standard Entry";
