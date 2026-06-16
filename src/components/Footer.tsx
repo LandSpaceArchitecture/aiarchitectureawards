@@ -19,10 +19,31 @@ export default function Footer() {
               The premier global design award celebrating the future of AI-driven architecture, landscape, urban, and interior design. Join the second edition of the most innovative competition in the field.
             </p>
             <div className="mt-8 flex space-x-6">
-              <a href="#" className="text-gray-400 hover:text-black"><Instagram className="h-5 w-5" /></a>
-              <a href="#" className="text-gray-400 hover:text-black"><Twitter className="h-5 w-5" /></a>
-              <a href="#" className="text-gray-400 hover:text-black"><Linkedin className="h-5 w-5" /></a>
-              <a href="#" className="text-gray-400 hover:text-black"><Mail className="h-5 w-5" /></a>
+              <a
+                href="https://www.instagram.com/ai_architecture_awards"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="text-gray-400 hover:text-black transition-colors"
+              >
+                <Instagram className="h-5 w-5" />
+              </a>
+              <a
+                href="https://www.linkedin.com/company/ai-architecture-awards/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="text-gray-400 hover:text-black transition-colors"
+              >
+                <Linkedin className="h-5 w-5" />
+              </a>
+              <a
+                href="mailto:info@aiarchitectureawards.com"
+                aria-label="Email us"
+                className="text-gray-400 hover:text-black transition-colors"
+              >
+                <Mail className="h-5 w-5" />
+              </a>
             </div>
           </div>
 
