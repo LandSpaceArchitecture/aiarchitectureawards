@@ -222,7 +222,7 @@ export default function Login() {
             <Lock className="absolute left-5 top-1/2 -translate-y-1/2 h-4 w-4 text-black/40" />
             <input
               type="password"
-              placeholder={isRegister ? "Password (min. 10 characters)" : "Password"}
+              placeholder={isRegister ? "Password" : "Password"}
               required
               minLength={isRegister ? 10 : undefined}
               value={password}
@@ -230,6 +230,13 @@ export default function Login() {
               className="w-full border border-black/20 bg-transparent py-4 pl-14 pr-5 text-sm tracking-wide outline-none transition-colors focus:border-black focus:bg-black/[0.02]"
             />
           </div>
+
+          {/* Password requirements hint (only on register, before user starts typing) */}
+          {isRegister && password.length === 0 && (
+            <p className="-mt-1 px-1 text-[10px] font-mono uppercase tracking-widest text-black/40">
+              Minimum 10 characters · Must include letters and digits
+            </p>
+          )}
 
           {/* Password strength meter — only on registration */}
           {isRegister && password.length > 0 && (() => {
