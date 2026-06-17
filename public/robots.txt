@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /jury
+Disallow: /my-submissions
+Disallow: /project/
+
+Sitemap: https://www.aiarchitectureawards.com/sitemap.xml

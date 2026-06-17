@@ -10,6 +10,7 @@ import { cn, compressImage } from "@/src/lib/utils";
 import { CATEGORIES, COUNTRIES } from "@/src/constants";
 import { submissionService } from "@/src/services/submissionService";
 import { useAuth } from "@/src/contexts/AuthContext";
+import { usePageMeta } from "@/src/hooks/usePageMeta";
 
 const submissionSchema = z.object({
   projectTitle: z.string().min(3, "Project title is required"),
@@ -33,6 +34,13 @@ export default function Submit() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { user, supabaseUser, loading: authLoading } = useAuth();
+
+  usePageMeta({
+    title: "Submit Your Project",
+    description: "Submit your AI-driven design project to the 2026 AI Architecture Awards. Eight categories, secure Stripe payment, instant confirmation.",
+    canonicalPath: "/submit",
+  });
+
   const [currentStep, setCurrentStep] = useState(1); // 1: Details (1-4), 2: Review & Payment (5)
   
   const [coverImage, setCoverImage] = useState<File | null>(null);

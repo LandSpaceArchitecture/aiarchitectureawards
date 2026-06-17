@@ -2,18 +2,27 @@ import { Link } from "react-router-dom";
 import { CATEGORIES } from "@/src/constants";
 import { ArrowRight } from "lucide-react";
 import { useAuth } from "@/src/contexts/AuthContext";
+import { usePageMeta } from "@/src/hooks/usePageMeta";
 
 export default function Categories() {
   const { user } = useAuth();
   const submitPath = user ? "/submit" : "/login?redirect=/submit";
 
+  usePageMeta({
+    title: "Award Categories — Architecture, Landscape, Urban, Interior, Visualization",
+    description: "Eight categories for AI-driven design: Architecture, Landscape, Urban, Interior, Visualization, Diagram, Animation, Real Estate. Entry from $20 (Early), $30 (Standard), $40 (Late).",
+    canonicalPath: "/categories",
+  });
+
   const getEntryPrice = (catId: string) => {
     if (catId === 'animation') return 35;
     const now = new Date();
-    const earlyDeadline = new Date("2026-05-20");
-    const standardDeadline = new Date("2026-06-01");
+    const earlyDeadline = new Date("2026-07-14");
+    const standardDeadline = new Date("2026-07-26");
+    const lateDeadline = new Date("2026-08-09");
     if (now <= earlyDeadline) return 20;
     if (now <= standardDeadline) return 30;
+    if (now <= lateDeadline) return 40;
     return 40;
   };
 

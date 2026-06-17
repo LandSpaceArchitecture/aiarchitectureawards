@@ -6,6 +6,7 @@ import { useAuth } from "@/src/contexts/AuthContext";
 import { submissionService, Submission } from "@/src/services/submissionService";
 import { CATEGORIES } from "@/src/constants";
 import { cn } from "@/src/lib/utils";
+import { usePageMeta } from "@/src/hooks/usePageMeta";
 
 // Recompute the fee paid for a submission, based on its categories + submission date
 function computeFeePaid(submission: Submission): number {
@@ -32,6 +33,13 @@ function computeFeePaid(submission: Submission): number {
 
 export default function MySubmissions() {
   const { user, supabaseUser, loading: authLoading } = useAuth();
+
+  usePageMeta({
+    title: "My Submissions",
+    description: "View your submitted projects, payment history, and current status.",
+    canonicalPath: "/my-submissions",
+  });
+
   const userId = supabaseUser?.id;
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);

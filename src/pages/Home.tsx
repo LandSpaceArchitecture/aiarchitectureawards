@@ -8,6 +8,7 @@ import * as THREE from "three";
 import { cn } from "@/src/lib/utils";
 import { CATEGORIES, KEY_DATES, JURY } from "@/src/constants";
 import { useAuth } from "@/src/contexts/AuthContext";
+import { usePageMeta } from "@/src/hooks/usePageMeta";
 import heroBg from "@/src/assets/hero-bg.png";
 
 const AI_TOOLS = [
@@ -214,6 +215,12 @@ function CustomCursor() {
 export default function Home() {
   const { user } = useAuth();
   const submitPath = user ? "/submit" : "/login?redirect=/submit";
+
+  usePageMeta({
+    title: "AI Architecture Awards 2026 — Global Recognition for AI-Driven Design",
+    description: "Submit your AI-driven architecture, landscape, urban, interior, visualization, and animation work to the 2026 AI Architecture Awards. Open for entries until August 9, 2026.",
+    canonicalPath: "/",
+  });
 
   return (
     <div className="flex flex-col bg-white selection:bg-black selection:text-white font-sans text-black scroll-smooth relative cursor-none">

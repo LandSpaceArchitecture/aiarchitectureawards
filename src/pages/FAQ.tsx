@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronDown, Mail, ArrowRight } from "lucide-react";
 import { cn } from "@/src/lib/utils";
+import { usePageMeta } from "@/src/hooks/usePageMeta";
 
 interface QA {
   q: string;
@@ -365,6 +366,41 @@ function FAQItem({ q, a, isOpen, onToggle }: { q: string; a: React.ReactNode; is
 
 export default function FAQ() {
   const [openKey, setOpenKey] = useState<string | null>(null);
+
+  usePageMeta({
+    title: "FAQ — Submission, Pricing, Jury",
+    description: "Answers about submitting to the 2026 AI Architecture Awards: eligibility, fees, jury process, payment, rights, and timelines.",
+    canonicalPath: "/faq",
+  });
+
+  // Inject FAQPage JSON-LD for Google rich results
+  useEffect(() => {
+    const faqJsonLd = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": FAQ_SECTIONS.flatMap(section =>
+        section.items.map(item => ({
+          "@type": "Question",
+          "name": item.q,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": typeof item.a === "string"
+              ? item.a
+              : `See https://www.aiarchitectureawards.com/faq#${section.id} for full answer.`
+          }
+        }))
+      )
+    };
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.id = "faq-jsonld";
+    script.text = JSON.stringify(faqJsonLd);
+    document.head.appendChild(script);
+    return () => {
+      const existing = document.getElementById("faq-jsonld");
+      if (existing) existing.remove();
+    };
+  }, []);
 
   const toggle = (key: string) => {
     setOpenKey(prev => (prev === key ? null : key));
