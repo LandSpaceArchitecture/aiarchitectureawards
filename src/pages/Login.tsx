@@ -26,6 +26,21 @@ export default function Login() {
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Enforce strong password on registration
+    if (isRegister) {
+      if (password.length < 10) {
+        setError("Password must be at least 10 characters long.");
+        return;
+      }
+      const hasLetter = /[A-Za-z]/.test(password);
+      const hasNumber = /\d/.test(password);
+      if (!hasLetter || !hasNumber) {
+        setError("Password must contain both letters and numbers.");
+        return;
+      }
+    }
+
     setLoading(true);
     setError("");
 
@@ -207,13 +222,54 @@ export default function Login() {
             <Lock className="absolute left-5 top-1/2 -translate-y-1/2 h-4 w-4 text-black/40" />
             <input
               type="password"
-              placeholder="Password"
+              placeholder={isRegister ? "Password (min. 10 characters)" : "Password"}
               required
+              minLength={isRegister ? 10 : undefined}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full border border-black/20 bg-transparent py-4 pl-14 pr-5 text-sm tracking-wide outline-none transition-colors focus:border-black focus:bg-black/[0.02]"
             />
           </div>
+
+          {/* Password strength meter — only on registration */}
+          {isRegister && password.length > 0 && (() => {
+            const hasMinLength = password.length >= 10;
+            const hasUpper = /[A-Z]/.test(password);
+            const hasLower = /[a-z]/.test(password);
+            const hasNumber = /\d/.test(password);
+            const hasSymbol = /[^A-Za-z0-9]/.test(password);
+            const score = [hasMinLength, hasUpper, hasLower, hasNumber, hasSymbol].filter(Boolean).length;
+            const labels = ["Too weak", "Weak", "Fair", "Good", "Strong", "Excellent"];
+            const colors = ["bg-red-500", "bg-red-500", "bg-orange-500", "bg-yellow-500", "bg-green-500", "bg-green-600"];
+            return (
+              <div className="space-y-2 -mt-1 px-1">
+                <div className="flex gap-1">
+                  {[0, 1, 2, 3, 4].map(i => (
+                    <div
+                      key={i}
+                      className={cn(
+                        "h-1 flex-1 rounded transition-colors",
+                        i < score ? colors[score] : "bg-gray-200"
+                      )}
+                    />
+                  ))}
+                </div>
+                <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-widest">
+                  <span className={cn(
+                    "font-bold",
+                    score < 2 && "text-red-600",
+                    score >= 2 && score < 4 && "text-orange-600",
+                    score >= 4 && "text-green-700",
+                  )}>
+                    {labels[score]}
+                  </span>
+                  <span className="text-black/40">
+                    {hasMinLength ? "✓" : "✗"} 10+ chars · {hasUpper && hasLower ? "✓" : "✗"} mixed case · {hasNumber ? "✓" : "✗"} number
+                  </span>
+                </div>
+              </div>
+            );
+          })()}
 
           {error && (
             <div className="border-l-4 border-red-500 bg-red-50 px-5 py-4">
