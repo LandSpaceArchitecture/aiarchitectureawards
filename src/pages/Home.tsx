@@ -501,15 +501,29 @@ export default function Home() {
                   {member.bio && (
                     <p className="mt-6 text-xs text-black/60 leading-relaxed">{member.bio}</p>
                   )}
-                  {member.instagram && (
-                    <a
-                      href={`https://instagram.com/${member.instagram}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-6 monospace-label text-black/60 hover:text-black transition-colors"
-                    >
-                      @{member.instagram}
-                    </a>
+                  {(member.instagram || member.linkedin) && (
+                    <div className="mt-6 flex flex-col gap-2">
+                      {member.instagram && (
+                        <a
+                          href={`https://instagram.com/${member.instagram}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="monospace-label text-black/60 hover:text-black transition-colors"
+                        >
+                          IG · @{member.instagram}
+                        </a>
+                      )}
+                      {member.linkedin && (
+                        <a
+                          href={`https://www.linkedin.com/in/${member.linkedin}/`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="monospace-label text-black/60 hover:text-black transition-colors"
+                        >
+                          LinkedIn · {member.linkedin}
+                        </a>
+                      )}
+                    </div>
                   )}
                 </div>
                 <div className="absolute bottom-0 left-0 w-full h-[2px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />

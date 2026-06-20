@@ -10,6 +10,8 @@ import cat08 from "@/src/assets/categories/08-realestate.jpg";
 import juryRada from "@/src/assets/jury/rada.jpg";
 import juryJoshua from "@/src/assets/jury/joshua.jpg";
 import juryShweta from "@/src/assets/jury/shweta.jpg";
+import juryAfshin from "@/src/assets/jury/afshin.jpg";
+import juryMatt from "@/src/assets/jury/matt.jpg";
 
 export const CATEGORIES = [
   {
@@ -117,6 +119,7 @@ export const JURY = [
     role: "Founder, Daleva Design · AI-Integrated Architecture Practice",
     bio: "Architect behind the world's first fully AI-driven architectural project. Work includes Britishvolt, Aston Martin F1 HQ & EMAAR developments.",
     instagram: "daleva.architecture",
+    linkedin: "",
     image: juryRada,
     placeholder: false,
   },
@@ -125,6 +128,7 @@ export const JURY = [
     role: "Professor of Architecture, UNLV · AI & Computational Design",
     bio: "AI & Computational Design researcher. Collaborator with Samsung, Microsoft & Architectural Digest. Behind the first AI/photography hybrid cover for Harper's BAZAAR.",
     instagram: "joshuavermillion",
+    linkedin: "",
     image: juryJoshua,
     placeholder: false,
   },
@@ -133,7 +137,26 @@ export const JURY = [
     role: "Founder, The Archart Studio",
     bio: "Architect, urban planner, and founder of The Archart Studio, pioneering AI-integrated architectural graphics education.",
     instagram: "the.archart",
+    linkedin: "",
     image: juryShweta,
+    placeholder: false,
+  },
+  {
+    name: "Afshin Ashari",
+    role: "Associate Professor of Landscape Architecture, University of Guelph",
+    bio: "Working at the fertile edge where computation, AI, and landscape imagination meet. Background in both computer science and landscape architecture; his work treats computation not as a shortcut to efficiency, but as a medium of inquiry, perception, and invention.",
+    instagram: "",
+    linkedin: "afshin-ashari-82749296",
+    image: juryAfshin,
+    placeholder: false,
+  },
+  {
+    name: "Matt Perotto",
+    role: "Principal, Urban Strategies · MLA, University of Toronto",
+    bio: "ASLA, OALA, CSLA. Landscape architect, urban designer, and University of Toronto educator advancing automation and AI in design through practice at Urban Strategies and research with UofT and ASLA.",
+    instagram: "",
+    linkedin: "mattperotto",
+    image: juryMatt,
     placeholder: false,
   },
   {
@@ -141,22 +164,7 @@ export const JURY = [
     role: "Position open — apply via info@aiarchitectureawards.com",
     bio: "",
     instagram: "",
-    image: "",
-    placeholder: true,
-  },
-  {
-    name: "Call for Jury",
-    role: "Position open — apply via info@aiarchitectureawards.com",
-    bio: "",
-    instagram: "",
-    image: "",
-    placeholder: true,
-  },
-  {
-    name: "Call for Jury",
-    role: "Position open — apply via info@aiarchitectureawards.com",
-    bio: "",
-    instagram: "",
+    linkedin: "",
     image: "",
     placeholder: true,
   },
