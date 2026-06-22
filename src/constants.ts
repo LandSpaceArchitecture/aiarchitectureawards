@@ -145,7 +145,7 @@ export const JURY = [
     name: "Afshin Ashari",
     role: "Associate Professor of Landscape Architecture, University of Guelph",
     bio: "Working at the fertile edge where computation, AI, and landscape imagination meet. Background in both computer science and landscape architecture; his work treats computation not as a shortcut to efficiency, but as a medium of inquiry, perception, and invention.",
-    instagram: "",
+    instagram: "afshin.ashari",
     linkedin: "afshin-ashari-82749296",
     image: juryAfshin,
     placeholder: false,
