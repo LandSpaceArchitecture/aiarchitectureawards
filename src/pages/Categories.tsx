@@ -27,16 +27,16 @@ export default function Categories() {
   };
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-      <div className="mb-24 text-center">
+    <div className="mx-auto max-w-7xl px-4 py-16 md:py-24 sm:px-6 lg:px-8">
+      <div className="mb-12 md:mb-24 text-center">
         <span className="text-xs font-bold uppercase tracking-widest text-gray-400">Competition</span>
-        <h1 className="mt-6 text-6xl font-bold uppercase tracking-tighter sm:text-8xl">Award Categories</h1>
-        <p className="mx-auto mt-8 max-w-2xl text-lg text-gray-500">
+        <h1 className="mt-4 md:mt-6 text-4xl sm:text-6xl md:text-8xl font-bold uppercase tracking-tighter">Award Categories</h1>
+        <p className="mx-auto mt-6 md:mt-8 max-w-2xl text-base md:text-lg text-gray-500">
           Explore the diverse categories of the AI Architecture Awards 2026. Each category celebrates a unique aspect of how artificial intelligence is transforming the built environment.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-12 md:gap-16 md:grid-cols-2 lg:grid-cols-3">
         {CATEGORIES.map((category) => (
           <div key={category.id} className="group flex flex-col border-b border-black pb-12">
             <div className="aspect-[4/3] overflow-hidden bg-gray-100 grayscale transition-all duration-500 group-hover:grayscale-0">
