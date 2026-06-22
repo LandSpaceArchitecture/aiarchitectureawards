@@ -159,13 +159,4 @@ export const JURY = [
     image: juryMatt,
     placeholder: false,
   },
-  {
-    name: "Call for Jury",
-    role: "Position open — apply via info@aiarchitectureawards.com",
-    bio: "",
-    instagram: "",
-    linkedin: "",
-    image: "",
-    placeholder: true,
-  },
 ];
