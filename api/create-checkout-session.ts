@@ -29,13 +29,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               name: `AI Architecture Awards Entry: ${projectTitle}`,
               description: "Official Entry Submission Fee",
             },
-            unit_amount: amount * 100, // Stripe uses pence
+            unit_amount: amount * 100, // Stripe uses cents
           },
           quantity: 1,
         },
       ],
       mode: "payment",
       customer_email: email,
+      // Enable promotion codes — users can enter codes you create in Stripe Dashboard
+      allow_promotion_codes: true,
       success_url: `${origin}/submit?success=true&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/submit?canceled=true`,
       metadata: {
