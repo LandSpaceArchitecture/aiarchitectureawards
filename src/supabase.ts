@@ -84,6 +84,48 @@ export const registerWithEmail = async (email: string, pass: string, name: strin
   return data;
 };
 
+/**
+ * Send password reset email. Supabase will email a link of the form:
+ *   https://www.aiarchitectureawards.com/reset-password#access_token=…&type=recovery
+ */
+export const sendPasswordResetEmail = async (email: string) => {
+  const redirectTo = `${window.location.origin}/reset-password`;
+  const url = `${supabaseUrl}/auth/v1/recover?apikey=${encodeURIComponent(supabaseAnonKey)}`;
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, redirect_to: redirectTo }),
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(data.msg || data.error_description || data.error || `Reset request failed (${response.status})`);
+  }
+  // Supabase always returns 200 for this endpoint regardless of whether the email exists
+  // (to prevent email enumeration). So we always tell the user "if the email exists, you'll receive a link".
+  return true;
+};
+
+/**
+ * Update the current user's password. Must be called from /reset-password page
+ * after the user has clicked the recovery email link (which sets the session).
+ */
+export const updatePassword = async (newPassword: string, accessToken: string) => {
+  const url = `${supabaseUrl}/auth/v1/user?apikey=${encodeURIComponent(supabaseAnonKey)}`;
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({ password: newPassword }),
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(data.msg || data.error_description || data.error || `Password update failed (${response.status})`);
+  }
+  return await response.json();
+};
+
 export const loginWithEmail = async (email: string, pass: string) => {
   // Use apikey via URL query param to avoid triggering CORS preflight
   const url = `${supabaseUrl}/auth/v1/token?grant_type=password&apikey=${encodeURIComponent(supabaseAnonKey)}`;

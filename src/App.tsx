@@ -13,6 +13,7 @@ import Gallery from "./pages/Gallery";
 import MySubmissions from "./pages/MySubmissions";
 import FAQ from "./pages/FAQ";
 import Jurors from "./pages/Jurors";
+import ResetPassword from "./pages/ResetPassword";
 
 export default function App() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
             <Route path="admin" element={<Admin />} />
             <Route path="jury" element={<Jury />} />
             <Route path="login" element={<Login />} />
+            <Route path="reset-password" element={<ResetPassword />} />
           </Route>
         </Routes>
       </BrowserRouter>
