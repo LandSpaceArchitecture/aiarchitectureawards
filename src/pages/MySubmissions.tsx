@@ -4,11 +4,10 @@ import { motion } from "motion/react";
 import { Loader2, Calendar, CheckCircle2, Clock, Award, FileText, ExternalLink, LogIn } from "lucide-react";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { submissionService, Submission } from "@/src/services/submissionService";
-import { CATEGORIES } from "@/src/constants";
+import { CATEGORIES, calculateFee } from "@/src/constants";
+import type { EntrantType } from "@/src/constants";
 import { cn } from "@/src/lib/utils";
 import { usePageMeta } from "@/src/hooks/usePageMeta";
-
-import { calculateFee, EntrantType } from "@/src/constants";
 
 // Get the fee paid — uses stored fee_paid if available, otherwise recomputes.
 function computeFeePaid(submission: Submission): number {
