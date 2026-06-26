@@ -229,6 +229,19 @@ export default function Submit() {
 
   const getEntryType = () => getEntryTierLabel(getEntryTier());
 
+  // Compute the fee breakdown for display (Step 5 Review)
+  function computeFeeBreakdown(cats: string[], type: EntrantType | undefined) {
+    const safeType: EntrantType = type === "student" ? "student" : "professional";
+    const rates = PRICING[safeType];
+    const tier = getEntryTier();
+    const tierFee = rates[tier === "final" ? "late" : tier];
+    const prices = cats.map(catId => catId === 'animation' ? rates.animation : tierFee);
+    const firstFee = prices.length > 0 ? Math.max(...prices) : 0;
+    const extraCount = Math.max(0, cats.length - 1);
+    const extraFee = extraCount * rates.additionalCategory;
+    return { firstFee, extraCount, extraFee, additionalRate: rates.additionalCategory };
+  }
+
   const handlePayment = async () => {
     const isFormValid = await trigger();
     if (!isFormValid || !coverImage) {
@@ -597,9 +610,10 @@ export default function Submit() {
                         {CATEGORIES.map((category) => {
                           const isAnimation = category.id === 'animation';
                           const entryType = getEntryType();
+                          const safeType: EntrantType = entrantType === "student" ? "student" : "professional";
+                          const catRates = PRICING[safeType];
                           const tier = getEntryTier();
-                          const rates = PRICING[entrantType || "professional"];
-                          const price = isAnimation ? rates.animation : rates[tier === "final" ? "late" : tier];
+                          const price = isAnimation ? catRates.animation : catRates[tier === "final" ? "late" : tier];
                           
                           return (
                             <label
@@ -630,8 +644,8 @@ export default function Submit() {
                                   "text-[9px] font-medium uppercase tracking-widest mt-1",
                                   selectedCategories.includes(category.id) ? "text-gray-400" : "text-gray-500"
                                 )}>
-                                  {isAnimation ? `$${rates.animation} Fixed` : `$${price} ${entryType}`}
-                                  {selectedCategories.length > 0 && !selectedCategories.includes(category.id) && ` (+$${rates.additionalCategory} Add-on)`}
+                                  {isAnimation ? `$${catRates.animation} Fixed` : `$${price} ${entryType}`}
+                                  {selectedCategories.length > 0 && !selectedCategories.includes(category.id) && ` (+$${catRates.additionalCategory} Add-on)`}
                                 </span>
                               </div>
                               <div className={cn(
@@ -950,22 +964,17 @@ export default function Submit() {
                         </div>
                         <div className="mt-6 space-y-4">
                           {(() => {
-                            const rates = PRICING[entrantType || "professional"];
-                            const tier = getEntryTier();
-                            const tierFee = rates[tier === "final" ? "late" : tier];
-                            const firstFee = selectedCategories.length > 0 ? Math.max(...selectedCategories.map(catId => catId === 'animation' ? rates.animation : tierFee)) : 0;
-                            const extraCount = Math.max(0, selectedCategories.length - 1);
-                            const extraFee = extraCount * rates.additionalCategory;
+                            const bd = computeFeeBreakdown(selectedCategories, entrantType);
                             return (
                               <>
                                 <div className="flex justify-between items-end">
                                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">First Category</span>
-                                  <span className="text-xl font-bold">${firstFee}</span>
+                                  <span className="text-xl font-bold">${bd.firstFee}</span>
                                 </div>
-                                {extraCount > 0 && (
+                                {bd.extraCount > 0 && (
                                   <div className="flex justify-between items-end">
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Additional ({extraCount}) · ${rates.additionalCategory} ea</span>
-                                    <span className="text-xl font-bold">${extraFee}</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Additional ({bd.extraCount}) · ${bd.additionalRate} ea</span>
+                                    <span className="text-xl font-bold">${bd.extraFee}</span>
                                   </div>
                                 )}
                               </>
