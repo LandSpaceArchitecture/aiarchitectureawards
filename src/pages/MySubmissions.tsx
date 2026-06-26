@@ -8,27 +8,19 @@ import { CATEGORIES } from "@/src/constants";
 import { cn } from "@/src/lib/utils";
 import { usePageMeta } from "@/src/hooks/usePageMeta";
 
-// Recompute the fee paid for a submission, based on its categories + submission date
+import { calculateFee, EntrantType } from "@/src/constants";
+
+// Get the fee paid — uses stored fee_paid if available, otherwise recomputes.
 function computeFeePaid(submission: Submission): number {
+  // Use stored value if it was recorded at submission time (after pricing schema update)
+  const stored = (submission as any).fee_paid;
+  if (typeof stored === "number" && stored > 0) return stored;
+
   const categories = submission.category || [];
   if (categories.length === 0) return 0;
-
-  // Determine base entry fee based on the actual submission date (not now)
   const submittedAt = submission.created_at ? new Date(submission.created_at) : new Date();
-  const earlyDeadline = new Date("2026-07-14");
-  const standardDeadline = new Date("2026-07-26");
-  const lateDeadline = new Date("2026-08-09");
-
-  let baseEntryFee = 30;
-  if (submittedAt <= earlyDeadline) baseEntryFee = 20;
-  else if (submittedAt <= standardDeadline) baseEntryFee = 30;
-  else if (submittedAt <= lateDeadline) baseEntryFee = 40;
-  else baseEntryFee = 40;
-
-  const categoryPrices = categories.map(catId => (catId === 'animation' ? 35 : baseEntryFee));
-  const firstCategoryPrice = Math.max(...categoryPrices);
-  const additionalPrice = (categories.length - 1) * 10;
-  return firstCategoryPrice + additionalPrice;
+  const entrantType: EntrantType = ((submission as any).entrant_type as EntrantType) || "professional";
+  return calculateFee(categories, entrantType, submittedAt);
 }
 
 export default function MySubmissions() {

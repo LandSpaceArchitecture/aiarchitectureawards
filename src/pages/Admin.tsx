@@ -115,8 +115,9 @@ export default function Admin() {
 
   const exportCSV = () => {
     const headers = [
-      "id", "project_title", "categories", "author_name", "email", "country",
-      "team_other_credits", "short_description", "full_description",
+      "id", "project_title", "categories", "entrant_type", "fee_paid_usd",
+      "author_name", "email", "country", "team_other_credits",
+      "short_description", "full_description",
       "video_url", "image_count", "image_urls", "submission_status",
       "payment_status", "is_featured", "vote_count", "voters", "submitted_at"
     ];
@@ -127,6 +128,8 @@ export default function Admin() {
         s.id,
         s.project_title,
         (s.category || []).join("; "),
+        (s as any).entrant_type || "professional",
+        (s as any).fee_paid || "",
         s.author_name,
         s.email,
         s.country,

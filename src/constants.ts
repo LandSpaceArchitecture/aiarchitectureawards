@@ -82,6 +82,81 @@ export const KEY_DATES = [
   { label: "Winners Announcement", date: "September 13, 2026" },
 ];
 
+// Centralized pricing logic — single source of truth for all pages.
+export type EntrantType = "student" | "professional";
+
+export const PRICING_DEADLINES = {
+  early: "2026-07-14",
+  standard: "2026-07-26",
+  late: "2026-08-09",
+};
+
+export const PRICING = {
+  student: {
+    early: 20,
+    standard: 30,
+    late: 40,
+    animation: 35,        // flat fee for AI Animation & Video
+    additionalCategory: 10,
+  },
+  professional: {
+    early: 50,
+    standard: 80,
+    late: 110,
+    animation: 90,        // flat fee for AI Animation & Video
+    additionalCategory: 20,
+  },
+};
+
+/** Get the current tier (early/standard/late/final) based on a date. */
+export function getEntryTier(date: Date = new Date()): "early" | "standard" | "late" | "final" {
+  const early = new Date(PRICING_DEADLINES.early);
+  const standard = new Date(PRICING_DEADLINES.standard);
+  const late = new Date(PRICING_DEADLINES.late);
+  if (date <= early) return "early";
+  if (date <= standard) return "standard";
+  if (date <= late) return "late";
+  return "final";
+}
+
+/** Human-readable label for the tier (used in emails, receipts). */
+export function getEntryTierLabel(tier: ReturnType<typeof getEntryTier>): string {
+  return {
+    early: "Early Entry",
+    standard: "Standard Entry",
+    late: "Late Entry",
+    final: "Final Entry",
+  }[tier];
+}
+
+/**
+ * Calculate the total fee for a submission.
+ * @param categories — list of category IDs
+ * @param entrantType — "student" or "professional"
+ * @param date — submission date (defaults to now); used for tier pricing
+ */
+export function calculateFee(
+  categories: string[],
+  entrantType: EntrantType,
+  date: Date = new Date()
+): number {
+  if (!categories || categories.length === 0) return 0;
+
+  const rates = PRICING[entrantType];
+  const tier = getEntryTier(date);
+  const baseEntryFee = tier === "final" ? rates.late : rates[tier];
+
+  // Each category's individual price
+  const categoryPrices = categories.map(catId =>
+    catId === "animation" ? rates.animation : baseEntryFee
+  );
+
+  // First category at full tier price (the highest in the list), additional categories at discount
+  const firstCategoryPrice = Math.max(...categoryPrices);
+  const additionalPrice = (categories.length - 1) * rates.additionalCategory;
+  return firstCategoryPrice + additionalPrice;
+}
+
 export const COUNTRIES = [
   "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan",
   "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi",

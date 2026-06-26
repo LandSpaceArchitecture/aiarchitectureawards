@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { CATEGORIES } from "@/src/constants";
+import { CATEGORIES, PRICING, getEntryTier } from "@/src/constants";
 import { ArrowRight } from "lucide-react";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { usePageMeta } from "@/src/hooks/usePageMeta";
@@ -10,21 +10,18 @@ export default function Categories() {
 
   usePageMeta({
     title: "Award Categories — Architecture, Landscape, Urban, Interior, Visualization",
-    description: "Eight categories for AI-driven design: Architecture, Landscape, Urban, Interior, Visualization, Diagram, Animation, Real Estate. Entry from $20 (Early), $30 (Standard), $40 (Late).",
+    description: "Eight categories for AI-driven design: Architecture, Landscape, Urban, Interior, Visualization, Diagram, Animation, Real Estate. Student & Professional pricing tiers.",
     canonicalPath: "/categories",
   });
 
-  const getEntryPrice = (catId: string) => {
-    if (catId === 'animation') return 35;
-    const now = new Date();
-    const earlyDeadline = new Date("2026-07-14");
-    const standardDeadline = new Date("2026-07-26");
-    const lateDeadline = new Date("2026-08-09");
-    if (now <= earlyDeadline) return 20;
-    if (now <= standardDeadline) return 30;
-    if (now <= lateDeadline) return 40;
-    return 40;
-  };
+  // Show both student and professional rates side by side
+  const tier = getEntryTier();
+  const tierKey = tier === "final" ? "late" : tier;
+
+  const getStudentPrice = (catId: string) =>
+    catId === 'animation' ? PRICING.student.animation : PRICING.student[tierKey];
+  const getProfessionalPrice = (catId: string) =>
+    catId === 'animation' ? PRICING.professional.animation : PRICING.professional[tierKey];
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-16 md:py-24 sm:px-6 lg:px-8">
@@ -55,7 +52,9 @@ export default function Categories() {
                 </p>
               </div>
               <div className="mt-8 flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-widest text-gray-400">Entry Fee: ${getEntryPrice(category.id)}</span>
+                <span className="text-xs font-bold uppercase tracking-widest text-gray-400">
+                  ${getStudentPrice(category.id)} Student / ${getProfessionalPrice(category.id)} Pro
+                </span>
                 <Link
                   to={`${submitPath}${submitPath.includes('?') ? '&' : '?'}category=${category.id}`}
                   className="flex items-center space-x-2 text-xs font-bold uppercase tracking-widest text-black hover:underline"

@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Check, ChevronRight, ChevronLeft, Upload, X, Video, CreditCard, Loader2, LogIn, Award, Globe, Info, FileText, Camera, ArrowRight } from "lucide-react";
 import { useDropzone } from "react-dropzone";
 import { cn, compressImage } from "@/src/lib/utils";
-import { CATEGORIES, COUNTRIES } from "@/src/constants";
+import { CATEGORIES, COUNTRIES, calculateFee, getEntryTier, getEntryTierLabel, EntrantType, PRICING } from "@/src/constants";
 import { submissionService } from "@/src/services/submissionService";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { usePageMeta } from "@/src/hooks/usePageMeta";
@@ -15,6 +15,9 @@ import { usePageMeta } from "@/src/hooks/usePageMeta";
 const submissionSchema = z.object({
   projectTitle: z.string().min(3, "Project title is required"),
   categories: z.array(z.string()).min(1, "Select at least one category"),
+  entrantType: z.enum(["student", "professional"], {
+    message: "Please select Student or Professional",
+  }),
   shortDescription: z.string()
     .min(10, "Short description is too short")
     .refine((val) => val.trim().split(/\s+/).length <= 150, "Short description must be under 150 words"),
@@ -126,6 +129,7 @@ export default function Submit() {
     resolver: zodResolver(submissionSchema),
     defaultValues: {
       categories: searchParams.get("category") ? [searchParams.get("category")!] : [],
+      entrantType: "professional" as EntrantType,
       projectTitle: "",
       shortDescription: "",
       aiApproach: "",
@@ -145,6 +149,7 @@ export default function Submit() {
   }, [user, supabaseUser, setValue]);
 
   const selectedCategories = watch("categories");
+  const entrantType = watch("entrantType") as EntrantType;
 
   // Cover Image Dropzone
   const onDropCover = (acceptedFiles: File[], fileRejections: any[]) => {
@@ -213,43 +218,15 @@ export default function Submit() {
   };
 
   const calculateTotal = () => {
-    return calculateTotalForCategories(selectedCategories);
+    return calculateFee(selectedCategories, entrantType || "professional");
   };
 
-  // Pure function — takes categories explicitly, doesn't depend on form state.
   // Used in finishSubmissionAfterPayment where form state may not be ready yet.
-  const calculateTotalForCategories = (categories: string[]) => {
-    if (!categories || categories.length === 0) return 0;
-
-    const now = new Date();
-    const earlyDeadline = new Date("2026-07-14");
-    const standardDeadline = new Date("2026-07-26");
-    const lateDeadline = new Date("2026-08-09");
-
-    let baseEntryFee = 30;
-    if (now <= earlyDeadline) baseEntryFee = 20;
-    else if (now <= standardDeadline) baseEntryFee = 30;
-    else if (now <= lateDeadline) baseEntryFee = 40;
-
-    const categoryPrices = categories.map(catId =>
-      catId === 'animation' ? 35 : baseEntryFee
-    );
-    const firstCategoryPrice = categoryPrices.length > 0 ? Math.max(...categoryPrices) : 0;
-    const additionalPrice = (categories.length - 1) * 10;
-    return firstCategoryPrice + additionalPrice;
+  const calculateTotalForCategories = (categories: string[], type?: EntrantType) => {
+    return calculateFee(categories, type || "professional");
   };
 
-  const getEntryType = () => {
-    const now = new Date();
-    const earlyDeadline = new Date("2026-07-14");
-    const standardDeadline = new Date("2026-07-26");
-    const lateDeadline = new Date("2026-08-09");
-    
-    if (now <= earlyDeadline) return "Early Entry";
-    if (now <= standardDeadline) return "Standard Entry";
-    if (now <= lateDeadline) return "Late Entry";
-    return "Final Entry";
-  };
+  const getEntryType = () => getEntryTierLabel(getEntryTier());
 
   const handlePayment = async () => {
     const isFormValid = await trigger();
@@ -364,7 +341,9 @@ export default function Submit() {
         other_credits: data.otherCredits,
         image_urls: [coverUrl, ...galleryUrls],
         video_url: data.videoUrl,
-      }, uidToUse);
+        entrant_type: data.entrantType || "professional",
+        fee_paid: totalFee,
+      } as any, uidToUse);
       const timeoutPromise = new Promise((_, reject) =>
         setTimeout(() => reject(new Error("createSubmission timed out after 20s — likely an auth/RLS issue. Check console.")), 20000)
       );
@@ -379,8 +358,9 @@ export default function Submit() {
         .map((c: string) => CATEGORIES.find(cat => cat.id === c)?.title || c)
         .join(", ");
       // Calculate from data.categories directly — form state may not be ready after Stripe redirect
-      const totalFee = calculateTotalForCategories(data.categories || []);
+      const totalFee = calculateTotalForCategories(data.categories || [], data.entrantType || "professional");
       const entryType = getEntryType();
+      const entrantTypeLabel = data.entrantType === "student" ? "Student" : "Professional";
 
       fetch("/api/send-email", {
         method: "POST",
@@ -394,7 +374,8 @@ export default function Submit() {
             `Submission Details:\n` +
             `- Project Title: ${data.projectTitle}\n` +
             `- Categories: ${categoriesText}\n` +
-            `- Entry Type: ${entryType}\n` +
+            `- Entrant Type: ${entrantTypeLabel}\n` +
+            `- Entry Tier: ${entryType}\n` +
             `- Total Fee Paid: $${totalFee}\n\n` +
             `Our jury will review your work shortly.\n\nBest regards,\nThe AI Architecture Awards Team`,
           html: `
@@ -410,7 +391,8 @@ export default function Submit() {
                 <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
                   <tr><td style="padding: 8px 0; font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 1px;">Project Title:</td><td style="padding: 8px 0; font-size: 13px; font-weight: bold; text-transform: uppercase;">${data.projectTitle}</td></tr>
                   <tr><td style="padding: 8px 0; font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 1px;">Categories:</td><td style="padding: 8px 0; font-size: 13px; font-weight: bold; text-transform: uppercase;">${categoriesText}</td></tr>
-                  <tr><td style="padding: 8px 0; font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 1px;">Entry Type:</td><td style="padding: 8px 0; font-size: 13px; font-weight: bold; text-transform: uppercase;">${entryType}</td></tr>
+                  <tr><td style="padding: 8px 0; font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 1px;">Entrant Type:</td><td style="padding: 8px 0; font-size: 13px; font-weight: bold; text-transform: uppercase;">${entrantTypeLabel}</td></tr>
+                  <tr><td style="padding: 8px 0; font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 1px;">Entry Tier:</td><td style="padding: 8px 0; font-size: 13px; font-weight: bold; text-transform: uppercase;">${entryType}</td></tr>
                   <tr><td style="padding: 8px 0; font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 1px;">Fee Paid:</td><td style="padding: 8px 0; font-size: 13px; font-weight: bold; text-transform: uppercase;">$${totalFee}</td></tr>
                 </table>
               </div>
@@ -614,7 +596,9 @@ export default function Submit() {
                         {CATEGORIES.map((category) => {
                           const isAnimation = category.id === 'animation';
                           const entryType = getEntryType();
-                          const price = isAnimation ? 35 : (entryType === "Early Entry" ? 20 : entryType === "Standard Entry" ? 30 : 40);
+                          const tier = getEntryTier();
+                          const rates = PRICING[entrantType || "professional"];
+                          const price = isAnimation ? rates.animation : rates[tier === "final" ? "late" : tier];
                           
                           return (
                             <label
@@ -645,8 +629,8 @@ export default function Submit() {
                                   "text-[9px] font-medium uppercase tracking-widest mt-1",
                                   selectedCategories.includes(category.id) ? "text-gray-400" : "text-gray-500"
                                 )}>
-                                  {isAnimation ? "$35 Fixed" : `$${price} ${entryType}`}
-                                  {selectedCategories.length > 0 && !selectedCategories.includes(category.id) && " (+$10 Add-on)"}
+                                  {isAnimation ? `$${rates.animation} Fixed` : `$${price} ${entryType}`}
+                                  {selectedCategories.length > 0 && !selectedCategories.includes(category.id) && ` (+$${rates.additionalCategory} Add-on)`}
                                 </span>
                               </div>
                               <div className={cn(
@@ -660,6 +644,65 @@ export default function Submit() {
                         })}
                       </div>
                       {errors.categories && <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest">{errors.categories.message}</p>}
+                    </div>
+
+                    {/* Entrant Type — Student vs Professional */}
+                    <div className="space-y-6">
+                      <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">Entrant Type *</label>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {(["student", "professional"] as const).map((type) => {
+                          const isSelected = entrantType === type;
+                          const tier = getEntryTier();
+                          const tierLabel = getEntryTierLabel(tier);
+                          const baseFee = PRICING[type][tier === "final" ? "late" : tier];
+                          return (
+                            <label
+                              key={type}
+                              className={cn(
+                                "relative cursor-pointer border-2 p-6 transition-all",
+                                isSelected ? "border-black bg-black text-white" : "border-black/20 bg-white hover:border-black/40"
+                              )}
+                            >
+                              <input
+                                type="radio"
+                                value={type}
+                                {...register("entrantType")}
+                                className="sr-only"
+                              />
+                              <div className="flex items-baseline justify-between mb-3">
+                                <span className="text-xs font-bold uppercase tracking-widest">
+                                  {type === "student" ? "Student" : "Professional"}
+                                </span>
+                                {isSelected && (
+                                  <span className={cn("text-[9px] font-mono uppercase tracking-[0.3em]", isSelected ? "text-white/60" : "text-black/40")}>
+                                    Selected
+                                  </span>
+                                )}
+                              </div>
+                              <div className="flex items-baseline gap-2">
+                                <span className="text-3xl font-bold tracking-tighter">${baseFee}</span>
+                                <span className={cn("text-xs", isSelected ? "text-white/60" : "text-black/40")}>
+                                  / category
+                                </span>
+                              </div>
+                              <div className={cn("mt-2 text-[10px] font-mono uppercase tracking-widest", isSelected ? "text-white/60" : "text-black/40")}>
+                                {tierLabel} pricing
+                              </div>
+                              {type === "student" && (
+                                <p className={cn("mt-4 text-[10px] leading-relaxed", isSelected ? "text-white/70" : "text-black/50")}>
+                                  For current students. Honor system — winners may be asked for verification.
+                                </p>
+                              )}
+                              {type === "professional" && (
+                                <p className={cn("mt-4 text-[10px] leading-relaxed", isSelected ? "text-white/70" : "text-black/50")}>
+                                  For practicing architects, studios, designers, and researchers.
+                                </p>
+                              )}
+                            </label>
+                          );
+                        })}
+                      </div>
+                      {errors.entrantType && <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest">{errors.entrantType.message}</p>}
                     </div>
 
                     <div className="space-y-4">
@@ -898,18 +941,35 @@ export default function Submit() {
                       </div>
 
                       <div className="border border-black p-8 bg-gray-50">
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Entry Fee Breakdown</span>
+                        <div className="flex items-baseline justify-between">
+                          <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Entry Fee Breakdown</span>
+                          <span className="text-[10px] font-mono uppercase tracking-widest text-gray-400">
+                            {entrantType === "student" ? "Student" : "Professional"} · {getEntryType()}
+                          </span>
+                        </div>
                         <div className="mt-6 space-y-4">
-                          <div className="flex justify-between items-end">
-                            <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">First Category</span>
-                            <span className="text-xl font-bold">${selectedCategories.length > 0 ? Math.max(...selectedCategories.map(catId => catId === 'animation' ? 35 : (getEntryType() === "Early Entry" ? 20 : getEntryType() === "Standard Entry" ? 30 : 40))) : 0}</span>
-                          </div>
-                          {selectedCategories.length > 1 && (
-                            <div className="flex justify-between items-end">
-                              <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Additional ({selectedCategories.length - 1})</span>
-                              <span className="text-xl font-bold">${(selectedCategories.length - 1) * 10}</span>
-                            </div>
-                          )}
+                          {(() => {
+                            const rates = PRICING[entrantType || "professional"];
+                            const tier = getEntryTier();
+                            const tierFee = rates[tier === "final" ? "late" : tier];
+                            const firstFee = selectedCategories.length > 0 ? Math.max(...selectedCategories.map(catId => catId === 'animation' ? rates.animation : tierFee)) : 0;
+                            const extraCount = Math.max(0, selectedCategories.length - 1);
+                            const extraFee = extraCount * rates.additionalCategory;
+                            return (
+                              <>
+                                <div className="flex justify-between items-end">
+                                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">First Category</span>
+                                  <span className="text-xl font-bold">${firstFee}</span>
+                                </div>
+                                {extraCount > 0 && (
+                                  <div className="flex justify-between items-end">
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Additional ({extraCount}) · ${rates.additionalCategory} ea</span>
+                                    <span className="text-xl font-bold">${extraFee}</span>
+                                  </div>
+                                )}
+                              </>
+                            );
+                          })()}
                           <div className="pt-4 border-t border-black/10 flex justify-between items-end">
                             <span className="text-[10px] font-bold uppercase tracking-widest text-black">Total Amount</span>
                             <span className="text-4xl font-bold tracking-tighter">${calculateTotal()}</span>

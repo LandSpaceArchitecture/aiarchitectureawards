@@ -6,7 +6,7 @@ import { Canvas, useFrame, useThree, useLoader } from "@react-three/fiber";
 import { Image, Float, PerspectiveCamera } from "@react-three/drei";
 import * as THREE from "three";
 import { cn } from "@/src/lib/utils";
-import { CATEGORIES, KEY_DATES, JURY } from "@/src/constants";
+import { CATEGORIES, KEY_DATES, JURY, PRICING } from "@/src/constants";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { usePageMeta } from "@/src/hooks/usePageMeta";
 import heroBg from "@/src/assets/hero-bg.png";
@@ -510,100 +510,86 @@ export default function Home() {
             </div>
           </div>
 
-          {/* 3-tier pricing cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-black/10 border border-black/10">
-            {[
-              {
-                tier: "EARLY",
-                label: "Early Entry",
-                price: 20,
-                deadline: "Until July 14, 2026",
-                note: "Save $20 vs Late Entry",
-                highlight: false,
-              },
-              {
-                tier: "STANDARD",
-                label: "Standard Entry",
-                price: 30,
-                deadline: "Until July 26, 2026",
-                note: "Most popular pricing window",
-                highlight: true,
-              },
-              {
-                tier: "LATE",
-                label: "Late Entry",
-                price: 40,
-                deadline: "Until August 9, 2026",
-                note: "Final chance — last-minute entrants",
-                highlight: false,
-              },
-            ].map((tier, idx) => (
-              <motion.div
-                key={tier.tier}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: idx * 0.1 }}
-                className={cn(
-                  "p-8 md:p-12 relative overflow-hidden flex flex-col",
-                  tier.highlight ? "bg-black text-white" : "bg-white"
-                )}
-              >
-                <div className={cn(
-                  "monospace-label mb-6",
-                  tier.highlight ? "text-white/40" : "text-black/40"
-                )}>
-                  0{idx + 1} // {tier.tier}
-                </div>
-                <h3 className="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight mb-2">
-                  {tier.label}
-                </h3>
-                <div className={cn(
-                  "monospace-label mb-8",
-                  tier.highlight ? "text-white/60" : "text-black/60"
-                )}>
-                  {tier.deadline}
-                </div>
-                <div className="flex items-baseline gap-2 mb-3">
-                  <span className="text-7xl md:text-8xl font-bold tracking-tighter leading-none">
-                    ${tier.price}
-                  </span>
-                  <span className={cn(
-                    "text-sm",
-                    tier.highlight ? "text-white/60" : "text-black/40"
-                  )}>
-                    / category
-                  </span>
-                </div>
-                <div className={cn(
-                  "text-xs leading-relaxed mt-auto pt-8",
-                  tier.highlight ? "text-white/60" : "text-black/50"
-                )}>
-                  {tier.note}
-                </div>
-              </motion.div>
-            ))}
+          {/* Pricing table — Student vs Professional × 3 tiers */}
+          <div className="border border-black/10 bg-white overflow-hidden">
+            {/* Header row */}
+            <div className="grid grid-cols-4 gap-px bg-black/10 border-b border-black/10">
+              <div className="bg-white p-4 md:p-6 monospace-label text-black/40">
+                Tier
+              </div>
+              <div className="bg-white p-4 md:p-6">
+                <div className="monospace-label text-black/40 mb-1">EARLY</div>
+                <div className="text-[10px] font-mono text-black/40 hidden md:block">until Jul 14</div>
+              </div>
+              <div className="bg-black text-white p-4 md:p-6 relative">
+                <div className="absolute top-1 right-2 text-[8px] font-mono uppercase tracking-widest text-white/40 hidden md:block">popular</div>
+                <div className="monospace-label text-white/60 mb-1">STANDARD</div>
+                <div className="text-[10px] font-mono text-white/40 hidden md:block">until Jul 26</div>
+              </div>
+              <div className="bg-white p-4 md:p-6">
+                <div className="monospace-label text-black/40 mb-1">LATE</div>
+                <div className="text-[10px] font-mono text-black/40 hidden md:block">until Aug 9</div>
+              </div>
+            </div>
+
+            {/* Student row */}
+            <div className="grid grid-cols-4 gap-px bg-black/10 border-b border-black/10">
+              <div className="bg-white p-4 md:p-6 flex flex-col justify-center">
+                <div className="text-base md:text-xl font-bold uppercase tracking-tight">Student</div>
+                <div className="text-[10px] text-black/40 hidden md:block mt-1">For current students</div>
+              </div>
+              <div className="bg-white p-4 md:p-6 text-center">
+                <div className="text-2xl md:text-4xl font-bold tracking-tighter">${PRICING.student.early}</div>
+                <div className="text-[9px] font-mono text-black/40">/ cat</div>
+              </div>
+              <div className="bg-black text-white p-4 md:p-6 text-center">
+                <div className="text-2xl md:text-4xl font-bold tracking-tighter">${PRICING.student.standard}</div>
+                <div className="text-[9px] font-mono text-white/40">/ cat</div>
+              </div>
+              <div className="bg-white p-4 md:p-6 text-center">
+                <div className="text-2xl md:text-4xl font-bold tracking-tighter">${PRICING.student.late}</div>
+                <div className="text-[9px] font-mono text-black/40">/ cat</div>
+              </div>
+            </div>
+
+            {/* Professional row */}
+            <div className="grid grid-cols-4 gap-px bg-black/10">
+              <div className="bg-white p-4 md:p-6 flex flex-col justify-center">
+                <div className="text-base md:text-xl font-bold uppercase tracking-tight">Professional</div>
+                <div className="text-[10px] text-black/40 hidden md:block mt-1">Architects, studios, designers</div>
+              </div>
+              <div className="bg-white p-4 md:p-6 text-center">
+                <div className="text-2xl md:text-4xl font-bold tracking-tighter">${PRICING.professional.early}</div>
+                <div className="text-[9px] font-mono text-black/40">/ cat</div>
+              </div>
+              <div className="bg-black text-white p-4 md:p-6 text-center">
+                <div className="text-2xl md:text-4xl font-bold tracking-tighter">${PRICING.professional.standard}</div>
+                <div className="text-[9px] font-mono text-white/40">/ cat</div>
+              </div>
+              <div className="bg-white p-4 md:p-6 text-center">
+                <div className="text-2xl md:text-4xl font-bold tracking-tighter">${PRICING.professional.late}</div>
+                <div className="text-[9px] font-mono text-black/40">/ cat</div>
+              </div>
+            </div>
           </div>
 
           {/* Add-on notes */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-black/10 border border-black/10 border-t-0 mt-px">
-            <div className="bg-white p-6 md:p-8 flex items-baseline gap-4">
-              <span className="text-3xl font-bold tracking-tighter">+$10</span>
-              <span className="text-xs text-black/60 leading-relaxed">
-                Each additional category on the same project
-              </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-px bg-black/10 border border-black/10 border-t-0 mt-px">
+            <div className="bg-white p-4 md:p-6 flex flex-col gap-1">
+              <span className="text-xl font-bold tracking-tighter">+$10 / +$20</span>
+              <span className="text-[10px] text-black/60 leading-relaxed">Add'l category (Student / Pro)</span>
             </div>
-            <div className="bg-white p-6 md:p-8 flex items-baseline gap-4">
-              <span className="text-3xl font-bold tracking-tighter">$35</span>
-              <span className="text-xs text-black/60 leading-relaxed">
-                AI Animation & Video — flat fee, all tiers
-              </span>
+            <div className="bg-white p-4 md:p-6 flex flex-col gap-1">
+              <span className="text-xl font-bold tracking-tighter">$35 / $90</span>
+              <span className="text-[10px] text-black/60 leading-relaxed">Animation flat fee (Student / Pro)</span>
             </div>
-            <div className="bg-white p-6 md:p-8 flex items-baseline gap-4">
-              <span className="text-3xl font-bold tracking-tighter">USD</span>
-              <span className="text-xs text-black/60 leading-relaxed">
-                All payments processed securely via Stripe. Promotion codes accepted.
-              </span>
+            <div className="bg-white p-4 md:p-6 flex flex-col gap-1">
+              <span className="text-xl font-bold tracking-tighter">USD</span>
+              <span className="text-[10px] text-black/60 leading-relaxed">All payments via Stripe</span>
+            </div>
+            <div className="bg-white p-4 md:p-6 flex flex-col gap-1">
+              <span className="text-xl font-bold tracking-tighter">Codes ✓</span>
+              <span className="text-[10px] text-black/60 leading-relaxed">Promotion codes accepted at checkout</span>
             </div>
           </div>
 

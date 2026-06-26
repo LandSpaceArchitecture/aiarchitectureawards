@@ -96,15 +96,29 @@ const FAQ_SECTIONS: Section[] = [
       {
         q: "How much does it cost to submit?",
         a: (
-          <div className="space-y-3">
-            <p>Entry fees depend on the deadline:</p>
-            <ul className="space-y-1">
-              <li><strong>Early Entry</strong> (until July 14): <strong>$20</strong> per category</li>
-              <li><strong>Standard Entry</strong> (until July 26): <strong>$30</strong> per category</li>
-              <li><strong>Late Entry</strong> (until August 9): <strong>$40</strong> per category</li>
-            </ul>
-            <p><strong>Animation & Video</strong> is <strong>$35 fixed</strong> regardless of tier.</p>
-            <p>Each additional category on the same project is <strong>+$10</strong>.</p>
+          <div className="space-y-4">
+            <p>Two pricing tracks based on entrant type:</p>
+            <div>
+              <p><strong>Student</strong> — for current students (honor system, may be asked for verification if shortlisted):</p>
+              <ul className="ml-4 space-y-1">
+                <li>Early (until July 14): <strong>$20</strong> per category</li>
+                <li>Standard (until July 26): <strong>$30</strong> per category</li>
+                <li>Late (until August 9): <strong>$40</strong> per category</li>
+                <li>Animation & Video: <strong>$35</strong> fixed</li>
+                <li>Each additional category: <strong>+$10</strong></li>
+              </ul>
+            </div>
+            <div>
+              <p><strong>Professional</strong> — architects, studios, designers, researchers:</p>
+              <ul className="ml-4 space-y-1">
+                <li>Early (until July 14): <strong>$50</strong> per category</li>
+                <li>Standard (until July 26): <strong>$80</strong> per category</li>
+                <li>Late (until August 9): <strong>$110</strong> per category</li>
+                <li>Animation & Video: <strong>$90</strong> fixed</li>
+                <li>Each additional category: <strong>+$20</strong></li>
+              </ul>
+            </div>
+            <p className="text-xs text-black/50">Studios entering 3+ projects can email info@aiarchitectureawards.com for bulk pricing.</p>
           </div>
         ),
       },
