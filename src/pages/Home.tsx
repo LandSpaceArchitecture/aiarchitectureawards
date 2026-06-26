@@ -216,6 +216,17 @@ export default function Home() {
   const { user } = useAuth();
   const submitPath = user ? "/submit" : "/login?redirect=/submit";
 
+  // Fallback: if a Supabase auth callback (recovery/error) lands at site root,
+  // forward the URL hash to /reset-password so the user sees the right page.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const hash = window.location.hash;
+    if (!hash) return;
+    if (hash.includes("type=recovery") || hash.includes("error_code=otp_expired") || hash.includes("access_token=")) {
+      window.location.replace("/reset-password" + hash);
+    }
+  }, []);
+
   usePageMeta({
     title: "AI Architecture Awards 2026 — Global Recognition for AI-Driven Design",
     description: "Submit your AI-driven architecture, landscape, urban, interior, visualization, and animation work to the 2026 AI Architecture Awards. Open for entries until August 9, 2026.",

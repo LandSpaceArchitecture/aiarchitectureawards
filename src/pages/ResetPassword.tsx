@@ -42,7 +42,12 @@ export default function ResetPassword() {
     const errorParam = params.get("error_description") || params.get("error");
 
     if (errorParam) {
-      setTokenError(decodeURIComponent(errorParam.replace(/\+/g, " ")));
+      const decoded = decodeURIComponent(errorParam.replace(/\+/g, " "));
+      if (decoded.toLowerCase().includes("expired") || params.get("error_code") === "otp_expired") {
+        setTokenError("This reset link has expired (links are valid for 1 hour). Please request a new one from the Sign In page.");
+      } else {
+        setTokenError(decoded);
+      }
       return;
     }
     if (!at) {
