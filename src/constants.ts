@@ -109,13 +109,14 @@ export const PRICING = {
 };
 
 /** Get the current tier (early/standard/late/final) based on a date. */
-export function getEntryTier(date: Date = new Date()): "early" | "standard" | "late" | "final" {
-  const early = new Date(PRICING_DEADLINES.early);
-  const standard = new Date(PRICING_DEADLINES.standard);
-  const late = new Date(PRICING_DEADLINES.late);
-  if (date <= early) return "early";
-  if (date <= standard) return "standard";
-  if (date <= late) return "late";
+export function getEntryTier(date?: Date): "early" | "standard" | "late" | "final" {
+  const now = date instanceof Date ? date.getTime() : Date.now();
+  const earlyMs = new Date(PRICING_DEADLINES.early).getTime();
+  const standardMs = new Date(PRICING_DEADLINES.standard).getTime();
+  const lateMs = new Date(PRICING_DEADLINES.late).getTime();
+  if (now <= earlyMs) return "early";
+  if (now <= standardMs) return "standard";
+  if (now <= lateMs) return "late";
   return "final";
 }
 
@@ -131,29 +132,32 @@ export function getEntryTierLabel(tier: ReturnType<typeof getEntryTier>): string
 
 /**
  * Calculate the total fee for a submission.
- * @param categories — list of category IDs
- * @param entrantType — "student" or "professional"
- * @param date — submission date (defaults to now); used for tier pricing
+ * Defensively coded to avoid TDZ / closure-capture pitfalls in production bundles.
  */
 export function calculateFee(
   categories: string[],
   entrantType: EntrantType,
-  date: Date = new Date()
+  date?: Date
 ): number {
-  if (!categories || categories.length === 0) return 0;
+  if (!Array.isArray(categories) || categories.length === 0) return 0;
+  const safeDate: Date = date instanceof Date ? date : new Date();
+  const safeType: EntrantType = entrantType === "student" ? "student" : "professional";
 
-  const rates = PRICING[entrantType];
-  const tier = getEntryTier(date);
-  const baseEntryFee = tier === "final" ? rates.late : rates[tier];
+  // Read rates directly each time — no closure capture
+  const animationRate = PRICING[safeType].animation;
+  const additionalCategoryRate = PRICING[safeType].additionalCategory;
+  const tier = getEntryTier(safeDate);
+  const tierKey: "early" | "standard" | "late" = tier === "final" ? "late" : tier;
+  const baseEntryFee = PRICING[safeType][tierKey];
 
-  // Each category's individual price
-  const categoryPrices = categories.map(catId =>
-    catId === "animation" ? rates.animation : baseEntryFee
-  );
-
-  // First category at full tier price (the highest in the list), additional categories at discount
-  const firstCategoryPrice = Math.max(...categoryPrices);
-  const additionalPrice = (categories.length - 1) * rates.additionalCategory;
+  // No inline closure — explicit for loop
+  let firstCategoryPrice = 0;
+  for (let i = 0; i < categories.length; i++) {
+    const catId = categories[i];
+    const price = catId === "animation" ? animationRate : baseEntryFee;
+    if (price > firstCategoryPrice) firstCategoryPrice = price;
+  }
+  const additionalPrice = (categories.length - 1) * additionalCategoryRate;
   return firstCategoryPrice + additionalPrice;
 }
 

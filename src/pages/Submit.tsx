@@ -230,16 +230,23 @@ export default function Submit() {
   const getEntryType = () => getEntryTierLabel(getEntryTier());
 
   // Compute the fee breakdown for display (Step 5 Review)
+  // Defensively coded — no inline closures referencing outer consts.
   function computeFeeBreakdown(cats: string[], type: EntrantType | undefined) {
     const safeType: EntrantType = type === "student" ? "student" : "professional";
-    const rates = PRICING[safeType];
+    const animationRate = PRICING[safeType].animation;
+    const addCatRate = PRICING[safeType].additionalCategory;
     const tier = getEntryTier();
-    const tierFee = rates[tier === "final" ? "late" : tier];
-    const prices = cats.map(catId => catId === 'animation' ? rates.animation : tierFee);
-    const firstFee = prices.length > 0 ? Math.max(...prices) : 0;
+    const tierKey: "early" | "standard" | "late" = tier === "final" ? "late" : tier;
+    const tierFee = PRICING[safeType][tierKey];
+
+    let firstFee = 0;
+    for (let i = 0; i < cats.length; i++) {
+      const p = cats[i] === 'animation' ? animationRate : tierFee;
+      if (p > firstFee) firstFee = p;
+    }
     const extraCount = Math.max(0, cats.length - 1);
-    const extraFee = extraCount * rates.additionalCategory;
-    return { firstFee, extraCount, extraFee, additionalRate: rates.additionalCategory };
+    const extraFee = extraCount * addCatRate;
+    return { firstFee, extraCount, extraFee, additionalRate: addCatRate };
   }
 
   const handlePayment = async () => {
