@@ -350,7 +350,11 @@ export default function Submit() {
       const uidToUse = savedUid || supabaseUser?.id;
       if (!uidToUse) throw new Error("No user ID available. Please log in again and contact support.");
 
-      console.log("[SUBMIT] Calling createSubmission with uid:", uidToUse);
+      // Pre-compute fee BEFORE createSubmission (used in both DB insert AND email body)
+      const safeEntrantType = data.entrantType === "student" ? "student" : "professional";
+      const totalFee = calculateTotalForCategories(data.categories || [], safeEntrantType);
+
+      console.log("[SUBMIT] Calling createSubmission with uid:", uidToUse, "fee:", totalFee);
       const createPromise = submissionService.createSubmission({
         project_title: data.projectTitle,
         category: data.categories,
@@ -362,7 +366,7 @@ export default function Submit() {
         other_credits: data.otherCredits,
         image_urls: [coverUrl, ...galleryUrls],
         video_url: data.videoUrl,
-        entrant_type: data.entrantType || "professional",
+        entrant_type: safeEntrantType,
         fee_paid: totalFee,
       } as any, uidToUse);
       const timeoutPromise = new Promise((_, reject) =>
@@ -378,10 +382,9 @@ export default function Submit() {
       const categoriesText = (data.categories || [])
         .map((c: string) => CATEGORIES.find(cat => cat.id === c)?.title || c)
         .join(", ");
-      // Calculate from data.categories directly — form state may not be ready after Stripe redirect
-      const totalFee = calculateTotalForCategories(data.categories || [], data.entrantType || "professional");
       const entryType = getEntryType();
-      const entrantTypeLabel = data.entrantType === "student" ? "Student" : "Professional";
+      const entrantTypeLabel = safeEntrantType === "student" ? "Student" : "Professional";
+      // totalFee was computed above before createSubmission
 
       fetch("/api/send-email", {
         method: "POST",
