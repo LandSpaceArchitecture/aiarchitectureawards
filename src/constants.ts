@@ -12,6 +12,7 @@ import juryJoshua from "@/src/assets/jury/joshua.jpg";
 import juryShweta from "@/src/assets/jury/shweta.jpg";
 import juryAfshin from "@/src/assets/jury/afshin.jpg";
 import juryMatt from "@/src/assets/jury/matt.jpg";
+import juryDaeho from "@/src/assets/jury/daeho.jpg";
 
 export const CATEGORIES = [
   {
@@ -157,6 +158,15 @@ export const JURY = [
     instagram: "",
     linkedin: "mattperotto",
     image: juryMatt,
+    placeholder: false,
+  },
+  {
+    name: "Daeho Lee",
+    role: "Co-founder & Principal, LMTLS Architectural Research Studio",
+    bio: "Bridging AI and architectural practice through research, teaching, and design. A graduate of MIT's Master of Architecture program, he has contributed to landmark projects at OMA, Adjaye Associates, and BIG. His work explores computational design and human-AI collaboration in studio environments.",
+    instagram: "daeho_lee_0104",
+    linkedin: "",
+    image: juryDaeho,
     placeholder: false,
   },
 ];
