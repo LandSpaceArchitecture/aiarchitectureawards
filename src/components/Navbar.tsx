@@ -9,6 +9,7 @@ import { loginWithGoogle, logout } from "@/src/supabase";
 const PUBLIC_NAV_LINKS = [
   { label: "Home", path: "/" },
   { label: "Categories", path: "/categories" },
+  { label: "Jury", path: "/jurors" },
 ];
 
 export default function Navbar() {

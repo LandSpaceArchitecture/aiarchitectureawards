@@ -12,6 +12,7 @@ import Login from "./pages/Login";
 import Gallery from "./pages/Gallery";
 import MySubmissions from "./pages/MySubmissions";
 import FAQ from "./pages/FAQ";
+import Jurors from "./pages/Jurors";
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
             <Route path="submit" element={<Submit />} />
             <Route path="my-submissions" element={<MySubmissions />} />
             <Route path="faq" element={<FAQ />} />
+            <Route path="jurors" element={<Jurors />} />
             <Route path="project/:id" element={<ProjectDetail />} />
             <Route path="admin" element={<Admin />} />
             <Route path="jury" element={<Jury />} />

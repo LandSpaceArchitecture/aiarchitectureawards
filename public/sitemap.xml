@@ -21,6 +21,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.aiarchitectureawards.com/jurors</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.aiarchitectureawards.com/login</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
