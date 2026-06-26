@@ -1,6 +1,6 @@
 import { useRef, Suspense, Component, ErrorInfo, ReactNode, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Calendar, Users, Award, Zap, Globe, Cpu, Layers, MousePointer2 } from "lucide-react";
+import { ArrowRight, Calendar, Users, Award, Zap, Globe, Cpu, Layers, MousePointer2, FileText, Stamp, ScrollText, Monitor, Megaphone, Trophy, Hexagon, Newspaper } from "lucide-react";
 import { motion, useMotionValue, useSpring, useMotionTemplate } from "motion/react";
 import { Canvas, useFrame, useThree, useLoader } from "@react-three/fiber";
 import { Image, Float, PerspectiveCamera } from "@react-three/drei";
@@ -554,6 +554,99 @@ export default function Home() {
                 <div className="absolute bottom-0 left-0 w-full h-[2px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Winner Rewards */}
+      <section className="py-24 md:py-48 border-b border-black/10 bg-white relative">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 mb-12 md:mb-24">
+            <div className="lg:col-span-7">
+              <div className="monospace-label mb-4 md:mb-8">05 // REWARDS</div>
+              <h2 className="text-5xl sm:text-7xl md:text-9xl font-bold uppercase tracking-tighter leading-[0.9]">
+                What Winners <br /><span className="text-black/20">Get</span>
+              </h2>
+            </div>
+            <div className="lg:col-span-5 lg:pl-12 flex items-end">
+              <p className="text-base md:text-lg text-black/60 leading-relaxed">
+                Winners receive well-deserved recognition and a range of benefits — exclusive badges, global media coverage, and promotion across our extensive network of design professionals and institutions.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-black/10 border border-black/10">
+            {[
+              {
+                icon: FileText,
+                title: "Personalised Interview Webpage",
+                desc: "Feature your stories, creative inspiration, and perspectives on our website permanently. Inspire fellow professionals worldwide.",
+              },
+              {
+                icon: Stamp,
+                title: "Award Logo Kit",
+                desc: "Exclusive award logos for your website, social media, portfolio, and any online or offline placement. (For winning work only.)",
+              },
+              {
+                icon: ScrollText,
+                title: "Certificate of Achievement",
+                desc: "All winners receive an electronic Certificate of Achievement, honouring their exceptional accomplishments.",
+              },
+              {
+                icon: Monitor,
+                title: "Online Exhibition",
+                desc: "A global audience views and engages with winning work — an accessible, innovative way to reach a wider audience.",
+              },
+              {
+                icon: Megaphone,
+                title: "Social Media Exposure",
+                desc: "We amplify winning projects on our social channels, reaching design industry professionals and AI-design enthusiasts.",
+              },
+              {
+                icon: Trophy,
+                title: "Award Trophy",
+                desc: "Design of the Year winner receives a complimentary customised trophy. Available for purchase for all winners.",
+              },
+              {
+                icon: Hexagon,
+                title: "Metal Magnet Badge",
+                desc: "A sleek symbol of success — complimentary for Design of the Year winners. Available for purchase for other winners.",
+              },
+              {
+                icon: Newspaper,
+                title: "Publication Exposure",
+                desc: "Subject to press release confirmation, your name and company may be included in the official winner announcement.",
+              },
+              {
+                icon: Globe,
+                title: "Global Network Access",
+                desc: "Join an exclusive community of architects, researchers, and AI-design pioneers shaping the future of the discipline.",
+              },
+            ].map((reward, idx) => {
+              const Icon = reward.icon;
+              return (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: idx * 0.05 }}
+                  className="group bg-white p-8 md:p-10 relative overflow-hidden flex flex-col"
+                >
+                  <div className="flex items-baseline justify-between mb-8">
+                    <span className="monospace-label">{`0${idx + 1}`}</span>
+                    <Icon className="h-6 w-6 text-black/20 group-hover:text-black transition-colors" />
+                  </div>
+                  <h3 className="text-xl md:text-2xl font-bold uppercase tracking-tight leading-tight mb-4">
+                    {reward.title}
+                  </h3>
+                  <p className="text-sm text-black/60 leading-relaxed">
+                    {reward.desc}
+                  </p>
+                  <div className="absolute bottom-0 left-0 w-full h-[2px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
