@@ -493,11 +493,143 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Call for Entries / Pricing */}
+      <section className="py-24 md:py-48 border-b border-black/10 bg-white relative">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 mb-12 md:mb-24">
+            <div className="lg:col-span-7">
+              <div className="monospace-label mb-4 md:mb-8">04 // CALL FOR ENTRIES</div>
+              <h2 className="text-5xl sm:text-7xl md:text-9xl font-bold uppercase tracking-tighter leading-[0.9]">
+                Entry <br /><span className="text-black/20">Fees</span>
+              </h2>
+            </div>
+            <div className="lg:col-span-5 lg:pl-12 flex items-end">
+              <p className="text-base md:text-lg text-black/60 leading-relaxed">
+                Submit your work in any of our 8 categories. Pricing tiers reward early entrants and scale with proximity to the final deadline.
+              </p>
+            </div>
+          </div>
+
+          {/* 3-tier pricing cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-black/10 border border-black/10">
+            {[
+              {
+                tier: "EARLY",
+                label: "Early Entry",
+                price: 20,
+                deadline: "Until July 14, 2026",
+                note: "Save $20 vs Late Entry",
+                highlight: false,
+              },
+              {
+                tier: "STANDARD",
+                label: "Standard Entry",
+                price: 30,
+                deadline: "Until July 26, 2026",
+                note: "Most popular pricing window",
+                highlight: true,
+              },
+              {
+                tier: "LATE",
+                label: "Late Entry",
+                price: 40,
+                deadline: "Until August 9, 2026",
+                note: "Final chance — last-minute entrants",
+                highlight: false,
+              },
+            ].map((tier, idx) => (
+              <motion.div
+                key={tier.tier}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: idx * 0.1 }}
+                className={cn(
+                  "p-8 md:p-12 relative overflow-hidden flex flex-col",
+                  tier.highlight ? "bg-black text-white" : "bg-white"
+                )}
+              >
+                <div className={cn(
+                  "monospace-label mb-6",
+                  tier.highlight ? "text-white/40" : "text-black/40"
+                )}>
+                  0{idx + 1} // {tier.tier}
+                </div>
+                <h3 className="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight mb-2">
+                  {tier.label}
+                </h3>
+                <div className={cn(
+                  "monospace-label mb-8",
+                  tier.highlight ? "text-white/60" : "text-black/60"
+                )}>
+                  {tier.deadline}
+                </div>
+                <div className="flex items-baseline gap-2 mb-3">
+                  <span className="text-7xl md:text-8xl font-bold tracking-tighter leading-none">
+                    ${tier.price}
+                  </span>
+                  <span className={cn(
+                    "text-sm",
+                    tier.highlight ? "text-white/60" : "text-black/40"
+                  )}>
+                    / category
+                  </span>
+                </div>
+                <div className={cn(
+                  "text-xs leading-relaxed mt-auto pt-8",
+                  tier.highlight ? "text-white/60" : "text-black/50"
+                )}>
+                  {tier.note}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Add-on notes */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-black/10 border border-black/10 border-t-0 mt-px">
+            <div className="bg-white p-6 md:p-8 flex items-baseline gap-4">
+              <span className="text-3xl font-bold tracking-tighter">+$10</span>
+              <span className="text-xs text-black/60 leading-relaxed">
+                Each additional category on the same project
+              </span>
+            </div>
+            <div className="bg-white p-6 md:p-8 flex items-baseline gap-4">
+              <span className="text-3xl font-bold tracking-tighter">$35</span>
+              <span className="text-xs text-black/60 leading-relaxed">
+                AI Animation & Video — flat fee, all tiers
+              </span>
+            </div>
+            <div className="bg-white p-6 md:p-8 flex items-baseline gap-4">
+              <span className="text-3xl font-bold tracking-tighter">USD</span>
+              <span className="text-xs text-black/60 leading-relaxed">
+                All payments processed securely via Stripe. Promotion codes accepted.
+              </span>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="mt-12 md:mt-16 flex flex-col sm:flex-row items-center justify-center gap-6">
+            <Link
+              to={submitPath}
+              className="btn-primary"
+            >
+              Start Your Entry
+            </Link>
+            <Link
+              to="/categories"
+              className="font-mono text-[10px] uppercase tracking-[0.4em] text-black/60 hover:text-black transition-colors"
+            >
+              See All Categories →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Jury */}
       <section className="py-24 md:py-48 border-b border-black/10 bg-white relative">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12 md:mb-32 text-center">
-            <div className="monospace-label mb-4 md:mb-8">04 // THE PANEL</div>
+            <div className="monospace-label mb-4 md:mb-8">05 // THE PANEL</div>
             <h2 className="text-5xl sm:text-7xl md:text-9xl font-bold uppercase tracking-tighter">JURY</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-black/10 border border-black/10">
@@ -563,7 +695,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 mb-12 md:mb-24">
             <div className="lg:col-span-7">
-              <div className="monospace-label mb-4 md:mb-8">05 // REWARDS</div>
+              <div className="monospace-label mb-4 md:mb-8">06 // REWARDS</div>
               <h2 className="text-5xl sm:text-7xl md:text-9xl font-bold uppercase tracking-tighter leading-[0.9]">
                 What Winners <br /><span className="text-black/20">Get</span>
               </h2>
