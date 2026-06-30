@@ -74,21 +74,21 @@ export const CATEGORIES = [
 ];
 
 export const KEY_DATES = [
-  { label: "Early Entry Deadline", date: "July 14, 2026" },
-  { label: "Standard Entry Deadline", date: "July 26, 2026" },
-  { label: "Late Entry Deadline", date: "August 9, 2026" },
-  { label: "Final Submission Deadline", date: "August 14, 2026" },
-  { label: "Jury Review Period", date: "August 15 – September 8, 2026" },
-  { label: "Winners Announcement", date: "September 13, 2026" },
+  { label: "Early Entry Deadline", date: "August 14, 2026" },
+  { label: "Standard Entry Deadline", date: "August 26, 2026" },
+  { label: "Late Entry Deadline", date: "September 9, 2026" },
+  { label: "Final Submission Deadline", date: "September 14, 2026" },
+  { label: "Jury Review Period", date: "September 15 – September 30, 2026" },
+  { label: "Winners Announcement", date: "October 5, 2026" },
 ];
 
 // Centralized pricing logic — single source of truth for all pages.
 export type EntrantType = "student" | "professional";
 
 export const PRICING_DEADLINES = {
-  early: "2026-07-14",
-  standard: "2026-07-26",
-  late: "2026-08-09",
+  early: "2026-08-14",
+  standard: "2026-08-26",
+  late: "2026-09-09",
 };
 
 export const PRICING = {

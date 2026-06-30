@@ -229,7 +229,7 @@ export default function Home() {
 
   usePageMeta({
     title: "AI Architecture Awards 2026 — Global Recognition for AI-Driven Design",
-    description: "Submit your AI-driven architecture, landscape, urban, interior, visualization, and animation work to the 2026 AI Architecture Awards. Open for entries until August 9, 2026.",
+    description: "Submit your AI-driven architecture, landscape, urban, interior, visualization, and animation work to the 2026 AI Architecture Awards. Open for entries until September 9, 2026.",
     canonicalPath: "/",
   });
 
@@ -530,16 +530,16 @@ export default function Home() {
               </div>
               <div className="bg-white p-4 md:p-6">
                 <div className="monospace-label text-black/40 mb-1">EARLY</div>
-                <div className="text-[10px] font-mono text-black/40 hidden md:block">until Jul 14</div>
+                <div className="text-[10px] font-mono text-black/40 hidden md:block">until Aug 14</div>
               </div>
               <div className="bg-black text-white p-4 md:p-6 relative">
                 <div className="absolute top-1 right-2 text-[8px] font-mono uppercase tracking-widest text-white/40 hidden md:block">popular</div>
                 <div className="monospace-label text-white/60 mb-1">STANDARD</div>
-                <div className="text-[10px] font-mono text-white/40 hidden md:block">until Jul 26</div>
+                <div className="text-[10px] font-mono text-white/40 hidden md:block">until Aug 26</div>
               </div>
               <div className="bg-white p-4 md:p-6">
                 <div className="monospace-label text-black/40 mb-1">LATE</div>
-                <div className="text-[10px] font-mono text-black/40 hidden md:block">until Aug 9</div>
+                <div className="text-[10px] font-mono text-black/40 hidden md:block">until Sep 9</div>
               </div>
             </div>
 
