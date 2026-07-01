@@ -13,6 +13,7 @@ import juryShweta from "@/src/assets/jury/shweta.jpg";
 import juryAfshin from "@/src/assets/jury/afshin.jpg";
 import juryMatt from "@/src/assets/jury/matt.jpg";
 import juryDaeho from "@/src/assets/jury/daeho.jpg";
+import juryKajetan from "@/src/assets/jury/kajetan.jpg";
 
 export const CATEGORIES = [
   {
@@ -246,6 +247,15 @@ export const JURY = [
     instagram: "daeho_lee_0104",
     linkedin: "",
     image: juryDaeho,
+    placeholder: false,
+  },
+  {
+    name: "Kajetan Szostok",
+    role: "AI Lead & Senior Architect, MC Studios",
+    bio: "Working alongside Mariana Cabugueira to pioneer the future of architecture at the intersection of artificial intelligence, cinematic storytelling, and human craft.",
+    instagram: "kajetan_szostok",
+    linkedin: "",
+    image: juryKajetan,
     placeholder: false,
   },
 ];
