@@ -107,6 +107,7 @@ export default function Admin() {
       (s.author_name || "").toLowerCase().includes(q) ||
       (s.email || "").toLowerCase().includes(q) ||
       (s.other_credits || "").toLowerCase().includes(q) ||
+      ((s as any).ai_tools || "").toLowerCase().includes(q) ||
       (s.country || "").toLowerCase().includes(q);
     const matchesStatus = statusFilter === "all" || s.submission_status === statusFilter;
     const matchesCategory = categoryFilter === "all" || s.category.includes(categoryFilter);
@@ -115,7 +116,7 @@ export default function Admin() {
 
   const exportCSV = () => {
     const headers = [
-      "id", "project_title", "categories", "entrant_type", "fee_paid_usd",
+      "id", "project_title", "categories", "ai_tools", "entrant_type", "fee_paid_usd",
       "author_name", "email", "country", "team_other_credits",
       "short_description", "full_description",
       "video_url", "image_count", "image_urls", "submission_status",
@@ -128,6 +129,7 @@ export default function Admin() {
         s.id,
         s.project_title,
         (s.category || []).join("; "),
+        (s as any).ai_tools || "",
         (s as any).entrant_type || "professional",
         (s as any).fee_paid || "",
         s.author_name,
@@ -409,6 +411,17 @@ export default function Admin() {
                               </div>
                             </div>
                           </div>
+
+                          {(submission as any).ai_tools && (
+                            <div>
+                              <h4 className="text-[9px] font-bold uppercase tracking-[0.4em] text-gray-400 mb-3">
+                                AI Tools Used
+                              </h4>
+                              <p className="text-sm leading-relaxed text-gray-700">
+                                {(submission as any).ai_tools}
+                              </p>
+                            </div>
+                          )}
 
                           {submission.other_credits && (
                             <div>

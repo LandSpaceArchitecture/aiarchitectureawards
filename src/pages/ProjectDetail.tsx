@@ -206,6 +206,14 @@ export default function ProjectDetail() {
                   {submission.full_description}
                 </p>
               </div>
+              {(submission as any).ai_tools && (
+                <div className="mt-16 pt-10 border-t border-black/10">
+                  <h3 className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-400 mb-4">AI Tools Used</h3>
+                  <p className="text-base leading-relaxed text-black/70">
+                    {(submission as any).ai_tools}
+                  </p>
+                </div>
+              )}
             </section>
 
             {/* Image Gallery — ALL images, no cropping, click to enlarge */}

@@ -25,6 +25,9 @@ const submissionSchema = z.object({
   aiApproach: z.string()
     .min(20, "AI approach description is required")
     .refine((val) => val.trim().split(/\s+/).length <= 200, "AI approach manifesto must be under 200 words"),
+  aiTools: z.string()
+    .min(3, "Please list at least one AI tool you used")
+    .max(500, "AI tools list must be under 500 characters"),
   authorName: z.string().min(2, "Author name is required"),
   email: z.string().email("Invalid email address"),
   country: z.string().min(1, "Country is required"),
@@ -134,6 +137,7 @@ export default function Submit() {
       projectTitle: "",
       shortDescription: "",
       aiApproach: "",
+      aiTools: "",
       authorName: user?.displayName || supabaseUser?.user_metadata?.full_name || supabaseUser?.email?.split('@')[0] || "",
       email: user?.email || supabaseUser?.email || "",
       country: "",
@@ -368,6 +372,7 @@ export default function Submit() {
         video_url: data.videoUrl,
         entrant_type: safeEntrantType,
         fee_paid: totalFee,
+        ai_tools: data.aiTools || "",
       } as any, uidToUse);
       const timeoutPromise = new Promise((_, reject) =>
         setTimeout(() => reject(new Error("createSubmission timed out after 20s — likely an auth/RLS issue. Check console.")), 20000)
@@ -398,6 +403,7 @@ export default function Submit() {
             `Submission Details:\n` +
             `- Project Title: ${data.projectTitle}\n` +
             `- Categories: ${categoriesText}\n` +
+            `- AI Tools Used: ${data.aiTools || "—"}\n` +
             `- Entrant Type: ${entrantTypeLabel}\n` +
             `- Entry Tier: ${entryType}\n` +
             `- Total Fee Paid: $${totalFee}\n\n` +
@@ -415,6 +421,7 @@ export default function Submit() {
                 <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
                   <tr><td style="padding: 8px 0; font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 1px;">Project Title:</td><td style="padding: 8px 0; font-size: 13px; font-weight: bold; text-transform: uppercase;">${data.projectTitle}</td></tr>
                   <tr><td style="padding: 8px 0; font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 1px;">Categories:</td><td style="padding: 8px 0; font-size: 13px; font-weight: bold; text-transform: uppercase;">${categoriesText}</td></tr>
+                  <tr><td style="padding: 8px 0; font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 1px;">AI Tools Used:</td><td style="padding: 8px 0; font-size: 13px; font-weight: bold;">${data.aiTools || "—"}</td></tr>
                   <tr><td style="padding: 8px 0; font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 1px;">Entrant Type:</td><td style="padding: 8px 0; font-size: 13px; font-weight: bold; text-transform: uppercase;">${entrantTypeLabel}</td></tr>
                   <tr><td style="padding: 8px 0; font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 1px;">Entry Tier:</td><td style="padding: 8px 0; font-size: 13px; font-weight: bold; text-transform: uppercase;">${entryType}</td></tr>
                   <tr><td style="padding: 8px 0; font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 1px;">Fee Paid:</td><td style="padding: 8px 0; font-size: 13px; font-weight: bold; text-transform: uppercase;">$${totalFee}</td></tr>
@@ -829,12 +836,26 @@ export default function Submit() {
                   </div>
 
                   <div className="space-y-4">
+                    <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">AI Tools Used * <span className="text-black/40 normal-case tracking-normal">(comma-separated)</span></label>
+                    <input
+                      {...register("aiTools")}
+                      type="text"
+                      className="w-full border border-black p-6 text-lg leading-relaxed outline-none focus:bg-gray-50 transition-colors"
+                      placeholder="e.g. Midjourney, ChatGPT, Stable Diffusion, Rhino + Grasshopper, Veras"
+                    />
+                    <p className="text-[10px] text-gray-400 uppercase tracking-widest">
+                      List every AI tool and workflow used to create your project.
+                    </p>
+                    {errors.aiTools && <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest">{errors.aiTools.message}</p>}
+                  </div>
+
+                  <div className="space-y-4">
                     <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">Process Manifesto (Max 200 words) *</label>
                     <textarea
                       {...register("aiApproach")}
                       rows={8}
                       className="w-full border border-black p-8 text-lg leading-relaxed outline-none focus:bg-gray-50 transition-colors"
-                      placeholder="Detail the AI tools used, the specific workflow, and the role of machine intelligence in your design process..."
+                      placeholder="Detail the specific workflow, the role of machine intelligence in your design process, and how tools were combined..."
                     />
                     {errors.aiApproach && <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest">{errors.aiApproach.message}</p>}
                   </div>
