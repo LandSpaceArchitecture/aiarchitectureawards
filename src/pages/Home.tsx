@@ -6,7 +6,7 @@ import { Canvas, useFrame, useThree, useLoader } from "@react-three/fiber";
 import { Image, Float, PerspectiveCamera } from "@react-three/drei";
 import * as THREE from "three";
 import { cn } from "@/src/lib/utils";
-import { CATEGORIES, KEY_DATES, JURY, PRICING } from "@/src/constants";
+import { CATEGORIES, KEY_DATES, JURY, PRICING, PARTNERS } from "@/src/constants";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { usePageMeta } from "@/src/hooks/usePageMeta";
 import heroBg from "@/src/assets/hero-bg.png";
@@ -777,6 +777,56 @@ export default function Home() {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* AI Partners */}
+      <section className="py-24 md:py-48 border-b border-black/10 bg-white relative">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 mb-12 md:mb-24">
+            <div className="lg:col-span-7">
+              <div className="monospace-label mb-4 md:mb-8">07 // OFFICIAL PARTNERS</div>
+              <h2 className="text-5xl sm:text-7xl md:text-9xl font-bold uppercase tracking-tighter leading-[0.9]">
+                AI <br /><span className="text-black/20">Partners</span>
+              </h2>
+            </div>
+            <div className="lg:col-span-5 lg:pl-12 flex items-end">
+              <p className="text-base md:text-lg text-black/60 leading-relaxed">
+                Winners of the 2026 AI Architecture Awards receive <strong className="text-black">Pro licenses or Premium subscriptions</strong> from our official AI platform partners — exclusive access to the tools reshaping the discipline.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-black/10 border border-black/10">
+            {PARTNERS.map((partner, idx) => (
+              <motion.a
+                key={partner.name}
+                href={partner.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                className="group bg-white p-12 md:p-16 flex items-center justify-center min-h-[180px] md:min-h-[220px] transition-all hover:bg-black/[0.02] relative overflow-hidden"
+              >
+                <img
+                  src={partner.logo}
+                  alt={`${partner.name} logo`}
+                  className="max-h-16 md:max-h-20 w-auto max-w-[70%] object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                />
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-black/40">
+                    Visit {partner.name} →
+                  </span>
+                </div>
+              </motion.a>
+            ))}
+          </div>
+
+          <p className="mt-8 md:mt-12 font-mono text-[10px] uppercase tracking-[0.4em] text-black/40 text-center">
+            Partnership programs — access provided directly by partner platforms to selected winners.
+          </p>
         </div>
       </section>
 

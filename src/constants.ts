@@ -15,6 +15,30 @@ import juryMatt from "@/src/assets/jury/matt.jpg";
 import juryDaeho from "@/src/assets/jury/daeho.jpg";
 import juryKajetan from "@/src/assets/jury/kajetan.jpg";
 
+import partnerSuapp from "@/src/assets/partners/suapp.png";
+import partnerD5 from "@/src/assets/partners/d5.png";
+import partnerAino from "@/src/assets/partners/ainoworld.png";
+
+// AI Partners — winners receive Pro/Premium access from these platforms.
+// Update the `url` field once you confirm each partner's official website.
+export const PARTNERS = [
+  {
+    name: "SUAPP",
+    logo: partnerSuapp,
+    url: "https://www.suapp.ai",
+  },
+  {
+    name: "D5 Render",
+    logo: partnerD5,
+    url: "https://www.d5render.com",
+  },
+  {
+    name: "Aino World",
+    logo: partnerAino,
+    url: "https://aino.world",
+  },
+];
+
 export const CATEGORIES = [
   {
     id: "architecture",
