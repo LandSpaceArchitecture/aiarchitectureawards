@@ -1,6 +1,6 @@
 import { useRef, Suspense, Component, ErrorInfo, ReactNode, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Calendar, Users, Award, Zap, Globe, Cpu, Layers, MousePointer2, FileText, Stamp, ScrollText, Monitor, Megaphone, Trophy, Hexagon, Newspaper } from "lucide-react";
+import { ArrowRight, Calendar, Users, Award, Zap, Globe, Cpu, Layers, MousePointer2, FileText, Stamp, ScrollText, Monitor, Megaphone, Trophy, Hexagon, Newspaper, DollarSign, Sparkles } from "lucide-react";
 import { motion, useMotionValue, useSpring, useMotionTemplate } from "motion/react";
 import { Canvas, useFrame, useThree, useLoader } from "@react-three/fiber";
 import { Image, Float, PerspectiveCamera } from "@react-three/drei";
@@ -10,27 +10,6 @@ import { CATEGORIES, KEY_DATES, JURY, PRICING, PARTNERS } from "@/src/constants"
 import { useAuth } from "@/src/contexts/AuthContext";
 import { usePageMeta } from "@/src/hooks/usePageMeta";
 import heroBg from "@/src/assets/hero-bg.png";
-
-const AI_TOOLS = [
-  { name: "Stable Diffusion", category: "Image Generation" },
-  { name: "Runway", category: "Video" },
-  { name: "Pika", category: "Video" },
-  { name: "ComfyUI", category: "Workflow" },
-  { name: "ControlNet", category: "Control" },
-  { name: "ChatGPT", category: "Text" },
-  { name: "Claude", category: "Text" },
-  { name: "Rhino + Grasshopper", category: "CAD" },
-  { name: "Blender", category: "3D" },
-  { name: "nano banana", category: "Multimodal" },
-  { name: "OpenClaw", category: "Workflow" },
-  { name: "Midjourney", category: "Image" },
-  { name: "DALL-E 3", category: "Image" },
-  { name: "Leonardo.ai", category: "Image" },
-  { name: "Veras", category: "Architecture" },
-  { name: "LookX", category: "Architecture" },
-  { name: "Adobe Firefly", category: "Design" },
-  { name: "Magnific AI", category: "Upscaling" },
-];
 
 // Static Hero Image Path
 const HERO_IMAGE_URL = heroBg;
@@ -687,12 +666,62 @@ export default function Home() {
         </div>
       </section>
 
+      {/* AI Partners — moved before Rewards */}
+      <section className="py-24 md:py-48 border-b border-black/10 bg-white relative">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 mb-12 md:mb-24">
+            <div className="lg:col-span-7">
+              <div className="monospace-label mb-4 md:mb-8">06 // OFFICIAL PARTNERS</div>
+              <h2 className="text-5xl sm:text-7xl md:text-9xl font-bold uppercase tracking-tighter leading-[0.9]">
+                AI <br /><span className="text-black/20">Partners</span>
+              </h2>
+            </div>
+            <div className="lg:col-span-5 lg:pl-12 flex items-end">
+              <p className="text-base md:text-lg text-black/60 leading-relaxed">
+                Winners of the 2026 AI Architecture Awards receive <strong className="text-black">Pro licenses or Premium subscriptions</strong> from our official AI platform partners — exclusive access to the tools reshaping the discipline.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-black/10 border border-black/10">
+            {PARTNERS.map((partner, idx) => (
+              <motion.a
+                key={partner.name}
+                href={partner.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                className="group bg-white p-12 md:p-16 flex items-center justify-center min-h-[180px] md:min-h-[220px] transition-all hover:bg-black/[0.02] relative overflow-hidden"
+              >
+                <img
+                  src={partner.logo}
+                  alt={`${partner.name} logo`}
+                  className="max-h-16 md:max-h-20 w-auto max-w-[70%] object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                />
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-black/40">
+                    Visit {partner.name} →
+                  </span>
+                </div>
+              </motion.a>
+            ))}
+          </div>
+
+          <p className="mt-8 md:mt-12 font-mono text-[10px] uppercase tracking-[0.4em] text-black/40 text-center">
+            Partnership programs — access provided directly by partner platforms to selected winners.
+          </p>
+        </div>
+      </section>
+
       {/* Winner Rewards */}
       <section className="py-24 md:py-48 border-b border-black/10 bg-white relative">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 mb-12 md:mb-24">
             <div className="lg:col-span-7">
-              <div className="monospace-label mb-4 md:mb-8">06 // REWARDS</div>
+              <div className="monospace-label mb-4 md:mb-8">07 // REWARDS</div>
               <h2 className="text-5xl sm:text-7xl md:text-9xl font-bold uppercase tracking-tighter leading-[0.9]">
                 What Winners <br /><span className="text-black/20">Get</span>
               </h2>
@@ -707,14 +736,14 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-black/10 border border-black/10">
             {[
               {
-                icon: FileText,
-                title: "Personalised Interview Webpage",
-                desc: "Feature your stories, creative inspiration, and perspectives on our website permanently. Inspire fellow professionals worldwide.",
+                icon: DollarSign,
+                title: "$500 USD Prize",
+                desc: "Cash prize awarded to top winners across the categories, recognizing exceptional AI-driven design work.",
               },
               {
-                icon: Stamp,
-                title: "Award Logo Kit",
-                desc: "Exclusive award logos for your website, social media, portfolio, and any online or offline placement. (For winning work only.)",
+                icon: Sparkles,
+                title: "AI Tools Pro Licenses",
+                desc: "Pro licenses or Premium subscriptions from our AI platform partners — exclusive access to the tools reshaping the discipline.",
               },
               {
                 icon: ScrollText,
@@ -780,97 +809,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* AI Partners */}
-      <section className="py-24 md:py-48 border-b border-black/10 bg-white relative">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 mb-12 md:mb-24">
-            <div className="lg:col-span-7">
-              <div className="monospace-label mb-4 md:mb-8">07 // OFFICIAL PARTNERS</div>
-              <h2 className="text-5xl sm:text-7xl md:text-9xl font-bold uppercase tracking-tighter leading-[0.9]">
-                AI <br /><span className="text-black/20">Partners</span>
-              </h2>
-            </div>
-            <div className="lg:col-span-5 lg:pl-12 flex items-end">
-              <p className="text-base md:text-lg text-black/60 leading-relaxed">
-                Winners of the 2026 AI Architecture Awards receive <strong className="text-black">Pro licenses or Premium subscriptions</strong> from our official AI platform partners — exclusive access to the tools reshaping the discipline.
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-black/10 border border-black/10">
-            {PARTNERS.map((partner, idx) => (
-              <motion.a
-                key={partner.name}
-                href={partner.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="group bg-white p-12 md:p-16 flex items-center justify-center min-h-[180px] md:min-h-[220px] transition-all hover:bg-black/[0.02] relative overflow-hidden"
-              >
-                <img
-                  src={partner.logo}
-                  alt={`${partner.name} logo`}
-                  className="max-h-16 md:max-h-20 w-auto max-w-[70%] object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
-                />
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-black/40">
-                    Visit {partner.name} →
-                  </span>
-                </div>
-              </motion.a>
-            ))}
-          </div>
-
-          <p className="mt-8 md:mt-12 font-mono text-[10px] uppercase tracking-[0.4em] text-black/40 text-center">
-            Partnership programs — access provided directly by partner platforms to selected winners.
-          </p>
-        </div>
-      </section>
-
-      {/* AI Tools */}
-      <section className="py-24 md:py-48 border-b border-black/10 overflow-hidden bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center mb-12 md:mb-32">
-          <div className="monospace-label mb-4 md:mb-8">INTEGRATIONS</div>
-          <h2 className="text-4xl md:text-6xl font-bold uppercase tracking-tighter">WORKS WITH <br /> <span className="text-black/40">YOUR WORKFLOW</span></h2>
-        </div>
-
-        <div className="relative space-y-8">
-          {/* Row 1: Left Scroll */}
-          <div className="flex overflow-hidden">
-            <motion.div
-              animate={{ x: [0, -1920] }}
-              transition={{ repeat: Infinity, duration: 40, ease: "linear" }}
-              className="flex whitespace-nowrap"
-            >
-              {[...AI_TOOLS, ...AI_TOOLS, ...AI_TOOLS].map((tool, idx) => (
-                <div key={idx} className="mx-4 flex h-20 w-64 flex-col items-center justify-center border border-black/10 bg-black/5 backdrop-blur-md p-6 transition-all hover:bg-black hover:border-black group">
-                  <span className="text-lg font-bold uppercase tracking-tight group-hover:scale-105 group-hover:text-white transition-all">{tool.name}</span>
-                  <span className="mt-1 text-[8px] monospace-label group-hover:text-white/60 transition-all">{tool.category}</span>
-                </div>
-              ))}
-            </motion.div>
-          </div>
-
-          {/* Row 2: Right Scroll */}
-          <div className="flex overflow-hidden">
-            <motion.div
-              animate={{ x: [-1920, 0] }}
-              transition={{ repeat: Infinity, duration: 40, ease: "linear" }}
-              className="flex whitespace-nowrap"
-            >
-              {[...AI_TOOLS, ...AI_TOOLS, ...AI_TOOLS].reverse().map((tool, idx) => (
-                <div key={idx} className="mx-4 flex h-20 w-64 flex-col items-center justify-center border border-black/10 bg-black/5 backdrop-blur-md p-6 transition-all hover:bg-black hover:border-black group">
-                  <span className="text-lg font-bold uppercase tracking-tight group-hover:scale-105 group-hover:text-white transition-all">{tool.name}</span>
-                  <span className="mt-1 text-[8px] monospace-label group-hover:text-white/60 transition-all">{tool.category}</span>
-                </div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="py-32 md:py-64 bg-white text-black relative overflow-hidden hairline-grid">
