@@ -309,18 +309,41 @@ export default function Submit() {
         })
       );
 
-      // 4. Create Stripe Checkout session
+      // 4. Create Stripe Checkout session — with retry for flaky networks / cold starts
       setUploadStatus("Initializing secure payment...");
-      const response = await fetch("/api/create-checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount: calculateTotal(),
-          projectTitle: watch("projectTitle"),
-          email: watch("email"),
-        }),
+      const checkoutPayload = JSON.stringify({
+        amount: calculateTotal(),
+        projectTitle: watch("projectTitle"),
+        email: watch("email"),
       });
 
+      const fetchWithRetry = async (attempts = 3): Promise<Response> => {
+        let lastError: any = null;
+        for (let i = 0; i < attempts; i++) {
+          try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000);
+            const res = await fetch("/api/create-checkout-session", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: checkoutPayload,
+              signal: controller.signal,
+            });
+            clearTimeout(timeoutId);
+            return res;
+          } catch (e: any) {
+            lastError = e;
+            console.warn(`[Payment] fetch attempt ${i + 1}/${attempts} failed:`, e?.message);
+            if (i < attempts - 1) {
+              setUploadStatus(`Network hiccup — retrying (${i + 2}/${attempts})...`);
+              await new Promise(r => setTimeout(r, 1500 * (i + 1))); // 1.5s, 3s backoff
+            }
+          }
+        }
+        throw lastError;
+      };
+
+      const response = await fetchWithRetry(3);
       const session = await response.json();
 
       if (session.url) {
@@ -333,7 +356,18 @@ export default function Submit() {
       }
     } catch (err: any) {
       console.error("Pre-payment flow error:", err);
-      setSubmissionError(err.message || "Failed to prepare submission. Please try again.");
+      const raw = err?.message || "";
+      let userMessage: string;
+      if (raw.includes("Failed to fetch") || raw.includes("NetworkError") || raw.includes("aborted") || raw === "") {
+        userMessage =
+          "We couldn't reach the payment server. This usually means a network hiccup on your side. " +
+          "Please: (1) disable any ad-blocker or VPN, (2) check your internet connection, (3) try again. " +
+          "Your uploaded images are still saved — you can retry without re-uploading. " +
+          "If it keeps failing, email info@aiarchitectureawards.com and we'll help you complete the submission.";
+      } else {
+        userMessage = raw || "Failed to prepare submission. Please try again.";
+      }
+      setSubmissionError(userMessage);
       setIsSubmitting(false);
     }
   };
