@@ -37,10 +37,10 @@ const FAQ_SECTIONS: Section[] = [
           <ul className="space-y-2">
             <li>Early Entry Deadline: <strong>August 14, 2026</strong></li>
             <li>Standard Entry Deadline: <strong>August 26, 2026</strong></li>
-            <li>Late Entry Deadline: <strong>September 9, 2026</strong></li>
-            <li>Final Submission Deadline: <strong>September 14, 2026</strong></li>
-            <li>Jury Review: <strong>September 15 – September 30, 2026</strong></li>
-            <li>Winners Announcement: <strong>October 5, 2026</strong></li>
+            <li>Late Entry Deadline: <strong>September 15, 2026</strong></li>
+            <li>Final Submission Deadline: <strong>September 30, 2026</strong></li>
+            <li>Jury Review: <strong>October 1 – October 9, 2026</strong></li>
+            <li>Winners Announcement: <strong>October 12, 2026</strong></li>
           </ul>
         ),
       },
@@ -103,7 +103,7 @@ const FAQ_SECTIONS: Section[] = [
               <ul className="ml-4 space-y-1">
                 <li>Early (until August 14): <strong>$20</strong> per category</li>
                 <li>Standard (until August 26): <strong>$30</strong> per category</li>
-                <li>Late (until September 9): <strong>$40</strong> per category</li>
+                <li>Late (until September 15): <strong>$40</strong> per category</li>
                 <li>Animation & Video: <strong>$35</strong> fixed</li>
                 <li>Each additional category: <strong>+$10</strong></li>
               </ul>
@@ -113,7 +113,7 @@ const FAQ_SECTIONS: Section[] = [
               <ul className="ml-4 space-y-1">
                 <li>Early (until August 14): <strong>$50</strong> per category</li>
                 <li>Standard (until August 26): <strong>$80</strong> per category</li>
-                <li>Late (until September 9): <strong>$110</strong> per category</li>
+                <li>Late (until September 15): <strong>$110</strong> per category</li>
                 <li>Animation & Video: <strong>$90</strong> fixed</li>
                 <li>Each additional category: <strong>+$20</strong></li>
               </ul>
@@ -247,7 +247,7 @@ const FAQ_SECTIONS: Section[] = [
       },
       {
         q: "When will I know if I won?",
-        a: "Winners will be announced October 5, 2026 by email and on aiarchitectureawards.com.",
+        a: "Winners will be announced October 12, 2026 by email and on aiarchitectureawards.com.",
       },
     ],
   },
