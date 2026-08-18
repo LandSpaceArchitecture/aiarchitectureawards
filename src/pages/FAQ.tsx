@@ -115,7 +115,7 @@ const FAQ_SECTIONS: Section[] = [
                 <li>Standard (until August 26): <strong>$80</strong> per category</li>
                 <li>Late (until September 15): <strong>$110</strong> per category</li>
                 <li>Animation & Video: <strong>$90</strong> fixed</li>
-                <li>Each additional category: <strong>+$20</strong></li>
+                <li>Each additional category: <strong>+$10</strong></li>
               </ul>
             </div>
             <p className="text-xs text-black/50">Studios entering 3+ projects can email info@aiarchitectureawards.com for bulk pricing.</p>

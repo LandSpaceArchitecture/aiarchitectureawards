@@ -129,7 +129,7 @@ export const PRICING = {
     standard: 80,
     late: 110,
     animation: 90,        // flat fee for AI Animation & Video
-    additionalCategory: 20,
+    additionalCategory: 10,
   },
 };
 
