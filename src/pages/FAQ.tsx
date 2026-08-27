@@ -113,7 +113,7 @@ const FAQ_SECTIONS: Section[] = [
               <ul className="ml-4 space-y-1">
                 <li>Early (until August 14): <strong>$50</strong> per category</li>
                 <li>Standard (until August 26): <strong>$80</strong> per category</li>
-                <li>Late (until September 15): <strong>$110</strong> per category</li>
+                <li>Late (until September 15): <strong>$99</strong> per category</li>
                 <li>Animation & Video: <strong>$90</strong> fixed</li>
                 <li>Each additional category: <strong>+$10</strong></li>
               </ul>
