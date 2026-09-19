@@ -3,17 +3,14 @@ import { X } from "lucide-react";
 
 const MESSAGE = (
   <>
-    <span className="font-bold tracking-widest">LATE ENTRY OPEN</span>
+    <span className="font-bold tracking-widest">FINAL SUBMISSION DEADLINE</span>
+    <span className="mx-1.5 font-semibold">September 30, 2026</span>
     <span className="mx-3 opacity-60">//</span>
-    <span>Don't miss your chance — deadline</span>
-    <span className="mx-1.5 font-semibold">Sept 15</span>
+    <span>Last chance to enter!</span>
     <span className="mx-3 opacity-60">//</span>
     <span>Use code</span>
     <span className="mx-1.5 rounded-sm bg-white px-2 py-0.5 font-mono font-bold text-black">AIAWARD20</span>
     <span>for 20% off</span>
-    <span className="mx-3 opacity-60">//</span>
-    <span>Submit now at</span>
-    <span className="ml-1.5 underline">aiarchitectureawards.com/submit</span>
     <span className="mx-6 opacity-40">✦</span>
   </>
 );
