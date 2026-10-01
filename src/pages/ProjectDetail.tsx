@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
-import { ArrowLeft, Mail, Video, Calendar, Award, Loader2, X, ChevronLeft, ChevronRight, Lock, ThumbsUp } from "lucide-react";
+import { ArrowLeft, Mail, Video, Award, Loader2, X, ChevronLeft, ChevronRight, Lock, ThumbsUp } from "lucide-react";
 import { submissionService, Submission } from "@/src/services/submissionService";
 import { voteService } from "@/src/services/voteService";
 import { CATEGORIES } from "@/src/constants";
@@ -259,13 +259,6 @@ export default function ProjectDetail() {
                     <span className="text-xs font-bold uppercase tracking-widest bg-black text-white px-3 py-1">
                       {submission.submission_status}
                     </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-medium text-gray-500">Submitted</span>
-                    <div className="flex items-center space-x-2 text-xs font-bold">
-                      <Calendar className="h-3 w-3" />
-                      <span>{new Date(submission.created_at).toLocaleDateString()}</span>
-                    </div>
                   </div>
                 </div>
               </div>
