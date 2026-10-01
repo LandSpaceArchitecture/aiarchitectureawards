@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
-import { ArrowLeft, Mail, Video, Calendar, Award, Loader2, Share2, X, ChevronLeft, ChevronRight, Lock, ThumbsUp } from "lucide-react";
+import { ArrowLeft, Mail, Video, Calendar, Award, Loader2, X, ChevronLeft, ChevronRight, Lock, ThumbsUp } from "lucide-react";
 import { submissionService, Submission } from "@/src/services/submissionService";
 import { voteService } from "@/src/services/voteService";
 import { CATEGORIES } from "@/src/constants";
@@ -308,7 +308,7 @@ export default function ProjectDetail() {
               </div>
 
               <div>
-                <h3 className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-400 mb-6">Connect</h3>
+                <h3 className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-400 mb-6">Video (please review)</h3>
                 <div className="space-y-4">
                   {isAdmin && (
                     <a
@@ -319,7 +319,7 @@ export default function ProjectDetail() {
                       <span>Contact Architect</span>
                     </a>
                   )}
-                  {submission.video_url && (
+                  {submission.video_url ? (
                     <a
                       href={submission.video_url}
                       target="_blank"
@@ -329,11 +329,9 @@ export default function ProjectDetail() {
                       <Video className="h-4 w-4" />
                       <span>Watch Cinematic</span>
                     </a>
+                  ) : (
+                    <p className="text-xs text-gray-400 uppercase tracking-widest">No video submitted</p>
                   )}
-                  <button className="flex items-center space-x-4 text-xs font-bold uppercase tracking-widest hover:text-gray-500 transition-colors">
-                    <Share2 className="h-4 w-4" />
-                    <span>Share Project</span>
-                  </button>
                 </div>
               </div>
 
