@@ -214,10 +214,16 @@ export const COUNTRIES = [
 ];
 
 export const JURY_EMAILS = [
-  "pipicorgisketch@gmail.com", // Admin is also a judge
+  "pipicorgisketch@gmail.com",      // Admin is also a judge
   "landarch.org@gmail.com",
-  "rada@dalevadesign.com",      // Rada Daleva
-  "josh.vermillion@unlv.edu",   // Joshua Vermillion
+  "landspace.arch@gmail.com",       // Test jury account
+  "rada@dalevadesign.com",          // Rada Daleva
+  "josh.vermillion@unlv.edu",       // Joshua Vermillion
+  "info@thearchart.com",            // Shweta Hingane
+  "aashari@uoguelph.ca",            // Afshin Ashari
+  "mattperotto@gmail.com",          // Matt Perotto
+  "dh840104@gmail.com",             // Daeho Lee
+  "kajetan.szostok@mcstudiosx.com", // Kajetan Szostok
 ];
 
 export const JURY = [
@@ -243,6 +249,7 @@ export const JURY = [
   },
   {
     name: "Shweta Hingane",
+    email: "info@thearchart.com",
     role: "Founder, The Archart Studio",
     bio: "Architect, urban planner, and founder of The Archart Studio, pioneering AI-integrated architectural graphics education.",
     instagram: "the.archart",
@@ -252,6 +259,7 @@ export const JURY = [
   },
   {
     name: "Afshin Ashari",
+    email: "aashari@uoguelph.ca",
     role: "Associate Professor of Landscape Architecture, University of Guelph",
     bio: "Working at the fertile edge where computation, AI, and landscape imagination meet. Background in both computer science and landscape architecture; his work treats computation not as a shortcut to efficiency, but as a medium of inquiry, perception, and invention.",
     instagram: "afshin.ashari",
@@ -261,6 +269,7 @@ export const JURY = [
   },
   {
     name: "Matt Perotto",
+    email: "mattperotto@gmail.com",
     role: "Principal, Urban Strategies · MLA, University of Toronto",
     bio: "ASLA, OALA, CSLA. Landscape architect, urban designer, and University of Toronto educator advancing automation and AI in design through practice at Urban Strategies and research with UofT and ASLA.",
     instagram: "",
@@ -270,6 +279,7 @@ export const JURY = [
   },
   {
     name: "Daeho Lee",
+    email: "dh840104@gmail.com",
     role: "Co-founder & Principal, LMTLS Architectural Research Studio",
     bio: "Bridging AI and architectural practice through research, teaching, and design. A graduate of MIT's Master of Architecture program, he has contributed to landmark projects at OMA, Adjaye Associates, and BIG. His work explores computational design and human-AI collaboration in studio environments.",
     instagram: "daeho_lee_0104",
@@ -279,6 +289,7 @@ export const JURY = [
   },
   {
     name: "Kajetan Szostok",
+    email: "kajetan.szostok@mcstudiosx.com",
     role: "AI Lead & Senior Architect, MC Studios",
     bio: "Working alongside Mariana Cabugueira to pioneer the future of architecture at the intersection of artificial intelligence, cinematic storytelling, and human craft.",
     instagram: "kajetan_szostok",
