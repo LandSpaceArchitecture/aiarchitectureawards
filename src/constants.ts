@@ -216,11 +216,14 @@ export const COUNTRIES = [
 export const JURY_EMAILS = [
   "pipicorgisketch@gmail.com", // Admin is also a judge
   "landarch.org@gmail.com",
+  "rada@dalevadesign.com",      // Rada Daleva
+  "josh.vermillion@unlv.edu",   // Joshua Vermillion
 ];
 
 export const JURY = [
   {
     name: "Rada Daleva",
+    email: "rada@dalevadesign.com",
     role: "Founder, Daleva Design · AI-Integrated Architecture Practice",
     bio: "Architect behind the world's first fully AI-driven architectural project. Work includes Britishvolt, Aston Martin F1 HQ & EMAAR developments.",
     instagram: "daleva.architecture",
@@ -230,6 +233,7 @@ export const JURY = [
   },
   {
     name: "Joshua Vermillion",
+    email: "josh.vermillion@unlv.edu",
     role: "Professor of Architecture, UNLV · AI & Computational Design",
     bio: "AI & Computational Design researcher. Collaborator with Samsung, Microsoft & Architectural Digest. Behind the first AI/photography hybrid cover for Harper's BAZAAR.",
     instagram: "joshuavermillion",
