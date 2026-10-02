@@ -1,5 +1,6 @@
 import { supabase } from "@/src/supabase";
 import { Submission, SubmissionStatus } from "@/src/types";
+import { getSession } from "./authToken";
 export type { Submission, SubmissionStatus };
 
 const SUBMISSIONS_TABLE = "submissions";
@@ -11,25 +12,9 @@ export const submissionService = {
     uid?: string
   ) {
     console.log("[submissionService] createSubmission called");
-    let userId = uid;
-    let accessToken: string | undefined;
-
-    // Read auth token directly from localStorage (never calls supabase.auth — avoids hangs)
-    try {
-      const url = import.meta.env.VITE_SUPABASE_URL as string;
-      const ref = url.replace('https://', '').split('.')[0];
-      const stored = localStorage.getItem(`sb-${ref}-auth-token`);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        accessToken = parsed?.access_token;
-        userId = userId || parsed?.user?.id;
-        console.log("[submissionService] Got token from localStorage, user:", userId);
-      } else {
-        console.warn("[submissionService] No auth token in localStorage");
-      }
-    } catch (e) {
-      console.warn('[submissionService] Could not read auth token from localStorage:', e);
-    }
+    // getSession() auto-refreshes near-expiry tokens — avoids 401 on long payments.
+    const { uid: sessionUid, token: accessToken } = await getSession();
+    const userId = uid || sessionUid;
 
     if (!userId) throw new Error("User must be authenticated to submit.");
     if (!accessToken) throw new Error("No auth token found. Please log in again.");
@@ -70,21 +55,8 @@ export const submissionService = {
   },
 
   async uploadProjectImages(files: File[], projectTitle: string, onProgress?: (progress: number) => void): Promise<string[]> {
-    // Read auth directly from localStorage (avoid getSession which can hang)
-    let userId: string | undefined;
-    let accessToken: string | undefined;
-    try {
-      const url = import.meta.env.VITE_SUPABASE_URL as string;
-      const ref = url.replace('https://', '').split('.')[0];
-      const stored = localStorage.getItem(`sb-${ref}-auth-token`);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        accessToken = parsed?.access_token;
-        userId = parsed?.user?.id;
-      }
-    } catch (e) {
-      console.warn('[submissionService] Failed to read localStorage auth:', e);
-    }
+    // getSession() auto-refreshes near-expiry tokens — prevents "exp claim" / 403 on upload.
+    const { uid: userId, token: accessToken } = await getSession();
     if (!userId || !accessToken) throw new Error("User must be authenticated to upload.");
     const user = { id: userId };
     
@@ -190,13 +162,7 @@ export const submissionService = {
   async updateSubmissionStatus(id: string, status: SubmissionStatus) {
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-    // Need authed token to pass RLS
-    let accessToken: string | undefined;
-    try {
-      const ref = supabaseUrl.replace('https://', '').split('.')[0];
-      const stored = localStorage.getItem(`sb-${ref}-auth-token`);
-      if (stored) accessToken = JSON.parse(stored)?.access_token;
-    } catch {}
+    const { token: accessToken } = await getSession();
     if (!accessToken) throw new Error("Not authenticated");
 
     const response = await fetch(
@@ -221,12 +187,7 @@ export const submissionService = {
   async updateSubmission(id: string, data: Partial<Submission>) {
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-    let accessToken: string | undefined;
-    try {
-      const ref = supabaseUrl.replace('https://', '').split('.')[0];
-      const stored = localStorage.getItem(`sb-${ref}-auth-token`);
-      if (stored) accessToken = JSON.parse(stored)?.access_token;
-    } catch {}
+    const { token: accessToken } = await getSession();
     if (!accessToken) throw new Error("Not authenticated");
 
     const response = await fetch(
@@ -250,12 +211,7 @@ export const submissionService = {
   async deleteSubmission(id: string) {
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-    let accessToken: string | undefined;
-    try {
-      const ref = supabaseUrl.replace('https://', '').split('.')[0];
-      const stored = localStorage.getItem(`sb-${ref}-auth-token`);
-      if (stored) accessToken = JSON.parse(stored)?.access_token;
-    } catch {}
+    const { token: accessToken } = await getSession();
     if (!accessToken) throw new Error("Not authenticated");
 
     const response = await fetch(

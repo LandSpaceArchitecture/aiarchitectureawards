@@ -1,4 +1,8 @@
 // Vote service — uses direct fetch to bypass the JS client which hangs after auth changes.
+// Uses getSession() which auto-refreshes the JWT when near expiry so long-lived
+// jury sessions don't fail with "JWT expired" / 401.
+
+import { getSession } from "./authToken";
 
 export interface Vote {
   id: string;
@@ -12,37 +16,20 @@ export interface Vote {
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
 const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
 
-function readAuth(): { uid?: string; email?: string; name?: string; token?: string } {
-  try {
-    const ref = supabaseUrl.replace('https://', '').split('.')[0];
-    const stored = localStorage.getItem(`sb-${ref}-auth-token`);
-    if (!stored) return {};
-    const parsed = JSON.parse(stored);
-    return {
-      uid: parsed?.user?.id,
-      email: parsed?.user?.email,
-      name: parsed?.user?.user_metadata?.full_name || parsed?.user?.email?.split('@')[0],
-      token: parsed?.access_token,
-    };
-  } catch {
-    return {};
-  }
-}
-
 export const voteService = {
   /** Cast a vote for a submission (no-op if already voted). */
   async vote(submissionId: string): Promise<void> {
-    const { uid, email, name, token } = readAuth();
-    if (!uid || !token) throw new Error('Not authenticated');
+    const { uid, email, name, token } = await getSession();
+    if (!uid || !token) throw new Error("Not authenticated");
 
     const response = await fetch(
       `${supabaseUrl}/rest/v1/votes?apikey=${encodeURIComponent(anonKey)}`,
       {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-          'Prefer': 'return=minimal,resolution=ignore-duplicates',
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          Prefer: "return=minimal,resolution=ignore-duplicates",
         },
         body: JSON.stringify({
           submission_id: submissionId,
@@ -63,14 +50,14 @@ export const voteService = {
 
   /** Remove the current user's vote for this submission. */
   async unvote(submissionId: string): Promise<void> {
-    const { uid, token } = readAuth();
-    if (!uid || !token) throw new Error('Not authenticated');
+    const { uid, token } = await getSession();
+    if (!uid || !token) throw new Error("Not authenticated");
 
     const response = await fetch(
       `${supabaseUrl}/rest/v1/votes?submission_id=eq.${encodeURIComponent(submissionId)}&voter_uid=eq.${encodeURIComponent(uid)}&apikey=${encodeURIComponent(anonKey)}`,
       {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` },
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
       }
     );
 
@@ -82,39 +69,39 @@ export const voteService = {
 
   /** Get all votes the current user has cast (returns submission_ids). */
   async getMyVotes(): Promise<Set<string>> {
-    const { uid, token } = readAuth();
+    const { uid, token } = await getSession();
     if (!uid || !token) return new Set();
 
     const response = await fetch(
       `${supabaseUrl}/rest/v1/votes?voter_uid=eq.${encodeURIComponent(uid)}&select=submission_id&apikey=${encodeURIComponent(anonKey)}`,
-      { headers: { 'Authorization': `Bearer ${token}` } }
+      { headers: { Authorization: `Bearer ${token}` } }
     );
 
     if (!response.ok) return new Set();
     const rows = await response.json();
-    return new Set((rows as { submission_id: string }[]).map(r => r.submission_id));
+    return new Set((rows as { submission_id: string }[]).map((r) => r.submission_id));
   },
 
   /** Get count of votes for a single submission (any jury can call). */
   async getCount(submissionId: string): Promise<number> {
-    const { token } = readAuth();
+    const { token } = await getSession();
     if (!token) return 0;
 
     const response = await fetch(
       `${supabaseUrl}/rest/v1/votes?submission_id=eq.${encodeURIComponent(submissionId)}&select=*&apikey=${encodeURIComponent(anonKey)}`,
       {
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Prefer': 'count=exact',
-          'Range': '0-0',
+          Authorization: `Bearer ${token}`,
+          Prefer: "count=exact",
+          Range: "0-0",
         },
       }
     );
 
     if (!response.ok) return 0;
-    const contentRange = response.headers.get('content-range');
+    const contentRange = response.headers.get("content-range");
     if (contentRange) {
-      const total = contentRange.split('/')[1];
+      const total = contentRange.split("/")[1];
       return parseInt(total, 10) || 0;
     }
     const rows = await response.json();
@@ -123,12 +110,12 @@ export const voteService = {
 
   /** Admin: get ALL votes with voter info — grouped by submission_id. */
   async getAllVotes(): Promise<Vote[]> {
-    const { token } = readAuth();
+    const { token } = await getSession();
     if (!token) return [];
 
     const response = await fetch(
       `${supabaseUrl}/rest/v1/votes?select=*&order=created_at.desc&apikey=${encodeURIComponent(anonKey)}`,
-      { headers: { 'Authorization': `Bearer ${token}` } }
+      { headers: { Authorization: `Bearer ${token}` } }
     );
 
     if (!response.ok) return [];
