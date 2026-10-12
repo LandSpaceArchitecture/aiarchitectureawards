@@ -1,5 +1,4 @@
 import { Outlet } from "react-router-dom";
-import AnnouncementBar from "./AnnouncementBar";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { motion, AnimatePresence } from "motion/react";
@@ -10,7 +9,6 @@ export default function Layout() {
 
   return (
     <div className="flex min-h-screen flex-col bg-white font-sans text-black selection:bg-black selection:text-white">
-      <AnnouncementBar />
       <Navbar />
       <main className="flex-grow">
         <AnimatePresence mode="wait">
