@@ -285,7 +285,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.5, delay: 1.2 }}
-          className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center space-y-4 pointer-events-none"
+          className="absolute left-1/2 bottom-24 md:bottom-28 z-30 -translate-x-1/2 flex flex-col items-center space-y-4 pointer-events-none"
         >
           <div className="monospace-label text-center">People's Choice · Vote Open</div>
           <Link
@@ -460,7 +460,8 @@ export default function Home() {
         <div className="absolute inset-0 hairline-grid opacity-30 pointer-events-none" />
       </section>
 
-      {/* Timeline */}
+      {/* Timeline — hidden during voting phase */}
+      {false && (
       <section className="py-24 md:py-48 border-b border-black/10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-12 gap-8 md:gap-12">
@@ -489,6 +490,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      )}
 
       {/* Call for Entries / Pricing */}
       <section className="py-24 md:py-48 border-b border-black/10 bg-white relative">
