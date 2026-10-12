@@ -9,9 +9,10 @@ import { useAuth } from "@/src/contexts/AuthContext";
 export default function Login() {
   type Mode = "login" | "register" | "forgot";
   const [mode, setMode] = useState<Mode>("login");
-  const isRegister = mode === "register";
+  // Email registration disabled site-wide — new users must use Google.
+  // Existing email accounts can still sign in and reset passwords.
+  const isRegister = false as const;
   const isForgot = mode === "forgot";
-  const setIsRegister = (val: boolean) => setMode(val ? "register" : "login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -219,7 +220,7 @@ export default function Login() {
             <div className="my-8 flex items-center gap-4">
               <div className="h-px flex-1 bg-black/10" />
               <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-black/40">
-                Or with email
+                Existing accounts
               </span>
               <div className="h-px flex-1 bg-black/10" />
             </div>
@@ -430,21 +431,13 @@ export default function Login() {
         </form>
         )}
 
-        {/* Toggle — hide in forgot mode (it has its own back link) */}
+        {/* Google-only signup note */}
         {!isForgot && (
           <div className="mt-10 border-t border-black/10 pt-8 text-center">
-            <p className="text-xs text-black/60">
-              {isRegister ? "Already have an account?" : "Don't have an account yet?"}{" "}
-              <button
-                type="button"
-                onClick={() => {
-                  setIsRegister(!isRegister);
-                  setError("");
-                }}
-                className="font-bold uppercase tracking-widest text-black underline underline-offset-4 hover:no-underline"
-              >
-                {isRegister ? "Sign In" : "Create one"}
-              </button>
+            <p className="text-xs text-black/60 leading-relaxed">
+              New here? <span className="font-bold uppercase tracking-widest text-black">Continue with Google</span> above.
+              <br />
+              <span className="text-[11px] text-black/40">Email registration is no longer available.</span>
             </p>
           </div>
         )}
