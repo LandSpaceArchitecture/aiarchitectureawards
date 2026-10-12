@@ -198,11 +198,11 @@ export default function ProjectDetail() {
           {/* Main Text */}
           <div className="lg:col-span-8 space-y-20">
             <section>
-              <h2 className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-400 mb-12">Project Manifesto</h2>
-              <p className="text-3xl font-medium leading-tight text-black sm:text-4xl">
+              <h2 className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-400 mb-8">Project Manifesto</h2>
+              <p className="text-xl font-medium leading-relaxed text-black">
                 {submission.short_description}
               </p>
-              <div className="mt-16 prose prose-2xl prose-black max-w-none">
+              <div className="mt-8 prose prose-xl prose-black max-w-none">
                 <p className="text-xl text-gray-600 leading-relaxed whitespace-pre-wrap">
                   {submission.full_description}
                 </p>
@@ -268,12 +268,6 @@ export default function ProjectDetail() {
               <div>
                 <h3 className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-400 mb-6">Jury Vote</h3>
                 <div className="space-y-3">
-                  <div className="flex items-baseline gap-3">
-                    <span className="text-5xl font-bold tracking-tighter tabular-nums">{voteCount}</span>
-                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">
-                      {voteCount === 1 ? "vote" : "votes"}
-                    </span>
-                  </div>
                   <button
                     onClick={handleToggleVote}
                     disabled={voting}
