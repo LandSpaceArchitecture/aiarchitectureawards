@@ -1,6 +1,6 @@
 import { useRef, Suspense, Component, ErrorInfo, ReactNode, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Calendar, Users, Award, Zap, Globe, Cpu, Layers, MousePointer2, FileText, Stamp, ScrollText, Monitor, Megaphone, Trophy, Hexagon, Newspaper, DollarSign, Sparkles } from "lucide-react";
+import { ArrowRight, Calendar, Users, Award, Zap, Globe, Cpu, Layers, MousePointer2, FileText, Stamp, ScrollText, Monitor, Megaphone, Trophy, Hexagon, Newspaper, DollarSign, Sparkles, ThumbsUp } from "lucide-react";
 import { motion, useMotionValue, useSpring, useMotionTemplate } from "motion/react";
 import { Canvas, useFrame, useThree, useLoader } from "@react-three/fiber";
 import { Image, Float, PerspectiveCamera } from "@react-three/drei";
@@ -280,29 +280,36 @@ export default function Home() {
           </div>
         </motion.div>
 
-        {/* Bottom UI — right on desktop, centered/full-width on mobile */}
-        <div className="absolute bottom-6 right-6 left-6 md:bottom-12 md:right-12 md:left-auto z-30 flex flex-col items-stretch md:items-end space-y-6 md:space-y-12">
+        {/* Centered CTA — Vote for your favorite shortlisted project */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.5, delay: 1.2 }}
+          className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center space-y-4 pointer-events-none"
+        >
+          <div className="monospace-label text-center">People's Choice · Vote Open</div>
+          <Link
+            to="/shortlist"
+            className="pointer-events-auto flex items-center gap-3 bg-black px-10 py-5 text-xs font-bold uppercase tracking-[0.3em] text-white transition-all hover:bg-gray-800 hover:scale-[1.03]"
+          >
+            <ThumbsUp className="h-4 w-4" />
+            <span>Vote Your Favorite</span>
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+          <div className="text-[9px] uppercase tracking-[0.4em] text-black/40">Closes Oct 19 · 23:59 UTC</div>
+        </motion.div>
+
+        {/* Status strip — bottom right (desktop only) */}
+        <div className="hidden md:block absolute bottom-12 right-12 z-30 text-right max-w-xs">
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1.5, delay: 1.2 }}
-            className="flex flex-col items-stretch md:items-end space-y-6 md:space-y-8"
+            transition={{ duration: 1.5, delay: 1.4 }}
           >
-            <div className="hidden md:block text-right max-w-xs">
-              <div className="monospace-label mb-2">STATUS.ACTIVE</div>
-              <p className="text-[10px] uppercase tracking-widest text-black/60 leading-relaxed">
-                The global platform for recognizing excellence in design facilitated by machine intelligence.
-              </p>
-            </div>
-
-            <div className="flex items-center justify-center md:justify-end">
-              <Link
-                to={submitPath}
-                className="btn-primary w-full md:w-auto text-center"
-              >
-                Initialize Entry
-              </Link>
-            </div>
+            <div className="monospace-label mb-2">STATUS.ACTIVE</div>
+            <p className="text-[10px] uppercase tracking-widest text-black/60 leading-relaxed">
+              The global platform for recognizing excellence in design facilitated by machine intelligence.
+            </p>
           </motion.div>
         </div>
       </section>
