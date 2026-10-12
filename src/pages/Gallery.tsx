@@ -6,6 +6,7 @@ import { cn } from "@/src/lib/utils";
 import { CATEGORIES } from "@/src/constants";
 import { submissionService, Submission } from "@/src/services/submissionService";
 import { useAuth } from "@/src/contexts/AuthContext";
+import { imgSrc } from "@/src/lib/imgSrc";
 
 export default function Gallery() {
   const { isAdmin, isJury, loading: authLoading, user, supabaseUser } = useAuth();
@@ -152,10 +153,11 @@ export default function Gallery() {
                 >
                   <Link to={`/project/${submission.id}`} className="block h-full w-full">
                     <img
-                      src={submission.image_urls[0]}
+                      src={imgSrc(submission.image_urls[0], "card")}
                       alt={submission.project_title}
                       className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-110 group-hover:grayscale-0"
                       referrerPolicy="no-referrer"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                     

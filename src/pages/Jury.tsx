@@ -12,6 +12,7 @@ import { useAuth } from "@/src/contexts/AuthContext";
 import { submissionService, Submission } from "@/src/services/submissionService";
 import { voteService } from "@/src/services/voteService";
 import { cn } from "@/src/lib/utils";
+import { imgSrc } from "@/src/lib/imgSrc";
 import { CATEGORIES } from "@/src/constants";
 import { Link } from "react-router-dom";
 
@@ -163,9 +164,10 @@ export default function Jury() {
                 hasVoted ? "grayscale-0" : "grayscale group-hover:grayscale-0"
               )}>
                 <img
-                  src={submission.image_urls[0]}
+                  src={imgSrc(submission.image_urls[0], "card")}
                   alt={submission.project_title}
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading="lazy"
                 />
               </div>
 

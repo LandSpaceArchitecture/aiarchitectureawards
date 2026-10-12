@@ -7,6 +7,7 @@ import { submissionService, Submission } from "@/src/services/submissionService"
 import { CATEGORIES, calculateFee } from "@/src/constants";
 import type { EntrantType } from "@/src/constants";
 import { cn } from "@/src/lib/utils";
+import { imgSrc } from "@/src/lib/imgSrc";
 import { usePageMeta } from "@/src/hooks/usePageMeta";
 
 // Get the fee paid — uses stored fee_paid if available, otherwise recomputes.
@@ -167,9 +168,10 @@ export default function MySubmissions() {
                     <div className="aspect-[4/3] overflow-hidden bg-gray-100">
                       {submission.image_urls?.[0] ? (
                         <img
-                          src={submission.image_urls[0]}
+                          src={imgSrc(submission.image_urls[0], "card")}
                           alt={submission.project_title}
                           className="h-full w-full object-cover"
+                          loading="lazy"
                         />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center text-black/10 text-2xl font-bold">

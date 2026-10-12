@@ -25,6 +25,7 @@ import { useAuth } from "@/src/contexts/AuthContext";
 import { submissionService, Submission } from "@/src/services/submissionService";
 import { voteService, Vote } from "@/src/services/voteService";
 import { cn } from "@/src/lib/utils";
+import { imgSrc } from "@/src/lib/imgSrc";
 import { CATEGORIES } from "@/src/constants";
 import { Link } from "react-router-dom";
 
@@ -287,7 +288,7 @@ export default function Admin() {
                   <td className="py-6 align-top">
                     <div className="flex items-center space-x-4">
                       <div className="h-14 w-14 flex-shrink-0 overflow-hidden bg-gray-100">
-                        <img src={submission.image_urls[0]} alt="" className="h-full w-full object-cover" />
+                        <img src={imgSrc(submission.image_urls[0], "thumbnail")} alt="" className="h-full w-full object-cover" loading="lazy" />
                       </div>
                       <div className="min-w-[200px]">
                         <p className="text-sm font-bold uppercase tracking-tight">{submission.project_title}</p>
@@ -530,9 +531,10 @@ export default function Admin() {
                                   title={idx === 0 ? "Cover" : `Image ${idx + 1}`}
                                 >
                                   <img
-                                    src={url}
+                                    src={imgSrc(url, "thumbnail")}
                                     alt=""
                                     className="h-full w-full object-cover group-hover/img:scale-105 transition-transform"
+                                    loading="lazy"
                                   />
                                 </a>
                               ))}

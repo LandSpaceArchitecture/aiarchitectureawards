@@ -12,6 +12,7 @@ import {
 } from "@/src/services/publicVoteService";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { usePageMeta } from "@/src/hooks/usePageMeta";
+import { imgSrc } from "@/src/lib/imgSrc";
 
 function useCountdown(targetIso: string) {
   const target = new Date(targetIso).getTime();
@@ -267,7 +268,7 @@ export default function Shortlist() {
                       className="relative block aspect-[4/5] overflow-hidden border border-black bg-gray-50"
                     >
                       <img
-                        src={s.image_urls?.[0]}
+                        src={imgSrc(s.image_urls?.[0], "card")}
                         alt={s.project_title}
                         className="h-full w-full object-cover transition-all duration-700 group-hover:scale-[1.03]"
                         referrerPolicy="no-referrer"

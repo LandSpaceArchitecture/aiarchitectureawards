@@ -7,6 +7,7 @@ import { voteService } from "@/src/services/voteService";
 import { CATEGORIES } from "@/src/constants";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { cn } from "@/src/lib/utils";
+import { imgSrc } from "@/src/lib/imgSrc";
 
 export default function ProjectDetail() {
   const { id } = useParams();
@@ -134,7 +135,7 @@ export default function ProjectDetail() {
       {/* Hero Section */}
       <div className="relative h-[80vh] w-full overflow-hidden cursor-pointer" onClick={() => setLightboxIdx(0)}>
         <img
-          src={submission.image_urls[0]}
+          src={imgSrc(submission.image_urls[0], "hero")}
           alt={submission.project_title}
           className="h-full w-full object-cover"
           referrerPolicy="no-referrer"
@@ -236,7 +237,7 @@ export default function ProjectDetail() {
                     className="block w-full overflow-hidden bg-gray-100 border border-black/5 group cursor-zoom-in"
                   >
                     <img
-                      src={url}
+                      src={imgSrc(url, "hero")}
                       alt={`${submission.project_title} ${idx === 0 ? "cover" : `detail ${idx}`}`}
                       className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-[1.02]"
                       referrerPolicy="no-referrer"
