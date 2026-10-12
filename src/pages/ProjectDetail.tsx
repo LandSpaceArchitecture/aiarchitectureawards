@@ -264,6 +264,25 @@ export default function ProjectDetail() {
                 </div>
               </div>
 
+              <div>
+                <h3 className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-400 mb-6">Credits</h3>
+                <div className="space-y-4">
+                  <div>
+                    <div className="text-[10px] font-mono uppercase tracking-[0.3em] text-gray-400 mb-1">Author / Studio</div>
+                    <div className="text-sm font-bold uppercase tracking-tight leading-snug">{submission.author_name}</div>
+                    {submission.country && (
+                      <div className="text-xs text-black/50 mt-1">{submission.country}</div>
+                    )}
+                  </div>
+                  {submission.other_credits && (
+                    <div className="pt-4 border-t border-black/10">
+                      <div className="text-[10px] font-mono uppercase tracking-[0.3em] text-gray-400 mb-1">Team / Other Credits</div>
+                      <div className="text-xs text-black/70 leading-relaxed whitespace-pre-wrap">{submission.other_credits}</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               {/* Jury Vote — available to jury + admin */}
               <div>
                 <h3 className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-400 mb-6">Jury Vote</h3>
