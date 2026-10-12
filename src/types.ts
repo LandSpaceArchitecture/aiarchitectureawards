@@ -16,6 +16,9 @@ export interface Submission {
   submission_status: SubmissionStatus;
   created_at: any;
   is_featured: boolean;
+  jury_vote_count?: number;
+  entrant_type?: string;
+  ai_tools?: string;
 }
 
 export interface User {
