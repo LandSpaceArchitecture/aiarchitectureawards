@@ -1,19 +1,37 @@
-// Image URL helper. Currently a pass-through: returns the raw URL.
+// Image URL helper — routes images through wsrv.nl's free CDN proxy
+// (https://wsrv.nl / images.weserv.nl) to resize + compress on the fly.
+// This saves Vercel/Supabase bandwidth without needing Supabase Pro's
+// built-in transformations.
 //
-// Rationale: Supabase Image Transformations ("/storage/v1/render/image/public/")
-// return 403 on this project's current plan, which broke all images on the site.
-// Until transformations are enabled (Supabase dashboard → Storage → Image
-// Transformations → toggle on), we must serve originals.
+// wsrv.nl is a long-standing free image proxy with no documented rate
+// limits for reasonable use; images are cached on their global CDN.
 //
-// All call sites remain correct — swap this file to re-enable server-side
-// resizing without touching components.
+// Pass preset "original" to bypass (use the raw URL — e.g. lightbox).
 
-export type ImgPreset = "thumbnail" | "card" | "hero" | "original";
+const PRESETS = {
+  thumbnail: { w: 400, q: 70 },
+  card: { w: 800, q: 75 },
+  hero: { w: 1600, q: 82 },
+  original: null,
+} as const;
+
+export type ImgPreset = keyof typeof PRESETS;
 
 export function imgSrc(
   url: string | undefined,
-  _preset: ImgPreset = "card",
-  _overrides?: { width?: number; quality?: number }
+  preset: ImgPreset = "card",
+  overrides?: { width?: number; quality?: number }
 ): string {
-  return url ?? "";
+  if (!url) return "";
+  if (preset === "original") return url;
+  // Only proxy http(s) URLs
+  if (!/^https?:\/\//i.test(url)) return url;
+
+  const cfg = PRESETS[preset] ?? PRESETS.card;
+  const w = overrides?.width ?? cfg.w;
+  const q = overrides?.quality ?? cfg.q;
+
+  // wsrv.nl requires the url param without protocol prefix stripped
+  const encoded = encodeURIComponent(url);
+  return `https://wsrv.nl/?url=${encoded}&w=${w}&q=${q}&output=webp&we`;
 }
