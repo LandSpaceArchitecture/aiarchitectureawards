@@ -26,3 +26,8 @@ coverage/
 # Local artifacts
 Gemini_Generated_Image_*.png
 *.tmp
+
+# Local shortlist image downloads (don't commit)
+scripts/downloads/
+scripts/top30.json
+scripts/*.csv
