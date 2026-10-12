@@ -287,9 +287,18 @@ export default function Shortlist() {
                         <h3 className="text-lg font-bold uppercase tracking-tight leading-tight line-clamp-2">
                           {s.project_title}
                         </h3>
-                        <p className="mt-1 text-xs text-black/50 line-clamp-1">
-                          {s.author_name} — {s.country}
+                        <p className="mt-1 text-xs font-semibold text-black line-clamp-1">
+                          {s.author_name}
                         </p>
+                        <p className="text-[11px] text-black/50 line-clamp-1">
+                          {s.country}
+                        </p>
+                        {s.ai_tools && (
+                          <p className="mt-2 text-[10px] font-mono uppercase tracking-wider text-black/40 line-clamp-2">
+                            <span className="text-black/30">AI · </span>
+                            {s.ai_tools}
+                          </p>
+                        )}
                       </div>
 
                       <button
