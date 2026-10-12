@@ -12,9 +12,8 @@ import { imgSrc } from "@/src/lib/imgSrc";
 export default function ProjectDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { isAdmin, isJury, loading: authLoading, user, supabaseUser } = useAuth();
+  const { isAdmin, isJury, loading: authLoading } = useAuth();
   const isAuthorized = isAdmin || isJury;
-  const isLoggedIn = !!(user || supabaseUser);
   const [submission, setSubmission] = useState<Submission | null>(null);
   const [loading, setLoading] = useState(true);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
@@ -39,21 +38,23 @@ export default function ProjectDetail() {
   }, [lightboxIdx, submission]);
 
   useEffect(() => {
-    if (!id || !isAuthorized) return;
+    if (!id) return;
     const fetchProject = async () => {
       try {
         const data = await submissionService.getSubmissionById(id);
         if (data) {
           setSubmission(data);
-          // Fetch vote info in parallel
-          const [count, myVotes] = await Promise.all([
-            voteService.getCount(id),
-            voteService.getMyVotes(),
-          ]);
-          setVoteCount(count);
-          setHasVoted(myVotes.has(id));
+          // Only jury/admin see jury vote data; skip the call for others
+          if (isAuthorized) {
+            const [count, myVotes] = await Promise.all([
+              voteService.getCount(id),
+              voteService.getMyVotes(),
+            ]);
+            setVoteCount(count);
+            setHasVoted(myVotes.has(id));
+          }
         } else {
-          navigate("/gallery");
+          navigate("/shortlist");
         }
       } catch (error) {
         console.error(error);
@@ -88,42 +89,10 @@ export default function ProjectDetail() {
     }
   };
 
-  if (authLoading || (isAuthorized && loading)) {
+  if (authLoading || loading) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-black" />
-      </div>
-    );
-  }
-
-  // Auth gate: only jury + admin can view project details
-  if (!isAuthorized) {
-    return (
-      <div className="mx-auto max-w-md px-4 py-32 text-center">
-        <div className="mb-12 flex h-24 w-24 items-center justify-center border border-black mx-auto">
-          <Lock className="h-10 w-10 text-black" />
-        </div>
-        <h2 className="text-4xl font-bold uppercase tracking-tighter">Restricted Access</h2>
-        <p className="mt-6 text-gray-500 leading-relaxed">
-          Project details are reserved for jury members and administrators only.
-        </p>
-        <div className="mt-12 space-y-4">
-          {!isLoggedIn ? (
-            <Link
-              to={`/login?redirect=/project/${id}`}
-              className="block w-full bg-black py-6 text-xs font-bold uppercase tracking-[0.3em] text-white transition-all hover:bg-gray-800"
-            >
-              Sign In
-            </Link>
-          ) : (
-            <Link
-              to="/"
-              className="block w-full border border-black py-6 text-xs font-bold uppercase tracking-[0.3em] text-black transition-all hover:bg-gray-50"
-            >
-              Return Home
-            </Link>
-          )}
-        </div>
       </div>
     );
   }
@@ -283,36 +252,55 @@ export default function ProjectDetail() {
                 </div>
               </div>
 
-              {/* Jury Vote — available to jury + admin */}
-              <div>
-                <h3 className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-400 mb-6">Jury Vote</h3>
-                <div className="space-y-3">
-                  <button
-                    onClick={handleToggleVote}
-                    disabled={voting}
-                    className={cn(
-                      "w-full flex items-center justify-center gap-3 px-6 py-4 text-xs font-bold uppercase tracking-[0.3em] border-2 transition-all disabled:opacity-50",
-                      hasVoted
-                        ? "bg-black text-white border-black hover:bg-gray-800"
-                        : "bg-transparent text-black border-black hover:bg-black hover:text-white"
-                    )}
+              {/* Jury Vote — available to jury + admin only */}
+              {isAuthorized && (
+                <div>
+                  <h3 className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-400 mb-6">Jury Vote</h3>
+                  <div className="space-y-3">
+                    <button
+                      onClick={handleToggleVote}
+                      disabled={voting}
+                      className={cn(
+                        "w-full flex items-center justify-center gap-3 px-6 py-4 text-xs font-bold uppercase tracking-[0.3em] border-2 transition-all disabled:opacity-50",
+                        hasVoted
+                          ? "bg-black text-white border-black hover:bg-gray-800"
+                          : "bg-transparent text-black border-black hover:bg-black hover:text-white"
+                      )}
+                    >
+                      {voting ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <>
+                          <ThumbsUp className={cn("h-4 w-4", hasVoted && "fill-current")} />
+                          <span>{hasVoted ? "Voted — click to remove" : "Vote for this project"}</span>
+                        </>
+                      )}
+                    </button>
+                    <p className="text-[10px] text-gray-400 leading-relaxed">
+                      {isAdmin
+                        ? "As admin you can vote and also see vote counts in the Admin Panel."
+                        : "Your vote is anonymous to other jurors. You can change it any time before the deadline."}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* People's Choice — shortlist voting CTA for public */}
+              {!isAuthorized && (submission.jury_vote_count ?? 0) >= 1 && (
+                <div>
+                  <h3 className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-400 mb-6">People's Choice</h3>
+                  <Link
+                    to="/shortlist"
+                    className="w-full flex items-center justify-center gap-3 px-6 py-4 text-xs font-bold uppercase tracking-[0.3em] border-2 border-black bg-transparent text-black transition-all hover:bg-black hover:text-white"
                   >
-                    {voting ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <>
-                        <ThumbsUp className={cn("h-4 w-4", hasVoted && "fill-current")} />
-                        <span>{hasVoted ? "Voted — click to remove" : "Vote for this project"}</span>
-                      </>
-                    )}
-                  </button>
-                  <p className="text-[10px] text-gray-400 leading-relaxed">
-                    {isAdmin
-                      ? "As admin you can vote and also see vote counts in the Admin Panel."
-                      : "Your vote is anonymous to other jurors. You can change it any time before the deadline."}
+                    <ThumbsUp className="h-4 w-4" />
+                    <span>Vote on Shortlist</span>
+                  </Link>
+                  <p className="mt-3 text-[10px] text-gray-400 leading-relaxed">
+                    Cast your vote for this project on the public shortlist. Voting closes October 19.
                   </p>
                 </div>
-              </div>
+              )}
 
               <div>
                 <h3 className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-400 mb-6">Video (please review)</h3>
