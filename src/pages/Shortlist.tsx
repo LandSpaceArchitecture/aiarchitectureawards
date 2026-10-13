@@ -89,13 +89,10 @@ export default function Shortlist() {
           s.country.toLowerCase().includes(q)
         );
       })
-      .sort((a, b) => {
-        const ac = publicCounts.get(a.id) ?? 0;
-        const bc = publicCounts.get(b.id) ?? 0;
-        if (bc !== ac) return bc - ac;
-        return (b.jury_vote_count ?? 0) - (a.jury_vote_count ?? 0);
-      });
-  }, [submissions, publicCounts, filter, search]);
+      // Stable deterministic order by id — vote counts are hidden,
+      // so sorting by them would just leak rank information.
+      .sort((a, b) => a.id.localeCompare(b.id));
+  }, [submissions, filter, search]);
 
   const handleVote = async (submissionId: string) => {
     if (!isLoggedIn) {
@@ -223,9 +220,10 @@ export default function Shortlist() {
         <div className="mt-6 border border-black/20 bg-gray-50 px-6 py-4 text-xs leading-relaxed text-black/70 space-y-2">
           <div>
             <span className="font-bold uppercase tracking-widest text-black">Voting Notice · </span>
-            Voters can both vote and unvote at any time, so individual project counts naturally
-            fluctuate throughout the voting period. We cannot alter voters' choices — all counts
-            are tallied automatically by our system directly from the database.
+            Live vote counts and project rankings are intentionally hidden during the voting
+            period. This keeps judgement focused on the work itself and prevents swayed
+            voting based on current standings. All votes are tallied automatically by our
+            system directly from the database and will be revealed with the final results.
           </div>
           <div>
             <span className="font-bold uppercase tracking-widest text-black">Fraud Detection · </span>
@@ -273,7 +271,6 @@ export default function Shortlist() {
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
             <AnimatePresence mode="popLayout">
               {shortlisted.map((s, idx) => {
-                const pubCount = publicCounts.get(s.id) ?? 0;
                 const voted = myVotes.has(s.id);
                 const busy = voting === s.id;
                 return (
@@ -297,9 +294,6 @@ export default function Shortlist() {
                         referrerPolicy="no-referrer"
                         loading="lazy"
                       />
-                      <div className="absolute top-3 left-3 bg-white px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.3em] text-black">
-                        #{idx + 1}
-                      </div>
                     </Link>
 
                     <div className="mt-4 flex items-start justify-between gap-4">
@@ -328,7 +322,7 @@ export default function Shortlist() {
                         onClick={() => handleVote(s.id)}
                         disabled={busy || !open}
                         className={cn(
-                          "flex-shrink-0 flex flex-col items-center justify-center border w-16 py-2 transition-all",
+                          "flex-shrink-0 flex items-center justify-center gap-2 border px-4 py-3 transition-all",
                           voted
                             ? "bg-black border-black text-white"
                             : "border-black bg-white text-black hover:bg-black hover:text-white",
@@ -342,7 +336,9 @@ export default function Shortlist() {
                         ) : (
                           <ThumbsUp className={cn("h-4 w-4", voted && "fill-white")} />
                         )}
-                        <span className="mt-1 text-xs font-bold tabular-nums">{pubCount}</span>
+                        <span className="text-[10px] font-bold uppercase tracking-widest">
+                          {voted ? "Voted" : "Vote"}
+                        </span>
                       </button>
                     </div>
 
