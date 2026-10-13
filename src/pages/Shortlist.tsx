@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowRight, Loader2, ThumbsUp, Search, Clock } from "lucide-react";
 import { cn } from "@/src/lib/utils";
-import { CATEGORIES } from "@/src/constants";
+import { CATEGORIES, PARTNERS } from "@/src/constants";
 import { submissionService, Submission } from "@/src/services/submissionService";
 import {
   publicVoteService,
@@ -138,8 +138,55 @@ export default function Shortlist() {
 
   return (
     <div className="bg-white min-h-screen">
+      {/* AI Partners banner */}
+      <section className="border-b border-black/10 bg-white pt-24 pb-16 md:pt-28 md:pb-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 mb-10 md:mb-12 items-end">
+            <div className="lg:col-span-7">
+              <div className="font-mono text-[9px] uppercase tracking-[0.4em] text-black/40 mb-3">
+                Official AI Partners
+              </div>
+              <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold uppercase tracking-tighter leading-[0.9]">
+                AI <span className="text-black/20">Partners</span>
+              </h2>
+            </div>
+            <div className="lg:col-span-5 lg:pl-12">
+              <p className="text-sm md:text-base text-black/60 leading-relaxed">
+                Winners of the 2026 AI Architecture Awards receive{" "}
+                <strong className="text-black">Pro licenses or Premium subscriptions</strong> from
+                our official AI platform partners — exclusive access to the tools reshaping the
+                discipline.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-black/10 border border-black/10">
+            {PARTNERS.map((partner) => (
+              <a
+                key={partner.name}
+                href={partner.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group bg-white px-8 py-10 md:px-12 md:py-14 flex items-center justify-center min-h-[140px] transition-all hover:bg-black/[0.02] relative overflow-hidden"
+              >
+                <img
+                  src={partner.logo}
+                  alt={`${partner.name} logo`}
+                  className="max-h-10 md:max-h-12 w-auto max-w-[70%] object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                />
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-black/40">
+                    Visit {partner.name} →
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Header */}
-      <div className="mx-auto max-w-7xl px-4 pt-24 pb-10 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 pt-16 pb-10 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
             <span className="font-mono text-[10px] uppercase tracking-[0.5em] text-gray-400">
