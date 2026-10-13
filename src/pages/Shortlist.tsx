@@ -37,7 +37,7 @@ export default function Shortlist() {
     canonicalPath: "/shortlist",
   });
 
-  const { user, supabaseUser } = useAuth();
+  const { user, supabaseUser, isAdmin } = useAuth();
   const isLoggedIn = !!(user || supabaseUser);
 
   const [submissions, setSubmissions] = useState<Submission[]>([]);
@@ -89,10 +89,17 @@ export default function Shortlist() {
           s.country.toLowerCase().includes(q)
         );
       })
-      // Stable deterministic order by id — vote counts are hidden,
-      // so sorting by them would just leak rank information.
-      .sort((a, b) => a.id.localeCompare(b.id));
-  }, [submissions, filter, search]);
+      // Public: stable order by id (hides rank). Admin: sort by current vote score.
+      .sort((a, b) => {
+        if (isAdmin) {
+          const ac = publicCounts.get(a.id) ?? 0;
+          const bc = publicCounts.get(b.id) ?? 0;
+          if (bc !== ac) return bc - ac;
+          return (b.jury_vote_count ?? 0) - (a.jury_vote_count ?? 0);
+        }
+        return a.id.localeCompare(b.id);
+      });
+  }, [submissions, filter, search, isAdmin, publicCounts]);
 
   const handleVote = async (submissionId: string) => {
     if (!isLoggedIn) {
@@ -341,6 +348,11 @@ export default function Shortlist() {
                         referrerPolicy="no-referrer"
                         loading="lazy"
                       />
+                      {isAdmin && (
+                        <div className="absolute top-3 left-3 bg-red-600 text-white px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-widest">
+                          #{idx + 1} · {publicCounts.get(s.id) ?? 0} pub · {s.jury_vote_count ?? 0} jury
+                        </div>
+                      )}
                     </Link>
 
                     <div className="mt-4 flex items-start justify-between gap-4">
