@@ -167,12 +167,12 @@ export default function Shortlist() {
                 href={partner.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group bg-white px-8 py-10 md:px-12 md:py-14 flex items-center justify-center min-h-[140px] transition-all hover:bg-black/[0.02] relative overflow-hidden"
+                className="group bg-white px-8 py-14 md:px-12 md:py-20 flex items-center justify-center min-h-[280px] transition-all hover:bg-black/[0.02] relative overflow-hidden"
               >
                 <img
                   src={partner.logo}
                   alt={`${partner.name} logo`}
-                  className="max-h-10 md:max-h-12 w-auto max-w-[70%] object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                  className="max-h-20 md:max-h-24 w-auto max-w-[80%] object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
                 />
                 <div className="absolute bottom-3 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
                   <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-black/40">
