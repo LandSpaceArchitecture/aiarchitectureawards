@@ -82,23 +82,35 @@ export const publicVoteService = {
     return new Set((rows as { submission_id: string }[]).map((r) => r.submission_id));
   },
 
-  /** Public vote counts for all shortlisted submissions. Returns Map(submission_id -> count). */
+  /** Public vote counts for all shortlisted submissions. Returns Map(submission_id -> count).
+   *  Paginates through ALL rows — the PostgREST default limit of 1000 would otherwise
+   *  cause projects to show fluctuating / under-counted vote totals once the total
+   *  number of votes crosses that threshold. */
   async getAllCounts(): Promise<Map<string, number>> {
-    // Reading is public (RLS allows). Falls back to just anon key.
-    const response = await fetch(
-      `${supabaseUrl}/rest/v1/public_votes?select=submission_id&apikey=${encodeURIComponent(anonKey)}`,
-      {
-        headers: {
-          apikey: anonKey,
-          Authorization: `Bearer ${anonKey}`,
-        },
-      }
-    );
-    if (!response.ok) return new Map();
-    const rows = (await response.json()) as { submission_id: string }[];
     const counts = new Map<string, number>();
-    for (const r of rows) {
-      counts.set(r.submission_id, (counts.get(r.submission_id) ?? 0) + 1);
+    const PAGE = 1000;
+    let offset = 0;
+    while (true) {
+      const response = await fetch(
+        `${supabaseUrl}/rest/v1/public_votes?select=submission_id&order=created_at.asc&apikey=${encodeURIComponent(anonKey)}`,
+        {
+          headers: {
+            apikey: anonKey,
+            Authorization: `Bearer ${anonKey}`,
+            Range: `${offset}-${offset + PAGE - 1}`,
+            "Range-Unit": "items",
+            Prefer: "count=exact",
+          },
+        }
+      );
+      if (!response.ok) break;
+      const rows = (await response.json()) as { submission_id: string }[];
+      for (const r of rows) {
+        counts.set(r.submission_id, (counts.get(r.submission_id) ?? 0) + 1);
+      }
+      if (rows.length < PAGE) break;
+      offset += PAGE;
+      if (offset > 100000) break; // safety guard
     }
     return counts;
   },
