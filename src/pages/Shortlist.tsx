@@ -219,6 +219,16 @@ export default function Shortlist() {
           </div>
         </div>
 
+        {/* Voting-integrity notice */}
+        <div className="mt-6 border border-black/20 bg-gray-50 px-6 py-4 text-xs leading-relaxed text-black/70">
+          <span className="font-bold uppercase tracking-widest text-black">Voting Notice · </span>
+          Voters can both vote and unvote at any time, so individual project counts naturally
+          fluctuate throughout the voting period. We cannot alter voters' choices — all counts
+          are tallied automatically by our system directly from the database. The final result
+          is determined by the combined score (<span className="font-bold">jury × 5 + public</span>)
+          at voting close on October 19, 23:59 UTC.
+        </div>
+
         {error && (
           <div className="mt-6 border border-red-500 bg-red-50 px-6 py-4 text-xs font-bold uppercase tracking-widest text-red-700">
             {error}
