@@ -25,7 +25,7 @@ export const PARTNERS = [
   {
     name: "SUAPP",
     logo: partnerSuapp,
-    url: "https://www.suapp.ai",
+    url: "https://url.suapp.ai/aiarchitecture",
   },
   {
     name: "D5 Render",
