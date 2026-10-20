@@ -20,17 +20,18 @@ import { imgSrc } from "@/src/lib/imgSrc";
 const ADMIN_JURY_WEIGHT = 13;
 
 // PRIMARY awards: Top 10 by Combined Score (receive cash prize + full sponsor package).
+// After-Breath removed from Top 10 as same-team as DANCHEONG; Voxel Terra promoted into #10.
 const TOP_10: Array<{ match: string; rank: number }> = [
   { match: "crystal spiral",           rank: 1 },
   { match: "beneath the still water",  rank: 2 },
   { match: "house that never existed", rank: 3 },
   { match: "dancheong",                rank: 4 },
   { match: "multimodal architecture",  rank: 5 },
-  { match: "after breath",             rank: 6 },
-  { match: "landscape remembers",      rank: 7 },
-  { match: "casa patio",               rank: 8 },
-  { match: "last voice",               rank: 9 },
-  { match: "canopia",                  rank: 10 },
+  { match: "landscape remembers",      rank: 6 },
+  { match: "casa patio",               rank: 7 },
+  { match: "last voice",               rank: 8 },
+  { match: "canopia",                  rank: 9 },
+  { match: "voxel terra",              rank: 10 },
 ];
 
 // SECONDARY: Category Recognition (jury-only pick per category; may overlap Top 10).
