@@ -34,7 +34,7 @@ const TOP_10: Array<{ match: string; rank: number }> = [
   { match: "voxel terra",              rank: 10 },
 ];
 
-// SECONDARY: Category Recognition (jury-only pick per category; may overlap Top 10).
+// SECONDARY: 8 Category Recognition (jury-only pick per discipline; may overlap Top 10).
 const CATEGORY_RECOGNITION: Array<{ match: string; label: string }> = [
   { match: "voxel terra",              label: "ARCHITECTURE" },
   { match: "last voice",               label: "INTERIOR" },
@@ -44,8 +44,6 @@ const CATEGORY_RECOGNITION: Array<{ match: string; label: string }> = [
   { match: "after breath",             label: "LANDSCAPE" },
   { match: "canopia",                  label: "REAL ESTATE" },
   { match: "bhotekoshi",               label: "DIAGRAM & MAPPING" },
-  { match: "city scanner",             label: "JURY'S PICK" },
-  { match: "casa patio",               label: "PEOPLE'S PICK" },
 ];
 
 function findTop10(title: string): number | null {
