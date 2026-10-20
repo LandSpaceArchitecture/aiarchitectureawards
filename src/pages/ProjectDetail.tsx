@@ -285,10 +285,10 @@ export default function ProjectDetail() {
                 </div>
               )}
 
-              {/* People's Choice — shortlist voting CTA for public */}
+              {/* Shortlist Vote CTA for public */}
               {!isAuthorized && (submission.jury_vote_count ?? 0) >= 1 && (
                 <div>
-                  <h3 className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-400 mb-6">People's Choice</h3>
+                  <h3 className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-400 mb-6">2026 Shortlist Vote</h3>
                   <Link
                     to="/shortlist"
                     className="w-full flex items-center justify-center gap-3 px-6 py-4 text-xs font-bold uppercase tracking-[0.3em] border-2 border-black bg-transparent text-black transition-all hover:bg-black hover:text-white"

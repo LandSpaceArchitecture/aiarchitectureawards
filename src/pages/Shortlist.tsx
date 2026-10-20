@@ -31,9 +31,9 @@ function useCountdown(targetIso: string) {
 
 export default function Shortlist() {
   usePageMeta({
-    title: "People's Choice — Shortlist 2026",
+    title: "2026 Shortlist Vote",
     description:
-      "Vote for your favourite project in the AI Architecture Awards 2026 shortlist. Jury-selected finalists compete for the People's Choice prize. Voting closes October 19, 2026.",
+      "Vote for your favourite project in the AI Architecture Awards 2026 shortlist. Public votes contribute to the final combined score (jury × 5 + public). Voting closes October 19, 2026.",
     canonicalPath: "/shortlist",
   });
 
@@ -197,7 +197,7 @@ export default function Shortlist() {
         <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
             <span className="font-mono text-[10px] uppercase tracking-[0.5em] text-gray-400">
-              People's Choice / 2026
+              2026 Shortlist Vote
             </span>
             <h1 className="mt-4 text-5xl font-bold uppercase tracking-tighter sm:text-7xl md:text-8xl leading-[0.9]">
               Shortlist
