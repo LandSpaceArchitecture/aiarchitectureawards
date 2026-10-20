@@ -19,6 +19,29 @@ import { imgSrc } from "@/src/lib/imgSrc";
 // (e.g. jury=5) are not displaced by heavy public-vote mobilization.
 const ADMIN_JURY_WEIGHT = 13;
 
+// Final winners — admin-visible award badge mapping (title substring → award).
+// Set to null to disable the badges, or wipe before publishing winners publicly.
+const FINAL_WINNERS: Array<{ match: string; award: string; order: number }> = [
+  { match: "crystal spiral",           award: "ANIMATION",     order: 1 },
+  { match: "beneath the still water",  award: "ARCHITECTURE",  order: 2 },
+  { match: "house that never existed", award: "INTERIOR",      order: 3 },
+  { match: "multimodal architecture",  award: "VISUALIZATION", order: 4 },
+  { match: "after breath",             award: "LANDSCAPE",     order: 5 },
+  { match: "casa patio",               award: "PEOPLE'S PICK", order: 6 },
+  { match: "canopia",                  award: "REAL ESTATE",   order: 7 },
+  { match: "vertic",                   award: "DIAGRAM",       order: 8 },
+  { match: "city scanner",             award: "JURY'S PICK",   order: 9 },
+  { match: "monster",                  award: "URBAN",         order: 10 },
+];
+
+function findAward(title: string): { award: string; order: number } | null {
+  const t = title.toLowerCase();
+  for (const w of FINAL_WINNERS) {
+    if (t.includes(w.match)) return { award: w.award, order: w.order };
+  }
+  return null;
+}
+
 function useCountdown(targetIso: string) {
   const target = new Date(targetIso).getTime();
   const [now, setNow] = useState(() => Date.now());
@@ -95,11 +118,14 @@ export default function Shortlist() {
         );
       })
       // Public: stable order by id (hides rank).
-      // Admin: sort by combined score — jury weight boosted to 13 so that
-      // strongly jury-endorsed projects (e.g. jury=5) outrank projects whose
-      // score is driven primarily by public mobilization.
+      // Admin: final winners first (by award order), then everyone else by combined score.
       .sort((a, b) => {
         if (isAdmin) {
+          const aw = findAward(a.project_title);
+          const bw = findAward(b.project_title);
+          if (aw && bw) return aw.order - bw.order;
+          if (aw) return -1;
+          if (bw) return 1;
           const aCombined = (a.jury_vote_count ?? 0) * ADMIN_JURY_WEIGHT + (publicCounts.get(a.id) ?? 0);
           const bCombined = (b.jury_vote_count ?? 0) * ADMIN_JURY_WEIGHT + (publicCounts.get(b.id) ?? 0);
           if (bCombined !== aCombined) return bCombined - aCombined;
@@ -376,19 +402,16 @@ export default function Shortlist() {
                       {isAdmin && (() => {
                         const pub = publicCounts.get(s.id) ?? 0;
                         const jury = s.jury_vote_count ?? 0;
-                        const combined = jury * ADMIN_JURY_WEIGHT + pub;
-                        const isTop10 = goldIds.has(s.id);
-                        const goldRank = isTop10
-                          ? Array.from(goldIds).indexOf(s.id) + 1
-                          : null;
+                        const combined = jury * 5 + pub;
+                        const award = findAward(s.project_title);
                         return (
                           <div className={cn(
                             "absolute top-3 left-3 px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-widest",
-                            isTop10 ? "bg-yellow-400 text-black" : "bg-red-600 text-white"
+                            award ? "bg-yellow-400 text-black" : "bg-red-600 text-white"
                           )}>
-                            {isTop10
-                              ? `🏆 #${goldRank} · ${combined} = ${jury}×${ADMIN_JURY_WEIGHT} + ${pub}`
-                              : `#${idx + 1} · ${combined} = ${jury}×${ADMIN_JURY_WEIGHT} + ${pub}`}
+                            {award
+                              ? `🏆 ${award.award} · ${jury} jury · ${pub} pub`
+                              : `#${idx + 1} · ${combined} = ${jury}×5 + ${pub}`}
                           </div>
                         );
                       })()}
