@@ -89,12 +89,13 @@ export default function Shortlist() {
           s.country.toLowerCase().includes(q)
         );
       })
-      // Public: stable order by id (hides rank). Admin: sort by current vote score.
+      // Public: stable order by id (hides rank).
+      // Admin: sort by combined score (jury × 5 + public), highest first.
       .sort((a, b) => {
         if (isAdmin) {
-          const ac = publicCounts.get(a.id) ?? 0;
-          const bc = publicCounts.get(b.id) ?? 0;
-          if (bc !== ac) return bc - ac;
+          const aCombined = (a.jury_vote_count ?? 0) * 5 + (publicCounts.get(a.id) ?? 0);
+          const bCombined = (b.jury_vote_count ?? 0) * 5 + (publicCounts.get(b.id) ?? 0);
+          if (bCombined !== aCombined) return bCombined - aCombined;
           return (b.jury_vote_count ?? 0) - (a.jury_vote_count ?? 0);
         }
         return a.id.localeCompare(b.id);
@@ -348,11 +349,20 @@ export default function Shortlist() {
                         referrerPolicy="no-referrer"
                         loading="lazy"
                       />
-                      {isAdmin && (
-                        <div className="absolute top-3 left-3 bg-red-600 text-white px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-widest">
-                          #{idx + 1} · {publicCounts.get(s.id) ?? 0} pub · {s.jury_vote_count ?? 0} jury
-                        </div>
-                      )}
+                      {isAdmin && (() => {
+                        const pub = publicCounts.get(s.id) ?? 0;
+                        const jury = s.jury_vote_count ?? 0;
+                        const combined = jury * 5 + pub;
+                        const isTop10 = idx < 10;
+                        return (
+                          <div className={cn(
+                            "absolute top-3 left-3 px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-widest",
+                            isTop10 ? "bg-yellow-400 text-black" : "bg-red-600 text-white"
+                          )}>
+                            {isTop10 && "🏆 "}#{idx + 1} · {combined} = {jury}×5 + {pub}
+                          </div>
+                        );
+                      })()}
                     </Link>
 
                     <div className="mt-4 flex items-start justify-between gap-4">
