@@ -14,6 +14,11 @@ import { useAuth } from "@/src/contexts/AuthContext";
 import { usePageMeta } from "@/src/hooks/usePageMeta";
 import { imgSrc } from "@/src/lib/imgSrc";
 
+// Admin-only jury weight for the internal Top-10 ranking.
+// Boosted above the public-facing ×5 so highly jury-endorsed projects
+// (e.g. jury=5) are not displaced by heavy public-vote mobilization.
+const ADMIN_JURY_WEIGHT = 13;
+
 function useCountdown(targetIso: string) {
   const target = new Date(targetIso).getTime();
   const [now, setNow] = useState(() => Date.now());
@@ -90,11 +95,13 @@ export default function Shortlist() {
         );
       })
       // Public: stable order by id (hides rank).
-      // Admin: sort by combined score (jury × 5 + public), highest first.
+      // Admin: sort by combined score — jury weight boosted to 13 so that
+      // strongly jury-endorsed projects (e.g. jury=5) outrank projects whose
+      // score is driven primarily by public mobilization.
       .sort((a, b) => {
         if (isAdmin) {
-          const aCombined = (a.jury_vote_count ?? 0) * 5 + (publicCounts.get(a.id) ?? 0);
-          const bCombined = (b.jury_vote_count ?? 0) * 5 + (publicCounts.get(b.id) ?? 0);
+          const aCombined = (a.jury_vote_count ?? 0) * ADMIN_JURY_WEIGHT + (publicCounts.get(a.id) ?? 0);
+          const bCombined = (b.jury_vote_count ?? 0) * ADMIN_JURY_WEIGHT + (publicCounts.get(b.id) ?? 0);
           if (bCombined !== aCombined) return bCombined - aCombined;
           return (b.jury_vote_count ?? 0) - (a.jury_vote_count ?? 0);
         }
@@ -369,9 +376,8 @@ export default function Shortlist() {
                       {isAdmin && (() => {
                         const pub = publicCounts.get(s.id) ?? 0;
                         const jury = s.jury_vote_count ?? 0;
-                        const combined = jury * 5 + pub;
+                        const combined = jury * ADMIN_JURY_WEIGHT + pub;
                         const isTop10 = goldIds.has(s.id);
-                        // Count how many gold slots come before this item to get display rank
                         const goldRank = isTop10
                           ? Array.from(goldIds).indexOf(s.id) + 1
                           : null;
@@ -381,8 +387,8 @@ export default function Shortlist() {
                             isTop10 ? "bg-yellow-400 text-black" : "bg-red-600 text-white"
                           )}>
                             {isTop10
-                              ? `🏆 #${goldRank} · ${combined} = ${jury}×5 + ${pub}`
-                              : `#${idx + 1} · ${combined} = ${jury}×5 + ${pub}`}
+                              ? `🏆 #${goldRank} · ${combined} = ${jury}×${ADMIN_JURY_WEIGHT} + ${pub}`
+                              : `#${idx + 1} · ${combined} = ${jury}×${ADMIN_JURY_WEIGHT} + ${pub}`}
                           </div>
                         );
                       })()}
