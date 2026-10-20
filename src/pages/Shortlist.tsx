@@ -19,26 +19,42 @@ import { imgSrc } from "@/src/lib/imgSrc";
 // (e.g. jury=5) are not displaced by heavy public-vote mobilization.
 const ADMIN_JURY_WEIGHT = 13;
 
-// Final winners — admin-visible award badge mapping (title substring → award).
-// Set to null to disable the badges, or wipe before publishing winners publicly.
-const FINAL_WINNERS: Array<{ match: string; award: string; order: number }> = [
-  { match: "crystal spiral",           award: "ANIMATION",     order: 1 },
-  { match: "beneath the still water",  award: "ARCHITECTURE",  order: 2 },
-  { match: "house that never existed", award: "INTERIOR",      order: 3 },
-  { match: "multimodal architecture",  award: "VISUALIZATION", order: 4 },
-  { match: "after breath",             award: "LANDSCAPE",     order: 5 },
-  { match: "casa patio",               award: "PEOPLE'S PICK", order: 6 },
-  { match: "canopia",                  award: "REAL ESTATE",   order: 7 },
-  { match: "bhotekoshi",               award: "DIAGRAM & MAPPING", order: 8 },
-  { match: "city scanner",             award: "JURY'S PICK",   order: 9 },
-  { match: "monster",                  award: "URBAN",         order: 10 },
+// PRIMARY awards: Top 10 by Combined Score (receive cash prize + full sponsor package).
+const TOP_10: Array<{ match: string; rank: number }> = [
+  { match: "crystal spiral",           rank: 1 },
+  { match: "beneath the still water",  rank: 2 },
+  { match: "house that never existed", rank: 3 },
+  { match: "dancheong",                rank: 4 },
+  { match: "multimodal architecture",  rank: 5 },
+  { match: "after breath",             rank: 6 },
+  { match: "landscape remembers",      rank: 7 },
+  { match: "casa patio",               rank: 8 },
+  { match: "last voice",               rank: 9 },
+  { match: "canopia",                  rank: 10 },
 ];
 
-function findAward(title: string): { award: string; order: number } | null {
+// SECONDARY: Category Recognition (jury-only pick per category; may overlap Top 10).
+const CATEGORY_RECOGNITION: Array<{ match: string; label: string }> = [
+  { match: "voxel terra",              label: "ARCHITECTURE" },
+  { match: "last voice",               label: "INTERIOR" },
+  { match: "aitopia",                  label: "VISUALIZATION" },
+  { match: "odyssey to peter",         label: "ANIMATION" },
+  { match: "monster",                  label: "URBAN" },
+  { match: "after breath",             label: "LANDSCAPE" },
+  { match: "canopia",                  label: "REAL ESTATE" },
+  { match: "bhotekoshi",               label: "DIAGRAM & MAPPING" },
+  { match: "city scanner",             label: "JURY'S PICK" },
+  { match: "casa patio",               label: "PEOPLE'S PICK" },
+];
+
+function findTop10(title: string): number | null {
   const t = title.toLowerCase();
-  for (const w of FINAL_WINNERS) {
-    if (t.includes(w.match)) return { award: w.award, order: w.order };
-  }
+  for (const w of TOP_10) if (t.includes(w.match)) return w.rank;
+  return null;
+}
+function findCategory(title: string): string | null {
+  const t = title.toLowerCase();
+  for (const c of CATEGORY_RECOGNITION) if (t.includes(c.match)) return c.label;
   return null;
 }
 
@@ -118,14 +134,19 @@ export default function Shortlist() {
         );
       })
       // Public: stable order by id (hides rank).
-      // Admin: final winners first (by award order), then everyone else by combined score.
+      // Admin: Top 10 first (ranked 1-10), then Category Recognition only,
+      // then everyone else by combined score.
       .sort((a, b) => {
         if (isAdmin) {
-          const aw = findAward(a.project_title);
-          const bw = findAward(b.project_title);
-          if (aw && bw) return aw.order - bw.order;
-          if (aw) return -1;
-          if (bw) return 1;
+          const aRank = findTop10(a.project_title);
+          const bRank = findTop10(b.project_title);
+          if (aRank && bRank) return aRank - bRank;
+          if (aRank) return -1;
+          if (bRank) return 1;
+          const aCat = findCategory(a.project_title);
+          const bCat = findCategory(b.project_title);
+          if (aCat && !bCat) return -1;
+          if (!aCat && bCat) return 1;
           const aCombined = (a.jury_vote_count ?? 0) * ADMIN_JURY_WEIGHT + (publicCounts.get(a.id) ?? 0);
           const bCombined = (b.jury_vote_count ?? 0) * ADMIN_JURY_WEIGHT + (publicCounts.get(b.id) ?? 0);
           if (bCombined !== aCombined) return bCombined - aCombined;
@@ -403,15 +424,26 @@ export default function Shortlist() {
                         const pub = publicCounts.get(s.id) ?? 0;
                         const jury = s.jury_vote_count ?? 0;
                         const combined = jury * 5 + pub;
-                        const award = findAward(s.project_title);
+                        const rank = findTop10(s.project_title);
+                        const cat = findCategory(s.project_title);
+                        const medal = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : rank ? "🏆" : "";
                         return (
-                          <div className={cn(
-                            "absolute top-3 left-3 px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-widest",
-                            award ? "bg-yellow-400 text-black" : "bg-red-600 text-white"
-                          )}>
-                            {award
-                              ? `🏆 ${award.award} · ${jury} jury · ${pub} pub`
-                              : `#${idx + 1} · ${combined} = ${jury}×5 + ${pub}`}
+                          <div className="absolute top-3 left-3 flex flex-col gap-1 items-start">
+                            {rank && (
+                              <div className="bg-yellow-400 text-black px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-widest">
+                                {medal} #{rank} · {combined} = {jury}×5 + {pub}
+                              </div>
+                            )}
+                            {cat && (
+                              <div className="bg-blue-600 text-white px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-widest">
+                                🏅 {cat}
+                              </div>
+                            )}
+                            {!rank && !cat && (
+                              <div className="bg-red-600 text-white px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-widest">
+                                #{idx + 1} · {combined} = {jury}×5 + {pub}
+                              </div>
+                            )}
                           </div>
                         );
                       })()}
