@@ -29,7 +29,7 @@ const FINAL_WINNERS: Array<{ match: string; award: string; order: number }> = [
   { match: "after breath",             award: "LANDSCAPE",     order: 5 },
   { match: "casa patio",               award: "PEOPLE'S PICK", order: 6 },
   { match: "canopia",                  award: "REAL ESTATE",   order: 7 },
-  { match: "vertic",                   award: "DIAGRAM",       order: 8 },
+  { match: "bhotekoshi",               award: "DIAGRAM & MAPPING", order: 8 },
   { match: "city scanner",             award: "JURY'S PICK",   order: 9 },
   { match: "monster",                  award: "URBAN",         order: 10 },
 ];
