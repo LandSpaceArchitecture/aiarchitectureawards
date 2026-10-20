@@ -426,8 +426,9 @@ export default function Shortlist() {
                         const rank = findTop10(s.project_title);
                         const cat = findCategory(s.project_title);
                         const medal = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : rank ? "🏆" : "";
-                        // Top 10 winners show only their rank badge — Category label hidden
-                        // (even if they also qualify) so each project has one clear primary award.
+                        // Admin view: show Top 10 rank badge (gold) AND Category Recognition
+                        // label (blue) together when both apply. Projects without either get
+                        // the red diagnostic badge.
                         return (
                           <div className="absolute top-3 left-3 flex flex-col gap-1 items-start">
                             {rank && (
@@ -435,7 +436,7 @@ export default function Shortlist() {
                                 {medal} #{rank} · {combined} = {jury}×5 + {pub}
                               </div>
                             )}
-                            {!rank && cat && (
+                            {cat && (
                               <div className="bg-blue-600 text-white px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-widest">
                                 🏅 {cat}
                               </div>
