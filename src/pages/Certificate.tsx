@@ -101,11 +101,11 @@ export default function Certificate() {
             <div className="font-mono text-[9px] uppercase tracking-[0.5em] text-black/40 mb-3">
               CERTIFICATE OF RECOGNITION
             </div>
-            <div className="text-[11px] font-bold uppercase tracking-[0.3em] leading-tight">
-              AI ARCHITECTURE
-              <br />
-              AWARDS 2026
-            </div>
+            <img
+              src="/aiaa-logo.png"
+              alt="AI Architecture Awards 2026"
+              className="h-14 w-auto object-contain"
+            />
           </div>
           <div className="text-right">
             <div className="font-mono text-[9px] uppercase tracking-[0.4em] text-black/40">
@@ -174,13 +174,19 @@ export default function Certificate() {
 
             <div className="flex-1 text-center">
               <div
-                className="inline-block font-signature text-2xl mb-1"
-                style={{ fontFamily: "'Dancing Script', 'Snell Roundhand', cursive", lineHeight: 1 }}
+                className="inline-block text-4xl mb-1"
+                style={{
+                  fontFamily: "'Caveat Brush', 'Homemade Apple', 'Snell Roundhand', cursive",
+                  lineHeight: 1,
+                  transform: "rotate(-6deg) skewX(-8deg)",
+                  letterSpacing: "-0.03em",
+                  fontWeight: 400,
+                }}
               >
-                Jojo
+                Zixu Qiao
               </div>
               <div className="border-t border-black pt-2 font-mono text-[10px] uppercase tracking-[0.3em] text-black/50">
-                AI Architecture Awards Team
+                Zixu Qiao · AI Architecture Awards
               </div>
             </div>
 
@@ -234,7 +240,13 @@ export default function Certificate() {
         </div>
       </div>
 
-      {/* Print styles */}
+      {/* Signature font + print styles */}
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Homemade+Apple&display=swap"
+        rel="stylesheet"
+      />
       <style>{`
         @media print {
           @page { size: 1100px 780px; margin: 0; }
