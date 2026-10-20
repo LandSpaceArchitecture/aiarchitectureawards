@@ -102,6 +102,23 @@ export default function Shortlist() {
       });
   }, [submissions, filter, search, isAdmin, publicCounts]);
 
+  // Admin only: compute the Top 10 projects with the "one person, one slot"
+  // rule — if an author (identified by email) already has a higher-scored
+  // project in the gold list, their second project is skipped.
+  const goldIds = useMemo(() => {
+    if (!isAdmin) return new Set<string>();
+    const seenEmails = new Set<string>();
+    const gold = new Set<string>();
+    for (const s of shortlisted) {
+      const email = (s.email || "").trim().toLowerCase();
+      if (email && seenEmails.has(email)) continue;
+      if (email) seenEmails.add(email);
+      gold.add(s.id);
+      if (gold.size >= 10) break;
+    }
+    return gold;
+  }, [shortlisted, isAdmin]);
+
   const handleVote = async (submissionId: string) => {
     if (!isLoggedIn) {
       window.location.href = `/login?redirect=/shortlist`;
@@ -353,13 +370,19 @@ export default function Shortlist() {
                         const pub = publicCounts.get(s.id) ?? 0;
                         const jury = s.jury_vote_count ?? 0;
                         const combined = jury * 5 + pub;
-                        const isTop10 = idx < 10;
+                        const isTop10 = goldIds.has(s.id);
+                        // Count how many gold slots come before this item to get display rank
+                        const goldRank = isTop10
+                          ? Array.from(goldIds).indexOf(s.id) + 1
+                          : null;
                         return (
                           <div className={cn(
                             "absolute top-3 left-3 px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-widest",
                             isTop10 ? "bg-yellow-400 text-black" : "bg-red-600 text-white"
                           )}>
-                            {isTop10 && "🏆 "}#{idx + 1} · {combined} = {jury}×5 + {pub}
+                            {isTop10
+                              ? `🏆 #${goldRank} · ${combined} = ${jury}×5 + ${pub}`
+                              : `#${idx + 1} · ${combined} = ${jury}×5 + ${pub}`}
                           </div>
                         );
                       })()}
