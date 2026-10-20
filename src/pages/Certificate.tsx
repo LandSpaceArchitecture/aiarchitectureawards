@@ -245,18 +245,13 @@ export default function Certificate() {
                 <div className="font-mono text-sm font-bold mt-1">October 22, 2026</div>
               </div>
 
-              {/* Signature */}
+              {/* Issuer */}
               <div className="flex-1 text-center">
-                <img
-                  src="/signature-zixu.png"
-                  alt="Zixu Qiao"
-                  className="h-16 w-auto mx-auto mb-1 object-contain"
-                  style={{ transform: "translateY(6px)" }}
-                />
                 <div className="border-t border-black pt-2 font-mono text-[10px] uppercase tracking-[0.3em] text-black/60">
-                  Zixu Qiao · Director
+                  Issued by
                 </div>
-                <div className="font-mono text-[9px] text-black/50 mt-0.5">AI Architecture Awards</div>
+                <div className="font-mono text-sm font-bold mt-1">AI Architecture Awards</div>
+                <div className="font-mono text-[9px] text-black/50 mt-0.5">Organising Committee</div>
               </div>
 
               {/* QR */}
