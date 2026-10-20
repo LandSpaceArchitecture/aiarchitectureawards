@@ -43,7 +43,7 @@ const CATEGORY_RECOGNITION: Array<{ match: string; label: string }> = [
   { match: "monster",                  label: "URBAN" },
   { match: "after breath",             label: "LANDSCAPE" },
   { match: "canopia",                  label: "REAL ESTATE" },
-  { match: "bhotekoshi",               label: "DIAGRAM & MAPPING" },
+  { match: "city scanner",             label: "DIAGRAM & MAPPING" },
 ];
 
 function findTop10(title: string): number | null {
