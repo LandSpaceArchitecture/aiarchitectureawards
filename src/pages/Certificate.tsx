@@ -38,7 +38,7 @@ function rankLabel(rank?: number) {
   if (rank === 1) return "FIRST PLACE OVERALL";
   if (rank === 2) return "SECOND PLACE OVERALL";
   if (rank === 3) return "THIRD PLACE OVERALL";
-  return `TOP TEN OVERALL · RANK ${rank}`;
+  return "TOP TEN OVERALL";
 }
 
 export default function Certificate() {
@@ -236,7 +236,7 @@ export default function Certificate() {
 
           {/* Footer */}
           <div className="absolute left-0 right-0 bottom-0 px-[70px] pb-12">
-            <div className="flex items-end justify-between gap-10">
+            <div className="flex items-start justify-between gap-10">
               {/* Date */}
               <div className="flex-1">
                 <div className="border-t border-black pt-2 font-mono text-[10px] uppercase tracking-[0.3em] text-black/60">
@@ -255,9 +255,9 @@ export default function Certificate() {
               </div>
 
               {/* QR */}
-              <div className="flex-1 flex items-end justify-end gap-4">
+              <div className="flex-1 flex items-start justify-end gap-4">
                 <div className="text-right">
-                  <div className="font-mono text-[9px] uppercase tracking-[0.3em] text-black/40">
+                  <div className="border-t border-black pt-2 font-mono text-[10px] uppercase tracking-[0.3em] text-black/60">
                     Verify at
                   </div>
                   <div className="font-mono text-[9px] text-black/60 mt-1 max-w-[150px] break-all">
@@ -267,8 +267,8 @@ export default function Certificate() {
                 <img
                   src={qrSrc}
                   alt="Verify certificate"
-                  width={72}
-                  height={72}
+                  width={64}
+                  height={64}
                   className="border border-black/20"
                 />
               </div>
