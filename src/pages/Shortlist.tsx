@@ -37,7 +37,7 @@ const TOP_10: Array<{ match: string; rank: number }> = [
 // SECONDARY: 8 Category Recognition (jury-only pick per discipline; may overlap Top 10).
 const CATEGORY_RECOGNITION: Array<{ match: string; label: string }> = [
   { match: "voxel terra",              label: "ARCHITECTURE" },
-  { match: "last voice",               label: "INTERIOR" },
+  { match: "after macbeth",            label: "INTERIOR" },
   { match: "aitopia",                  label: "VISUALIZATION" },
   { match: "odyssey to peter",         label: "ANIMATION" },
   { match: "monster",                  label: "URBAN" },
