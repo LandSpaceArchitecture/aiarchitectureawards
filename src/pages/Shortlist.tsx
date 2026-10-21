@@ -274,51 +274,10 @@ export default function Shortlist() {
               Winners
             </h1>
             <p className="mt-6 text-base md:text-lg text-black/60 leading-relaxed max-w-xl">
-              The 2026 cycle recognizes 10 overall winners (ranked by combined jury × 5 + public
-              vote), 6 category winners selected by jury expertise, and the full shortlist of
-              jury-selected finalists.
+              The 2026 cycle celebrates its overall winners, category recognitions, and the full
+              shortlist of jury-selected finalists — representing a wide range of practices and
+              perspectives in AI-assisted design from around the world.
             </p>
-          </div>
-        </div>
-
-        {/* Filters + Search */}
-        <div className="mt-12 flex flex-col gap-6 border-t border-black pt-6 md:flex-row md:items-center md:justify-between">
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => setFilter("all")}
-              className={cn(
-                "px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] transition-all",
-                filter === "all"
-                  ? "bg-black text-white"
-                  : "bg-gray-50 text-gray-500 hover:bg-gray-100"
-              )}
-            >
-              All ({shortlisted.length})
-            </button>
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setFilter(cat.id)}
-                className={cn(
-                  "px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] transition-all",
-                  filter === cat.id
-                    ? "bg-black text-white"
-                    : "bg-gray-50 text-gray-500 hover:bg-gray-100"
-                )}
-              >
-                {cat.title}
-              </button>
-            ))}
-          </div>
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search title, author, country"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full border border-black bg-transparent py-3 pl-12 pr-6 text-xs font-bold uppercase tracking-widest outline-none focus:bg-gray-50 md:w-80"
-            />
           </div>
         </div>
 
