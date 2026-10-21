@@ -11,6 +11,7 @@ import Jury from "./pages/Jury";
 import Login from "./pages/Login";
 import Gallery from "./pages/Gallery";
 import Shortlist from "./pages/Shortlist";
+import Winners from "./pages/Winners";
 import Certificate from "./pages/Certificate";
 import MySubmissions from "./pages/MySubmissions";
 import FAQ from "./pages/FAQ";
@@ -27,6 +28,8 @@ export default function App() {
             <Route path="categories" element={<Categories />} />
             <Route path="gallery" element={<Gallery />} />
             <Route path="shortlist" element={<Shortlist />} />
+            <Route path="winner" element={<Winners />} />
+            <Route path="winners" element={<Winners />} />
             <Route path="certificate/:slug" element={<Certificate />} />
             <Route path="submit" element={<Submit />} />
             <Route path="my-submissions" element={<MySubmissions />} />
