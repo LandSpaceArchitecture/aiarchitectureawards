@@ -420,30 +420,21 @@ export default function Shortlist() {
                         loading="lazy"
                       />
                       {isAdmin && (() => {
-                        const pub = publicCounts.get(s.id) ?? 0;
-                        const jury = s.jury_vote_count ?? 0;
-                        const combined = jury * 5 + pub;
                         const rank = findTop10(s.project_title);
                         const cat = findCategory(s.project_title);
                         const medal = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : rank ? "🏆" : "";
-                        // Admin view: show Top 10 rank badge (gold) AND Category Recognition
-                        // label (blue) together when both apply. Projects without either get
-                        // the red diagnostic badge.
+                        // Admin view: show rank and category badges only — no vote counts
+                        // or scoring breakdown (we're previewing the public-facing look).
                         return (
                           <div className="absolute top-3 left-3 flex flex-col gap-1 items-start">
                             {rank && (
                               <div className="bg-yellow-400 text-black px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-widest">
-                                {medal} #{rank} · {combined} = {jury}×5 + {pub}
+                                {medal} #{rank}
                               </div>
                             )}
                             {cat && (
                               <div className="bg-blue-600 text-white px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-widest">
                                 🏅 {cat}
-                              </div>
-                            )}
-                            {!rank && !cat && (
-                              <div className="bg-red-600 text-white px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-widest">
-                                #{idx + 1} · {combined} = {jury}×5 + {pub}
                               </div>
                             )}
                           </div>
