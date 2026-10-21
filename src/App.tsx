@@ -27,10 +27,11 @@ export default function App() {
             <Route index element={<Home />} />
             <Route path="categories" element={<Categories />} />
             <Route path="gallery" element={<Gallery />} />
-            <Route path="shortlist" element={<Navigate to="/winner" replace />} />
+            <Route path="shortlist" element={<Navigate to="/" replace />} />
             <Route path="shortlist-admin" element={<Shortlist />} />
-            <Route path="winner" element={<Winners />} />
-            <Route path="winners" element={<Winners />} />
+            <Route path="winner" element={<Navigate to="/" replace />} />
+            <Route path="winners" element={<Navigate to="/" replace />} />
+            <Route path="winner-preview" element={<Winners />} />
             <Route path="certificate/:slug" element={<Certificate />} />
             <Route path="submit" element={<Submit />} />
             <Route path="my-submissions" element={<MySubmissions />} />
