@@ -10,7 +10,9 @@ export default function Layout() {
 
   return (
     <div className="flex min-h-screen flex-col bg-white font-sans text-black selection:bg-black selection:text-white">
-      <Navbar />
+      <div className="print:hidden">
+        <Navbar />
+      </div>
       <main className="flex-grow">
         <AnimatePresence mode="wait">
           <motion.div
@@ -24,8 +26,10 @@ export default function Layout() {
           </motion.div>
         </AnimatePresence>
       </main>
-      <Footer />
-      <SubscribePopup />
+      <div className="print:hidden">
+        <Footer />
+        <SubscribePopup />
+      </div>
     </div>
   );
 }
