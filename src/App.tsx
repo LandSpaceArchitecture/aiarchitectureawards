@@ -12,6 +12,7 @@ import Login from "./pages/Login";
 import Gallery from "./pages/Gallery";
 import Shortlist from "./pages/Shortlist";
 import Winners from "./pages/Winners";
+import AiTools from "./pages/AiTools";
 import Certificate from "./pages/Certificate";
 import MySubmissions from "./pages/MySubmissions";
 import FAQ from "./pages/FAQ";
@@ -31,6 +32,7 @@ export default function App() {
             <Route path="shortlist-admin" element={<Navigate to="/" replace />} />
             <Route path="winner" element={<Winners />} />
             <Route path="winners" element={<Winners />} />
+            <Route path="aitools" element={<AiTools />} />
             <Route path="certificate/:slug" element={<Certificate />} />
             <Route path="submit" element={<Submit />} />
             <Route path="my-submissions" element={<MySubmissions />} />
