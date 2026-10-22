@@ -121,7 +121,6 @@ export default function Certificate() {
             top: 90,
             width: 900,
             opacity: 0.045,
-            transform: "rotate(-6deg)",
           }}
         />
 
