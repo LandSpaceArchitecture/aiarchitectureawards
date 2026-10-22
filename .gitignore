@@ -34,5 +34,4 @@ scripts/*.csv
 
 # Local-only sensitive files
 winner-emails*.md
-supabase-lock-vote-counts.sql
-supabase-restore-submissions-anon.sql
+supabase-*.sql
