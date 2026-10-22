@@ -110,19 +110,23 @@ export default function Certificate() {
           }}
         />
 
-        {/* Watermark: giant AIAA logo on the right (very light) */}
-        <img
-          src="/aiaa-logo.png"
-          alt=""
+        {/* Watermark: AI ARCHITECTURE AWARDS as big flat text, centered horizontally */}
+        <div
+          className="absolute pointer-events-none select-none font-bold uppercase whitespace-nowrap"
           aria-hidden
-          className="absolute pointer-events-none"
           style={{
-            right: -140,
-            top: 90,
-            width: 900,
-            opacity: 0.045,
+            left: "50%",
+            top: "60%",
+            transform: "translate(-50%, -50%)",
+            fontSize: 150,
+            letterSpacing: "-0.04em",
+            lineHeight: 1,
+            color: "#000",
+            opacity: 0.05,
           }}
-        />
+        >
+          AI Architecture Awards
+        </div>
 
         {/* Watermark circle seal (bottom-left) */}
         <svg
@@ -167,11 +171,17 @@ export default function Certificate() {
               <div className="font-mono text-[9px] uppercase tracking-[0.5em] text-black/40 mb-3">
                 CERTIFICATE OF RECOGNITION
               </div>
-              <img
-                src="/aiaa-logo.png"
-                alt="AI Architecture Awards 2026"
-                className="h-14 w-auto object-contain"
-              />
+              <div className="flex items-center gap-3">
+                <div className="font-bold leading-none" style={{ fontSize: 46, letterSpacing: "-0.05em" }}>
+                  ai
+                </div>
+                <div className="border-l border-black/40 pl-3">
+                  <div className="font-mono text-[9px] font-bold tracking-wider">2026</div>
+                  <div className="font-mono text-[9.5px] font-bold uppercase tracking-wider leading-[1.25]">
+                    AI ARCHITECTURE<br />AWARDS
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="text-right">
               <div className="font-mono text-[9px] uppercase tracking-[0.4em] text-black/40">
