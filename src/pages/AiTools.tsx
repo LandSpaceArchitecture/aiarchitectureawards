@@ -103,8 +103,8 @@ export default function AiTools() {
           AI Tools
         </h1>
         <p className="mt-6 text-base md:text-lg text-black/60 leading-relaxed max-w-xl">
-          The platforms, models and workflows behind the 2026 winning projects.
-          Click any tool to see which winners used it.
+          The platforms, models and workflows behind every 2026 submission.
+          Click any tool to see which projects used it.
         </p>
       </div>
 
@@ -167,7 +167,7 @@ export default function AiTools() {
               <div className="flex items-end justify-between gap-6 flex-wrap mb-10">
                 <div>
                   <div className="font-mono text-[10px] uppercase tracking-[0.5em] text-black/40 mb-3">
-                    Winners that used
+                    Projects that used
                   </div>
                   <h2 className="text-4xl sm:text-6xl font-bold uppercase tracking-tighter leading-[0.9]">
                     {selected}
