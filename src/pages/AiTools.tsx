@@ -21,6 +21,43 @@ type Project = {
 
 const PROJECTS = data.projects as Project[];
 
+// Tool → canonical website domain (used for favicon fetch via Google s2).
+// If a tool isn't here, we fall back to a text-only chip.
+const TOOL_DOMAIN: Record<string, string> = {
+  "ChatGPT": "chatgpt.com",
+  "Midjourney": "midjourney.com",
+  "Nano Banana": "gemini.google.com",
+  "Google Gemini": "gemini.google.com",
+  "Claude": "claude.ai",
+  "Codex": "openai.com",
+  "ComfyUI": "comfy.org",
+  "Stable Diffusion": "stability.ai",
+  "Adobe Photoshop": "adobe.com",
+  "Rhino": "rhino3d.com",
+  "Grasshopper": "rhino3d.com",
+  "Kling AI": "klingai.com",
+  "D5 Render": "d5render.com",
+  "Revit": "autodesk.com",
+  "Runway": "runwayml.com",
+  "DeepSeek": "deepseek.com",
+  "CapCut": "capcut.com",
+  "Adobe Firefly": "adobe.com",
+  "DALL·E": "openai.com",
+  "Flux": "bfl.ai",
+  "Magnific": "magnific.ai",
+  "Google Veo": "gemini.google.com",
+  "Suno": "suno.com",
+  "Luma": "lumalabs.ai",
+  "Gendo AI": "gendo.ai",
+  "MiniMax": "minimax.chat",
+};
+
+function toolIconUrl(tool: string): string | null {
+  const d = TOOL_DOMAIN[tool];
+  if (!d) return null;
+  return `https://www.google.com/s2/favicons?domain=${d}&sz=64`;
+}
+
 function medalFor(rank: number | null) {
   if (rank === 1) return "🥇";
   if (rank === 2) return "🥈";
@@ -81,12 +118,25 @@ export default function AiTools() {
                 key={tool}
                 onClick={() => setSelected(active ? null : tool)}
                 className={
-                  "group inline-flex items-center gap-2 border px-4 py-2 font-mono text-xs transition-all " +
+                  "group inline-flex items-center gap-2 border pl-2 pr-3 py-2 font-mono text-xs transition-all " +
                   (active
                     ? "bg-black text-white border-black"
                     : "bg-white text-black border-black/20 hover:border-black")
                 }
               >
+                {toolIconUrl(tool) ? (
+                  <img
+                    src={toolIconUrl(tool)!}
+                    alt=""
+                    aria-hidden
+                    className={"h-4 w-4 object-contain " + (active ? "bg-white rounded-sm p-[1px]" : "")}
+                    loading="lazy"
+                  />
+                ) : (
+                  <span className="h-4 w-4 flex items-center justify-center text-[10px] font-bold border border-current rounded-sm">
+                    {tool[0]}
+                  </span>
+                )}
                 <span className="uppercase tracking-wider font-bold">{tool}</span>
                 <span
                   className={
