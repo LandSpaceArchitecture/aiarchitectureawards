@@ -10,6 +10,7 @@ const PUBLIC_NAV_LINKS = [
   { label: "Home", path: "/" },
   { label: "Categories", path: "/categories" },
   { label: "Jury", path: "/jurors" },
+  { label: "Winners", path: "/winner" },
 ];
 
 export default function Navbar() {
