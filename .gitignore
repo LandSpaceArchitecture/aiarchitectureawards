@@ -31,3 +31,8 @@ Gemini_Generated_Image_*.png
 scripts/downloads/
 scripts/top30.json
 scripts/*.csv
+
+# Local-only sensitive files
+winner-emails*.md
+supabase-lock-vote-counts.sql
+supabase-restore-submissions-anon.sql

@@ -687,7 +687,7 @@ export default function Home() {
             </div>
             <div className="lg:col-span-5 lg:pl-12 flex items-end">
               <p className="text-base md:text-lg text-black/60 leading-relaxed">
-                Winners of the 2026 AI Architecture Awards receive <strong className="text-black">Pro licenses or Premium subscriptions</strong> from our official AI platform partners — exclusive access to the tools reshaping the discipline.
+                Winners of the 2026 AI Architecture Awards receive <strong className="text-black">Pro licenses or Premium subscriptions</strong> from our official AI platform partners — exclusive access to the tools reshaping the discipline. The <strong className="text-black">Top 3 overall</strong> additionally receive a cash prize.
               </p>
             </div>
           </div>
@@ -752,7 +752,7 @@ export default function Home() {
               {
                 icon: Sparkles,
                 title: "AI Tools Pro Licenses",
-                desc: "Pro licenses or Premium subscriptions from our AI platform partners — exclusive access to the tools reshaping the discipline.",
+                desc: "Pro licenses or Premium subscriptions from our AI platform partners, plus a cash prize for the Top 3 overall — exclusive access to the tools reshaping the discipline.",
               },
               {
                 icon: ScrollText,

@@ -133,7 +133,8 @@ export default function Winners() {
                 Winners of the 2026 AI Architecture Awards receive{" "}
                 <strong className="text-black">Pro licenses or Premium subscriptions</strong> from
                 our official AI platform partners — exclusive access to the tools reshaping the
-                discipline.
+                discipline. The <strong className="text-black">Top 3 overall</strong> additionally
+                receive a cash prize.
               </p>
             </div>
           </div>
