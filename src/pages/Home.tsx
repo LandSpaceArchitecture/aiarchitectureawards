@@ -722,6 +722,16 @@ export default function Home() {
           <p className="mt-8 md:mt-12 font-mono text-[10px] uppercase tracking-[0.4em] text-black/40 text-center">
             Partnership programs — access provided directly by partner platforms to selected winners.
           </p>
+
+          <div className="mt-12 md:mt-16 flex justify-center">
+            <Link
+              to="/aitools"
+              className="group inline-flex items-center gap-3 border border-black bg-black px-6 py-4 text-xs font-bold uppercase tracking-widest text-white hover:bg-white hover:text-black transition-colors"
+            >
+              Explore the AI Tools used by the 2026 Shortlist
+              <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
         </div>
       </section>
 

@@ -283,21 +283,6 @@
       ]
     },
     {
-      "id": "32790e80-e889-4470-8e74-9b563d6f6420",
-      "title": "33 LIGHTS, 69 DAYS",
-      "author": "hamsuhyeon",
-      "country": "Korea, South",
-      "image": "https://xukezminikmpkovknuvf.supabase.co/storage/v1/object/public/submissions/ff2d0700-39d5-4372-a196-ebd33325f6ee/33_lights__69_days/1790697424677-main.jpg",
-      "category": "interior",
-      "rank": null,
-      "recognition": null,
-      "tools_raw": "Midjourney, ChatGPT",
-      "tools": [
-        "Midjourney",
-        "ChatGPT"
-      ]
-    },
-    {
       "id": "012ecaa5-d322-4078-b69d-ef631e4e19bf",
       "title": "Aetheria Tower",
       "author": "Jamila Karimova",
@@ -382,23 +367,6 @@
       ]
     },
     {
-      "id": "53a6b438-b90c-4bb3-810d-d5ffa152576a",
-      "title": "driftwood residence",
-      "author": "Jenifer Haider Chowdhury",
-      "country": "Bangladesh",
-      "image": "https://xukezminikmpkovknuvf.supabase.co/storage/v1/object/public/submissions/097c1315-e6ff-49f7-9013-9062ceec7ebf/driftwood_residence/1786629221993-DriftWood_residence_2.0_1.png",
-      "category": "architecture",
-      "rank": null,
-      "recognition": null,
-      "tools_raw": "Midjourney (For Images) , Kling AI + Luma Dream Machine + Suno AI ( For Video) ",
-      "tools": [
-        "Midjourney",
-        "Kling AI",
-        "Luma",
-        "Suno"
-      ]
-    },
-    {
       "id": "9db0a496-cb14-4887-a3c9-09bd1cd417f3",
       "title": "Dune vision",
       "author": "Fíona Caoileann",
@@ -440,55 +408,6 @@
       "tools_raw": "Nano banan pro (ComfyUI workflow)",
       "tools": [
         "Nano Banana"
-      ]
-    },
-    {
-      "id": "4c8c676a-195d-4c5b-b2dc-508e04bf2062",
-      "title": "Inside–Out",
-      "author": "OLGA CHIOTI",
-      "country": "Greece",
-      "image": "https://xukezminikmpkovknuvf.supabase.co/storage/v1/object/public/submissions/a65bc6bb-056a-4904-bbca-6725ac84014c/inside_out/1788126740683-_________1.JPG",
-      "category": "visualization",
-      "rank": null,
-      "recognition": null,
-      "tools_raw": "ChatGPT (OpenAI)",
-      "tools": [
-        "ChatGPT"
-      ]
-    },
-    {
-      "id": "e05d3ea9-c5d4-4757-9f27-67eaf9c94fe9",
-      "title": "la cicatriz: from scar to healing",
-      "author": "Patrese Winter",
-      "country": "United States",
-      "image": "https://xukezminikmpkovknuvf.supabase.co/storage/v1/object/public/submissions/2f480776-28e3-48d4-9a2e-109c8420585f/la_cicatriz__from_scar_to_healing/1789526005230-LA_CICATRIZ_0_LANDFILL_PROJECT_COVER.png",
-      "category": "landscape",
-      "rank": null,
-      "recognition": null,
-      "tools_raw": "Hand drawing, AutoCAD, SketchUp, D5 Render, ChatGPT",
-      "tools": [
-        "Hand sketching",
-        "AutoCAD",
-        "SketchUp",
-        "D5 Render",
-        "ChatGPT"
-      ]
-    },
-    {
-      "id": "84084f75-cdc3-493b-bf99-ebe23b83c15a",
-      "title": "ManMaTIC — Protocol Port",
-      "author": "Ahmad Alhadidi",
-      "country": "Jordan",
-      "image": "https://xukezminikmpkovknuvf.supabase.co/storage/v1/object/public/submissions/676ad458-67c4-4098-95a7-be92150af8b2/manmatic___protocol_port/1789350859636-ManMaTIC00.jpg",
-      "category": "architecture",
-      "rank": null,
-      "recognition": null,
-      "tools_raw": "ChatGPT (ORION AI-assisted design-thinking & review workflow), OpenAI Codex, Google NotebookLM",
-      "tools": [
-        "ChatGPT",
-        "review workflow)",
-        "Codex",
-        "Google NotebookLM"
       ]
     },
     {
@@ -542,23 +461,6 @@
       ]
     },
     {
-      "id": "8f88e52e-b659-4909-aefb-489e3fa8007a",
-      "title": "OBLITERUM",
-      "author": "Ethan Orion Elliott Halinski",
-      "country": "United States",
-      "image": "https://xukezminikmpkovknuvf.supabase.co/storage/v1/object/public/submissions/1c44114e-018c-4128-8225-9f1f74df6f78/obliterum/1787801650263-ethanxorion_interior_of_an_abandoned_suburban_living_room_cra_26b50d60_0243_471b_b757_0dca23ec6908_1.png",
-      "category": "animation",
-      "rank": null,
-      "recognition": null,
-      "tools_raw": "Midjourney, ChatGPT, Claude, Suno",
-      "tools": [
-        "Midjourney",
-        "ChatGPT",
-        "Claude",
-        "Suno"
-      ]
-    },
-    {
       "id": "67294431-5424-4962-ab33-7cc17ae5d88e",
       "title": "PARADOX",
       "author": "Jenifer Haider Chowdhury",
@@ -587,52 +489,6 @@
         "Midjourney",
         "Nano Banana",
         "ChatGPT"
-      ]
-    },
-    {
-      "id": "e1701311-79be-4dd4-ae88-ff29ee386cc4",
-      "title": "Resonance of the Sacred Peak: The Naxi Civilization Museum beneath Yulong Snow Mountain",
-      "author": "YUWEI GAO",
-      "country": "China",
-      "image": "https://xukezminikmpkovknuvf.supabase.co/storage/v1/object/public/submissions/a87b8ea6-900a-40c9-a9a3-00db8a2a0cad/resonance_of_the_sacred_peak__the_naxi_civilization_museum_beneath_yulong_snow_mountain/1787764688781-Page_0.jpg",
-      "category": "architecture",
-      "rank": null,
-      "recognition": null,
-      "tools_raw": "ChatGPT, Nano Banana Pro, Adobe Photoshop",
-      "tools": [
-        "ChatGPT",
-        "Nano Banana",
-        "Adobe Photoshop"
-      ]
-    },
-    {
-      "id": "627c45de-8d15-472e-84dd-5e3fad413169",
-      "title": "rewind",
-      "author": "park gyuri",
-      "country": "Korea, South",
-      "image": "https://xukezminikmpkovknuvf.supabase.co/storage/v1/object/public/submissions/76c9e04d-fe01-407d-accd-0c57013936ca/rewind/1790698436579-1.jpg",
-      "category": "visualization",
-      "rank": null,
-      "recognition": null,
-      "tools_raw": "Chat GPT, Claude",
-      "tools": [
-        "ChatGPT",
-        "Claude"
-      ]
-    },
-    {
-      "id": "2a0d230f-7f37-4c53-a6a0-f871e87ca848",
-      "title": "Rhythm of the Mudflat",
-      "author": "김동호",
-      "country": "Korea, South",
-      "image": "https://xukezminikmpkovknuvf.supabase.co/storage/v1/object/public/submissions/24357745-f02a-46a4-9b9a-3a28072433ac/rhythm_of_the_mudflat/1787291279721-________________1_.jpg",
-      "category": "visualization",
-      "rank": null,
-      "recognition": null,
-      "tools_raw": "ChatGPT, Nano Banana",
-      "tools": [
-        "ChatGPT",
-        "Nano Banana"
       ]
     },
     {
@@ -706,24 +562,6 @@
       ]
     },
     {
-      "id": "123ee860-d115-4571-9ac2-1fe092562a5b",
-      "title": "The Balance",
-      "author": "Vivian Park",
-      "country": "Netherlands",
-      "image": "https://xukezminikmpkovknuvf.supabase.co/storage/v1/object/public/submissions/83ce3c7f-0d02-4834-984c-7622e576a19e/the_balance/1789408866595-Front_facade_cover_image.png",
-      "category": "architecture",
-      "rank": null,
-      "recognition": null,
-      "tools_raw": "Comfy UI, Nano Banana, Chat GPT, Qwen, MiniMax H3",
-      "tools": [
-        "ComfyUI",
-        "Nano Banana",
-        "ChatGPT",
-        "Qwen",
-        "MiniMax"
-      ]
-    },
-    {
       "id": "5a064c25-2e7a-4a80-87f3-2faadf253e8c",
       "title": "THE LAST GLACIER ARCHIVE",
       "author": "JIHYEON YOON,YUMIN KIM",
@@ -758,22 +596,6 @@
       ]
     },
     {
-      "id": "79263ce3-52ef-49ce-9558-230a9b3cb745",
-      "title": "The use of AI in combination with BIM in the design of a warehouse complex",
-      "author": "Dmitry Zharkov",
-      "country": "Russia",
-      "image": "https://xukezminikmpkovknuvf.supabase.co/storage/v1/object/public/submissions/10d19f28-a7da-4a74-a149-a32a12f8e5f4/the_use_of_ai_in_combination_with_bim_in_the_design_of_a_warehouse_complex/1789515034543-Video_Cover_1.png",
-      "category": "architecture",
-      "rank": null,
-      "recognition": null,
-      "tools_raw": "ChatGPT, Autodesk Forma, Stable Diffusion",
-      "tools": [
-        "ChatGPT",
-        "Autodesk Forma",
-        "Stable Diffusion"
-      ]
-    },
-    {
       "id": "eb4cd24e-3bdc-42ad-9da9-eab462e56b36",
       "title": "The Vortex",
       "author": "Jason Pieper",
@@ -804,39 +626,6 @@
       "tools_raw": "ChatGPT",
       "tools": [
         "ChatGPT"
-      ]
-    },
-    {
-      "id": "70d88b61-d09f-4a5b-8c2f-c5e9c131083c",
-      "title": "urban oasis in the ai era",
-      "author": "Clarisse Ching Hei Cheng",
-      "country": "United Kingdom",
-      "image": "https://xukezminikmpkovknuvf.supabase.co/storage/v1/object/public/submissions/72caaf20-d2d9-464a-917a-c51babeeb550/urban_oasis_in_the_ai_era/1786652686048-cropped4.jpg",
-      "category": "architecture",
-      "rank": null,
-      "recognition": null,
-      "tools_raw": "Gemini, Seedance",
-      "tools": [
-        "Google Gemini",
-        "Seedance"
-      ]
-    },
-    {
-      "id": "72162ecb-e305-497b-bab9-09eb0b6e6a15",
-      "title": "Urban Organism.",
-      "author": "Daria Kamenshchikova",
-      "country": "Russia",
-      "image": "https://xukezminikmpkovknuvf.supabase.co/storage/v1/object/public/submissions/38c1c6d4-b100-4ffb-9cba-65e70f29f866/urban_organism_/1790860682544-Cover_image.png",
-      "category": "urban",
-      "rank": null,
-      "recognition": null,
-      "tools_raw": "Midjourney, Nano Banano, Archicad, Autodesk 3ds Max, Autodesk Revit",
-      "tools": [
-        "Midjourney",
-        "Nano Banana",
-        "Archicad",
-        "3ds Max",
-        "Revit"
       ]
     },
     {
@@ -887,18 +676,6 @@
       ]
     },
     {
-      "id": "1a360848-4ae0-4a9f-92af-cbe2901d35f3",
-      "title": "Walking the Line - Fiction|Reality",
-      "author": "Jack Rendler",
-      "country": "United States",
-      "image": "https://xukezminikmpkovknuvf.supabase.co/storage/v1/object/public/submissions/dddd0a58-7bf9-44a4-8087-5412483d49a6/walking_the_line___fiction_reality/1787374883768-helios.arc_Monumental_speculative_megatower_on_an_ancient_tecto_b0a54442_dcd1_4974_a1c9_8fecee3931ac.jpg",
-      "category": "architecture",
-      "rank": null,
-      "recognition": null,
-      "tools_raw": "Rhino - Grasshopper - Unreal Engine - Midjourney - Chat GPT Image 2 - AURA ENGINE",
-      "tools": []
-    },
-    {
       "id": "0f681f7b-b0a3-4b05-8005-d3ea7ee6f671",
       "title": "WATER ALBUM",
       "author": "YONGHENG TOTO HU",
@@ -937,34 +714,6 @@
       ]
     },
     {
-      "id": "717820d1-8f96-4f70-900e-2102888e932c",
-      "title": "WHITE DESERT HOUSE",
-      "author": "Bex Langley (Rebecca Langley)",
-      "country": "New Zealand",
-      "image": "https://xukezminikmpkovknuvf.supabase.co/storage/v1/object/public/submissions/38c1c6d4-b100-4ffb-9cba-65e70f29f866/white_desert_house/1790851307747-White_Desert_House_Entry_Spread_Page_1.jpg",
-      "category": "animation",
-      "rank": null,
-      "recognition": null,
-      "tools_raw": "Custom Uncanny Dataset · Multi-Agent Generative System · Stable Diffusion · FLUX · ChatGPT · Grok · Tripo AI",
-      "tools": []
-    },
-    {
-      "id": "cc66dbda-6c70-433c-8604-5c064fa00d6f",
-      "title": "WINE PRESERVATION CENTRE",
-      "author": "Mark Mitropoulos",
-      "country": "Greece",
-      "image": "https://xukezminikmpkovknuvf.supabase.co/storage/v1/object/public/submissions/37cd7439-cd01-42a6-8d9f-6cc6fb2497e9/wine_preservation_centre/1786430144219-Vineyard_View_01.png",
-      "category": "animation",
-      "rank": null,
-      "recognition": null,
-      "tools_raw": "CHAT GPT, KLING V3,CAPCUT",
-      "tools": [
-        "ChatGPT",
-        "Kling AI",
-        "CapCut"
-      ]
-    },
-    {
       "id": "402c44db-ef0e-4a00-9b21-7fd9e256fa48",
       "title": "Work to play",
       "author": "María Cuellar",
@@ -980,5 +729,5 @@
       ]
     }
   ],
-  "generated_at": "2026-10-22T16:09:38.485Z"
+  "generated_at": "2026-10-23T09:34:23.838Z"
 }

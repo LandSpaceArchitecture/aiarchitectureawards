@@ -103,8 +103,8 @@ export default function AiTools() {
           AI Tools
         </h1>
         <p className="mt-6 text-base md:text-lg text-black/60 leading-relaxed max-w-xl">
-          The platforms, models and workflows behind every 2026 submission.
-          Click any tool to see which projects used it.
+          The platforms, models and workflows behind the 2026 jury-selected
+          shortlist. Click any tool to see which projects used it.
         </p>
       </div>
 
@@ -118,7 +118,7 @@ export default function AiTools() {
                 key={tool}
                 onClick={() => setSelected(active ? null : tool)}
                 className={
-                  "group inline-flex items-center gap-2 border pl-2 pr-3 py-2 font-mono text-xs transition-all " +
+                  "group inline-flex items-center gap-3 border pl-2 pr-4 py-2.5 font-mono text-sm transition-all " +
                   (active
                     ? "bg-black text-white border-black"
                     : "bg-white text-black border-black/20 hover:border-black")
@@ -129,11 +129,11 @@ export default function AiTools() {
                     src={toolIconUrl(tool)!}
                     alt=""
                     aria-hidden
-                    className={"h-4 w-4 object-contain " + (active ? "bg-white rounded-sm p-[1px]" : "")}
+                    className={"h-7 w-7 object-contain " + (active ? "bg-white rounded p-[2px]" : "")}
                     loading="lazy"
                   />
                 ) : (
-                  <span className="h-4 w-4 flex items-center justify-center text-[10px] font-bold border border-current rounded-sm">
+                  <span className="h-7 w-7 flex items-center justify-center text-sm font-bold border border-current rounded">
                     {tool[0]}
                   </span>
                 )}

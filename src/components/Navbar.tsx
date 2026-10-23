@@ -11,6 +11,7 @@ const PUBLIC_NAV_LINKS = [
   { label: "Categories", path: "/categories" },
   { label: "Jury", path: "/jurors" },
   { label: "Winners", path: "/winner" },
+  { label: "AI Tools", path: "/aitools" },
 ];
 
 export default function Navbar() {

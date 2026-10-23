@@ -178,6 +178,13 @@ export default function Winners() {
             shortlist of jury-selected finalists — representing a wide range of practices and
             perspectives in AI-assisted design from around the world.
           </p>
+          <Link
+            to="/aitools"
+            className="mt-8 inline-flex items-center gap-2 border border-black bg-black px-5 py-3 text-xs font-bold uppercase tracking-widest text-white hover:bg-white hover:text-black transition-colors"
+          >
+            Browse the AI Tools behind these projects
+            <ArrowRight className="h-3 w-3" />
+          </Link>
         </div>
       </div>
 
