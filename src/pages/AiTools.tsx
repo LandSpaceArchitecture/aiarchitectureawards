@@ -118,7 +118,7 @@ export default function AiTools() {
                 key={tool}
                 onClick={() => setSelected(active ? null : tool)}
                 className={
-                  "group inline-flex items-center gap-3 border pl-2 pr-4 py-2.5 font-mono text-sm transition-all " +
+                  "group inline-flex items-center gap-2.5 border pl-2 pr-3.5 py-2 font-mono text-xs transition-all " +
                   (active
                     ? "bg-black text-white border-black"
                     : "bg-white text-black border-black/20 hover:border-black")
@@ -137,7 +137,7 @@ export default function AiTools() {
                     {tool[0]}
                   </span>
                 )}
-                <span className="uppercase tracking-wider font-bold">{tool}</span>
+                <span className="uppercase tracking-wider">{tool}</span>
                 <span
                   className={
                     "px-1.5 py-0.5 text-[10px] font-bold " +

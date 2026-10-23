@@ -280,23 +280,23 @@ export default function Home() {
           </div>
         </motion.div>
 
-        {/* Centered CTA — Vote for your favorite shortlisted project */}
+        {/* Centered CTA — AI Tools used by the 2026 shortlist */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.5, delay: 1.2 }}
           className="absolute left-1/2 bottom-24 md:bottom-28 z-30 -translate-x-1/2 flex flex-col items-center space-y-4 pointer-events-none"
         >
-          <div className="monospace-label text-center">2026 Shortlist Vote · Open</div>
+          <div className="monospace-label text-center">2026 Winners · Announced</div>
           <Link
-            to="/shortlist"
+            to="/aitools"
             className="pointer-events-auto flex items-center gap-3 bg-black px-10 py-5 text-xs font-bold uppercase tracking-[0.3em] text-white transition-all hover:bg-gray-800 hover:scale-[1.03]"
           >
-            <ThumbsUp className="h-4 w-4" />
-            <span>Vote Your Favorite</span>
+            <Sparkles className="h-4 w-4" />
+            <span>AI Tools</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
-          <div className="text-[9px] uppercase tracking-[0.4em] text-black/40">Closes Oct 19 · 23:59 UTC</div>
+          <div className="text-[9px] uppercase tracking-[0.4em] text-black/40">Behind the Shortlist</div>
         </motion.div>
 
         {/* Status strip — bottom right (desktop only) */}
