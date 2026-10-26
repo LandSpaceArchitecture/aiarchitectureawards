@@ -34,7 +34,7 @@ const WINNERS: Winner[] = [
 
   // ── Shortlist Finalists (28) ────────────────────────────────────────────
   { slug: "bhotekoshi-river-flood-response-map", cert_id: "AIAA-2026-SL01", project_id: "371c74fe-b3e6-4859-9a9a-8aff223c111c", project_title: "Bhotekoshi River Flood Response Map, Rasuwa, Nepal (August 2026)", author_name: "Tek Kshetri", country: "Nepal", shortlist: true },
-  { slug: "aetheria-tower", cert_id: "AIAA-2026-SL02", project_id: "012ecaa5-d322-4078-b69d-ef631e4e19bf", project_title: "Aetheria Tower", author_name: "Jamila Karimova", country: "Azerbaijan", shortlist: true },
+  { slug: "aetheria-tower", cert_id: "AIAA-2026-SL02", project_id: "012ecaa5-d322-4078-b69d-ef631e4e19bf", project_title: "Aetheria Tower", author_name: "Jamila Karimova / Masma Hasanzade", country: "Azerbaijan", shortlist: true },
   { slug: "ai-fungi-and-residual-ground", cert_id: "AIAA-2026-SL03", project_id: "dd473b9e-208c-4bca-9acf-3420f9c8b685", project_title: "AI, Fungi, and Residual Ground: A Field-Verified Protocol for Urban Micro-Sites", author_name: "Davidson Hancong Ding", country: "United States", shortlist: true },
   { slug: "architecture-of-architecture", cert_id: "AIAA-2026-SL04", project_id: "c19fc07e-9a31-4e8f-9eb1-c6dbd213e0bd", project_title: "Architecture of architecture", author_name: "Cristiano Antonutti", country: "Italy", shortlist: true },
   { slug: "beirut-spine-and-graft", cert_id: "AIAA-2026-SL05", project_id: "f2c7b642-5b19-4a99-a5f9-9bef6c1a5464", project_title: "Beirut: Spine and Graft", author_name: "Gregory Taousson", country: "Lebanon", shortlist: true },
