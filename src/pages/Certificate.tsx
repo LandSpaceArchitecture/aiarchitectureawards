@@ -11,6 +11,7 @@ type Winner = {
   country: string;
   rank?: number;
   category?: string;
+  shortlist?: boolean;
 };
 
 const WINNERS: Winner[] = [
@@ -30,15 +31,46 @@ const WINNERS: Winner[] = [
   { slug: "monster",                      cert_id: "AIAA-2026-13", project_id: "916693aa-2a4b-4e05-815a-c1dcf6fa4087", project_title: "MONSTER",                                                                                                       author_name: "Chen yiwei",                country: "China",          category: "URBAN" },
   { slug: "after-breath",                 cert_id: "AIAA-2026-14", project_id: "7d152afc-c30e-4126-a702-4e3b092ecee3", project_title: "AFTER BREATH",                                                                                                  author_name: "HYUNBIN DO / EUNJEONG KIM / GYURI PARK", country: "Korea, South",   category: "LANDSCAPE" },
   { slug: "city-scanner",                 cert_id: "AIAA-2026-15", project_id: "17cf7531-05c1-46b9-a108-a977f041c3e5", project_title: "City Scanner",                                                                                                  author_name: "Alejandro Quinto",          country: "Spain",          category: "DIAGRAM & MAPPING" },
+
+  // ── Shortlist Finalists (28) ────────────────────────────────────────────
+  { slug: "bhotekoshi-river-flood-response-map", cert_id: "AIAA-2026-SL01", project_id: "371c74fe-b3e6-4859-9a9a-8aff223c111c", project_title: "Bhotekoshi River Flood Response Map, Rasuwa, Nepal (August 2026)", author_name: "Tek Kshetri", country: "Nepal", shortlist: true },
+  { slug: "aetheria-tower", cert_id: "AIAA-2026-SL02", project_id: "012ecaa5-d322-4078-b69d-ef631e4e19bf", project_title: "Aetheria Tower", author_name: "Jamila Karimova", country: "Azerbaijan", shortlist: true },
+  { slug: "ai-fungi-and-residual-ground", cert_id: "AIAA-2026-SL03", project_id: "dd473b9e-208c-4bca-9acf-3420f9c8b685", project_title: "AI, Fungi, and Residual Ground: A Field-Verified Protocol for Urban Micro-Sites", author_name: "Davidson Hancong Ding", country: "United States", shortlist: true },
+  { slug: "architecture-of-architecture", cert_id: "AIAA-2026-SL04", project_id: "c19fc07e-9a31-4e8f-9eb1-c6dbd213e0bd", project_title: "Architecture of architecture", author_name: "Cristiano Antonutti", country: "Italy", shortlist: true },
+  { slug: "beirut-spine-and-graft", cert_id: "AIAA-2026-SL05", project_id: "f2c7b642-5b19-4a99-a5f9-9bef6c1a5464", project_title: "Beirut: Spine and Graft", author_name: "Gregory Taousson", country: "Lebanon", shortlist: true },
+  { slug: "cave-home-train-home-and-furry-home", cert_id: "AIAA-2026-SL06", project_id: "7270be94-6c80-4ef8-a7a6-cd7cc3d52fe2", project_title: "Cave Home, Train Home and Furry Home", author_name: "Emre Arslan", country: "Turkey", shortlist: true },
+  { slug: "dune-vision", cert_id: "AIAA-2026-SL07", project_id: "9db0a496-cb14-4887-a3c9-09bd1cd417f3", project_title: "Dune vision", author_name: "Fíona Caoileann", country: "Finland", shortlist: true },
+  { slug: "emergent-environments-lithification", cert_id: "AIAA-2026-SL08", project_id: "5540b6aa-baa8-45ba-bfdf-8243cdbeeabb", project_title: "EMERGENT ENVIRONMENTS 003: LITHIFICATION", author_name: "Konrad Kołtun / FOUNTAINHEAD ARCHITEKT", country: "Poland", shortlist: true },
+  { slug: "framing-potala", cert_id: "AIAA-2026-SL09", project_id: "9be68713-e3fb-4dfe-b014-27ac794306e5", project_title: "Framing Potala: The Sacred Horizon", author_name: "e zhang", country: "China", shortlist: true },
+  { slug: "metropolis", cert_id: "AIAA-2026-SL10", project_id: "fa9556fc-7557-4e79-97c0-a24ae79d0eaf", project_title: "Metropolis — Can an accumulated city adapt to an uncertain future without abandoning its memory?", author_name: "Bart Weiyong Zhang", country: "United States", shortlist: true },
+  { slug: "mot-solen-ascent-toward-the-sun", cert_id: "AIAA-2026-SL11", project_id: "80a18b67-6160-490f-abe7-3a9f037c8be1", project_title: "MOt solen — The Ascent Toward the Sun", author_name: "CHEMLAL OTHMANE", country: "Morocco", shortlist: true },
+  { slug: "nexus-of-urban-alchemy", cert_id: "AIAA-2026-SL12", project_id: "d8c8bd3f-7241-42bb-aea9-4da9d21cab6b", project_title: "Nexus of urban alchemy", author_name: "dongjun lee", country: "Korea, South", shortlist: true },
+  { slug: "paradox", cert_id: "AIAA-2026-SL13", project_id: "67294431-5424-4962-ab33-7cc17ae5d88e", project_title: "PARADOX", author_name: "Jenifer Haider Chowdhury", country: "Bangladesh", shortlist: true },
+  { slug: "recursive-spatial-consciousness", cert_id: "AIAA-2026-SL14", project_id: "3ca263cf-e882-4790-ba5d-190c37ce4527", project_title: "recursive[spatial]consciousness", author_name: "Patrick McManama", country: "United States", shortlist: true },
+  { slug: "rooted-high-rise", cert_id: "AIAA-2026-SL15", project_id: "7ec67c21-7215-4d4b-a824-760112ade874", project_title: "ROOTED HIGH-RISE: AI-Curated Ecologies for Vertical Living", author_name: "Eamon Sun", country: "China", shortlist: true },
+  { slug: "sand-port", cert_id: "AIAA-2026-SL16", project_id: "30be08a2-2564-4bbf-b393-0762d5678486", project_title: "Sand Port", author_name: "YEJIN CHA", country: "Korea, South", shortlist: true },
+  { slug: "strait-of-union", cert_id: "AIAA-2026-SL17", project_id: "3058781b-a018-4962-8fc4-c1724f8793bc", project_title: "Strait of Union", author_name: "Znera Space", country: "United Arab Emirates", shortlist: true },
+  { slug: "temple-to-nothing", cert_id: "AIAA-2026-SL18", project_id: "5755c30e-6c17-432a-8b5c-3d222b9e051b", project_title: "Temple to Nothing", author_name: "Elchanan Brown", country: "Australia", shortlist: true },
+  { slug: "the-last-glacier-archive", cert_id: "AIAA-2026-SL19", project_id: "5a064c25-2e7a-4a80-87f3-2faadf253e8c", project_title: "THE LAST GLACIER ARCHIVE", author_name: "JIHYEON YOON, YUMIN KIM", country: "Korea, South", shortlist: true },
+  { slug: "the-second-life-of-memory", cert_id: "AIAA-2026-SL20", project_id: "291d4bd4-4278-4c1c-8e83-cf2e64e492ae", project_title: "The Second Life of Memory", author_name: "Siyu Gao", country: "United States", shortlist: true },
+  { slug: "the-vortex", cert_id: "AIAA-2026-SL21", project_id: "eb4cd24e-3bdc-42ad-9da9-eab462e56b36", project_title: "The Vortex", author_name: "Jason Pieper", country: "United States", shortlist: true },
+  { slug: "timeless-contrast", cert_id: "AIAA-2026-SL22", project_id: "70470329-9681-4dd3-aedd-7583eaec8037", project_title: "Timeless Contrast", author_name: "Malgorzata Puzzo", country: "Poland", shortlist: true },
+  { slug: "vertic-multi-hazard-observatory", cert_id: "AIAA-2026-SL23", project_id: "c74fb404-4c02-4c8d-acc5-92353e136009", project_title: "VERTIC: Multi-Hazard Observatory for Natural Disasters in Tropical Regions", author_name: "Loic Tcheugoue · Karol Mezafack · Jovis Nguefack", country: "Cameroon", shortlist: true },
+  { slug: "visiontodesign-ai-agent", cert_id: "AIAA-2026-SL24", project_id: "1fe59106-a1a8-4266-a0a6-9525d3ea99bd", project_title: "VisionToDESIGN AI Agent", author_name: "Krish Jain", country: "Canada", shortlist: true },
+  { slug: "w-houston-st-renovation", cert_id: "AIAA-2026-SL25", project_id: "84f08c64-fe93-41e7-b5e4-b26bff97fa6d", project_title: "W Houston St Renovation", author_name: "Jenny Han", country: "United States", shortlist: true },
+  { slug: "where-home-meets-the-flyway", cert_id: "AIAA-2026-SL27", project_id: "e2494ee3-5c18-4afe-af13-4598774b0501", project_title: "Where Home Meets the Flyway: A Shared Landscape for Migratory Birds and Villagers along Poyang Lake's Wetland Edge", author_name: "Yuwei Gao", country: "China", shortlist: true },
+  { slug: "work-to-play", cert_id: "AIAA-2026-SL28", project_id: "402c44db-ef0e-4a00-9b21-7fd9e256fa48", project_title: "Work to Play", author_name: "María Cuellar", country: "Colombia", shortlist: true },
 ];
 
 const SITE_ORIGIN = "https://aiarchitectureawards.com";
 
-function rankLabel(rank?: number) {
-  if (!rank) return null;
-  if (rank === 1) return "FIRST PLACE OVERALL";
-  if (rank === 2) return "SECOND PLACE OVERALL";
-  if (rank === 3) return "THIRD PLACE OVERALL";
+function rankLabel(winner: Winner) {
+  if (winner.shortlist) return "SHORTLIST FINALIST";
+  const r = winner.rank;
+  if (!r) return null;
+  if (r === 1) return "FIRST PLACE OVERALL";
+  if (r === 2) return "SECOND PLACE OVERALL";
+  if (r === 3) return "THIRD PLACE OVERALL";
   return "TOP TEN OVERALL";
 }
 
@@ -66,7 +98,7 @@ export default function Certificate() {
     );
   }
 
-  const rl = rankLabel(winner.rank);
+  const rl = rankLabel(winner);
   const verifyUrl = `${SITE_ORIGIN}/project/${winner.project_id || ""}`;
   const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(verifyUrl)}&margin=0`;
 
@@ -292,22 +324,41 @@ export default function Certificate() {
         </div>
       </div>
 
-      {/* Index of all winners */}
-      <div className="print:hidden mx-auto max-w-[1100px] px-6 mt-10">
-        <div className="font-mono text-[9px] uppercase tracking-[0.4em] text-black/40 mb-3">
-          All 15 certificates
+      {/* Index of all certificates */}
+      <div className="print:hidden mx-auto max-w-[1100px] px-6 mt-10 space-y-8">
+        <div>
+          <div className="font-mono text-[9px] uppercase tracking-[0.4em] text-black/40 mb-3">
+            Winners · {WINNERS.filter(w => !w.shortlist).length} certificates
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+            {WINNERS.filter(w => !w.shortlist).map((w) => (
+              <Link
+                key={w.slug}
+                to={`/certificate/${w.slug}`}
+                className={`border border-black/10 px-3 py-2 text-[11px] font-medium hover:bg-black hover:text-white transition-colors ${w.slug === slug ? "bg-black text-white" : ""}`}
+              >
+                <span className="font-mono text-[9px] text-black/40 mr-2">{w.cert_id}</span>
+                {w.author_name}
+              </Link>
+            ))}
+          </div>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-          {WINNERS.map((w) => (
-            <Link
-              key={w.slug}
-              to={`/certificate/${w.slug}`}
-              className={`border border-black/10 px-3 py-2 text-[11px] font-medium hover:bg-black hover:text-white transition-colors ${w.slug === slug ? "bg-black text-white" : ""}`}
-            >
-              <span className="font-mono text-[9px] text-black/40 mr-2">{w.cert_id}</span>
-              {w.author_name}
-            </Link>
-          ))}
+        <div>
+          <div className="font-mono text-[9px] uppercase tracking-[0.4em] text-black/40 mb-3">
+            Shortlist Finalists · {WINNERS.filter(w => w.shortlist).length} certificates
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+            {WINNERS.filter(w => w.shortlist).map((w) => (
+              <Link
+                key={w.slug}
+                to={`/certificate/${w.slug}`}
+                className={`border border-black/10 px-3 py-2 text-[11px] font-medium hover:bg-black hover:text-white transition-colors ${w.slug === slug ? "bg-black text-white" : ""}`}
+              >
+                <span className="font-mono text-[9px] text-black/40 mr-2">{w.cert_id}</span>
+                {w.author_name}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
 
