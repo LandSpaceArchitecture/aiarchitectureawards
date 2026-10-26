@@ -35,3 +35,6 @@ scripts/*.csv
 # Local-only sensitive files
 winner-emails*.md
 supabase-*.sql
+
+# Local video assets (not for repo)
+video/
