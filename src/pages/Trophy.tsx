@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Mail, Package, Globe, Pencil, Check } from "lucide-react";
+import { ArrowRight, Mail, Package, Globe, Pencil, Check, CreditCard } from "lucide-react";
 import { usePageMeta } from "@/src/hooks/usePageMeta";
 
 type Variant = {
@@ -159,18 +159,29 @@ Thank you!`;
                 </dl>
               </div>
 
-              {/* CTA */}
+              {/* CTA — Pay with Stripe (primary) + Email backup */}
               <a
-                href={mailtoHref}
+                href={`https://buy.stripe.com/7sY6oB4JU5qr6yO1OHcjS02?prefilled_promo_code=&client_reference_id=finish-${variant.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="mt-10 inline-flex items-center gap-3 w-full justify-center bg-white text-black px-8 py-5 text-xs font-bold uppercase tracking-[0.3em] hover:bg-white/90 transition-colors"
               >
-                <Mail className="h-4 w-4" />
-                Order the {variant.name} Trophy
+                <CreditCard className="h-4 w-4" />
+                Pay with Card · $150
                 <ArrowRight className="h-4 w-4" />
               </a>
-              <p className="mt-3 text-[11px] text-white/40 text-center font-mono uppercase tracking-widest">
-                Secure online payment coming soon · Email order active now
+              <p className="mt-3 text-[11px] text-white/50 text-center font-mono uppercase tracking-widest">
+                Secure checkout by Stripe · Please note the selected finish
+                (<strong className="text-white">{variant.name}</strong>) in the engraving field
               </p>
+
+              <a
+                href={mailtoHref}
+                className="mt-6 inline-flex items-center gap-3 w-full justify-center bg-transparent border border-white/20 text-white px-8 py-4 text-xs font-bold uppercase tracking-[0.3em] hover:bg-white/5 hover:border-white/40 transition-colors"
+              >
+                <Mail className="h-4 w-4" />
+                Order by Email (PayPal invoice)
+              </a>
             </div>
           </div>
         </div>
@@ -221,7 +232,7 @@ Thank you!`;
             How to order
           </div>
           <h2 className="text-3xl md:text-5xl font-bold uppercase tracking-tighter leading-[0.95] max-w-3xl">
-            Email us with your details and we'll send you a PayPal invoice.
+            Checkout in two steps.
           </h2>
 
           <ol className="mt-10 space-y-6 max-w-3xl">
@@ -229,37 +240,27 @@ Thank you!`;
               <div className="font-mono text-xs text-white/40 pt-1 shrink-0 w-8">01</div>
               <div>
                 <div className="font-bold text-base mb-1">
-                  Click the <span className="font-mono">Order the … Trophy</span> button above
+                  Choose your finish on this page
                 </div>
                 <p className="text-sm text-white/60">
-                  Your email client opens with a pre-filled order template.
+                  Gold, Silver, Copper, or Cobalt Blue. The selection is remembered and sent to us
+                  with your order.
                 </p>
               </div>
             </li>
             <li className="flex gap-6">
               <div className="font-mono text-xs text-white/40 pt-1 shrink-0 w-8">02</div>
               <div>
-                <div className="font-bold text-base mb-1">Fill in your engraving details</div>
-                <ul className="text-sm text-white/60 space-y-1 list-disc pl-5">
-                  <li>Name(s) of the recipient(s) on trophy</li>
-                </ul>
-              </div>
-            </li>
-            <li className="flex gap-6">
-              <div className="font-mono text-xs text-white/40 pt-1 shrink-0 w-8">03</div>
-              <div>
-                <div className="font-bold text-base mb-1">Confirm the shipping address</div>
+                <div className="font-bold text-base mb-1">
+                  Click <span className="font-mono">Pay with Card</span>
+                </div>
                 <p className="text-sm text-white/60">
-                  Full postal address, recipient name, and a phone number for the courier.
+                  You will be taken to a secure Stripe checkout page. Enter the name(s) to be
+                  engraved on the trophy, your shipping address, and payment details. Production
+                  begins once payment clears.
                 </p>
-              </div>
-            </li>
-            <li className="flex gap-6">
-              <div className="font-mono text-xs text-white/40 pt-1 shrink-0 w-8">04</div>
-              <div>
-                <div className="font-bold text-base mb-1">Pay via PayPal invoice</div>
-                <p className="text-sm text-white/60">
-                  We'll send a $150 PayPal invoice. Production begins once payment is received.
+                <p className="text-xs text-white/40 mt-2">
+                  Prefer PayPal? Use the "Order by Email" button and we will send a PayPal invoice.
                 </p>
               </div>
             </li>
