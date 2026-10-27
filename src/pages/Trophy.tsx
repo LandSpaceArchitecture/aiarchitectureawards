@@ -171,8 +171,7 @@ Thank you!`;
                 <ArrowRight className="h-4 w-4" />
               </a>
               <p className="mt-3 text-[11px] text-white/50 text-center font-mono uppercase tracking-widest">
-                Secure checkout by Stripe · Please note the selected finish
-                (<strong className="text-white">{variant.name}</strong>) in the engraving field
+                Secure checkout by Stripe · Finish and engraving confirmed on the next page
               </p>
 
               <a
