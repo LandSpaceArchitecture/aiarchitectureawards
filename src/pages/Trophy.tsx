@@ -42,11 +42,8 @@ I'd like to order the Official Winner Trophy.
 
 Finish: ${variant.name}
 
-Engraving details:
-• Project title:
-• Recipient name(s):
-• Award (rank / category / shortlist):
-• Certificate ID (AIAA-2026-...):
+Engraving — name(s) on trophy:
+•
 
 Shipping address:
 • Full name:
@@ -189,8 +186,8 @@ Thank you!`;
                 Personalised engraving
               </div>
               <p className="text-sm text-white/70 leading-relaxed">
-                Each trophy is UV-printed with the recipient's name (or team members), project
-                title, category or rank, and the year 2026.
+                Each trophy is UV-printed with the recipient's name (or team members' names) under
+                the standard "AI Architecture Awards 2026" header.
               </p>
             </div>
             <div>
@@ -244,10 +241,7 @@ Thank you!`;
               <div>
                 <div className="font-bold text-base mb-1">Fill in your engraving details</div>
                 <ul className="text-sm text-white/60 space-y-1 list-disc pl-5">
-                  <li>Project title (exactly as you want it engraved)</li>
-                  <li>Name(s) of the recipient(s)</li>
-                  <li>Your award: rank / category / shortlist</li>
-                  <li>Your Certificate ID (e.g. AIAA-2026-01)</li>
+                  <li>Name(s) of the recipient(s) on trophy</li>
                 </ul>
               </div>
             </li>
