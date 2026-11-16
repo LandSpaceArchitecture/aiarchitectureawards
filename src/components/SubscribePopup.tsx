@@ -56,7 +56,7 @@ export default function SubscribePopup() {
           apikey: anonKey,
           Authorization: `Bearer ${anonKey}`,
           "Content-Type": "application/json",
-          Prefer: "return=minimal,resolution=ignore-duplicates",
+          Prefer: "return=minimal",
         },
         body: JSON.stringify({ email: addr, source: "popup" }),
       });
