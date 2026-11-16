@@ -12,6 +12,11 @@ type Winner = {
   rank?: number;
   category?: string;
   shortlist?: boolean;
+  faculty?: boolean;
+  academic_title?: string;
+  department?: string;
+  institution?: string;
+  supervised?: Array<{ title: string; members: string; award: string }>;
 };
 
 const WINNERS: Winner[] = [
@@ -60,6 +65,28 @@ const WINNERS: Winner[] = [
   { slug: "w-houston-st-renovation", cert_id: "AIAA-2026-SL25", project_id: "84f08c64-fe93-41e7-b5e4-b26bff97fa6d", project_title: "W Houston St Renovation", author_name: "Jenny Han", country: "United States", shortlist: true },
   { slug: "where-home-meets-the-flyway", cert_id: "AIAA-2026-SL27", project_id: "e2494ee3-5c18-4afe-af13-4598774b0501", project_title: "Where Home Meets the Flyway: A Shared Landscape for Migratory Birds and Villagers along Poyang Lake's Wetland Edge", author_name: "Yuwei Gao", country: "China", shortlist: true },
   { slug: "work-to-play", cert_id: "AIAA-2026-SL28", project_id: "402c44db-ef0e-4a00-9b21-7fd9e256fa48", project_title: "Work to Play", author_name: "María Cuellar", country: "Colombia", shortlist: true },
+
+  // ── Faculty Advisor Certificates ─────────────────────────────────────────
+  {
+    slug: "youngho-kim",
+    cert_id: "AIAA-2026-FA01",
+    project_id: "",
+    project_title: "Faculty Advisor — Hanyang Women's University",
+    author_name: "Youngho Kim",
+    country: "Korea, South",
+    faculty: true,
+    academic_title: "Assistant Professor",
+    department: "Department of Interior Design",
+    institution: "Hanyang Women's University",
+    supervised: [
+      { title: "beneath the still water", members: "Eunjin Choi", award: "2nd Place Overall" },
+      { title: "THE HOUSE THAT NEVER EXISTED", members: "Im Jiwon · Ryu Eunbee", award: "3rd Place Overall" },
+      { title: "DANCHEONG, REFRACTED", members: "Eunjeong Kim · Hyunbin Do · Gyuri Park", award: "4th Place Overall" },
+      { title: "The Landscape Remembers", members: "Gwon Ye Rim", award: "6th Place Overall" },
+      { title: "THE LAST VOICE — Memorial for The Livonian Language", members: "Jihyeon Yoon · Yumin Kim", award: "8th Place Overall" },
+      { title: "AFTER BREATH", members: "Hyunbin Do · Eunjeong Kim · Gyuri Park", award: "Landscape Recognition" },
+    ],
+  },
 ];
 
 const SITE_ORIGIN = "https://aiarchitectureawards.com";
@@ -79,8 +106,16 @@ export default function Certificate() {
   const winner = useMemo(() => WINNERS.find((w) => w.slug === slug), [slug]);
 
   usePageMeta({
-    title: winner ? `${winner.author_name} — Winner Certificate` : "Certificate",
-    description: winner ? `Official AI Architecture Awards 2026 recognition certificate for ${winner.project_title}.` : "AI Architecture Awards 2026 certificate.",
+    title: winner
+      ? winner.faculty
+        ? `${winner.author_name} — Faculty Advisor Certificate`
+        : `${winner.author_name} — Winner Certificate`
+      : "Certificate",
+    description: winner
+      ? winner.faculty
+        ? `Official AI Architecture Awards 2026 Faculty Advisor certificate for ${winner.author_name}, ${winner.institution}.`
+        : `Official AI Architecture Awards 2026 recognition certificate for ${winner.project_title}.`
+      : "AI Architecture Awards 2026 certificate.",
     canonicalPath: slug ? `/certificate/${slug}` : "/certificate",
   });
 
@@ -99,7 +134,9 @@ export default function Certificate() {
   }
 
   const rl = rankLabel(winner);
-  const verifyUrl = `${SITE_ORIGIN}/project/${winner.project_id || ""}`;
+  const verifyUrl = winner.faculty
+    ? `${SITE_ORIGIN}/certificate/${winner.slug}`
+    : `${SITE_ORIGIN}/project/${winner.project_id || ""}`;
   const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(verifyUrl)}&margin=0`;
 
   return (
@@ -201,7 +238,7 @@ export default function Certificate() {
           <div className="flex items-start justify-between">
             <div>
               <div className="font-mono text-[9px] uppercase tracking-[0.5em] text-black/40 mb-3">
-                CERTIFICATE OF RECOGNITION
+                {winner.faculty ? "FACULTY ADVISOR CERTIFICATE" : "CERTIFICATE OF RECOGNITION"}
               </div>
               <img
                 src="/aiaa-logo.png"
@@ -222,53 +259,106 @@ export default function Certificate() {
           </div>
 
           {/* Body */}
-          <div className="mt-14 text-center">
-            <div className="font-mono text-[10px] uppercase tracking-[0.5em] text-black/40">
-              This certifies that
-            </div>
+          {winner.faculty ? (
+            <div className="mt-8 text-center">
+              <div className="font-mono text-[10px] uppercase tracking-[0.5em] text-black/40">
+                This is to formally recognise
+              </div>
 
-            {/* Author name with flanking rules */}
-            <div className="mt-7 flex items-center justify-center gap-6">
-              <span className="h-px flex-shrink-0 bg-black/30" style={{ width: 60 }} />
-              <h1
-                className="font-bold uppercase tracking-tight leading-[0.95]"
-                style={{ fontSize: winner.author_name.length > 30 ? 40 : 56 }}
-              >
-                {winner.author_name}
-              </h1>
-              <span className="h-px flex-shrink-0 bg-black/30" style={{ width: 60 }} />
-            </div>
+              <div className="mt-4 flex items-center justify-center gap-6">
+                <span className="h-px flex-shrink-0 bg-black/30" style={{ width: 60 }} />
+                <h1 className="font-bold uppercase tracking-tight leading-[0.95]" style={{ fontSize: 48 }}>
+                  {winner.author_name}
+                </h1>
+                <span className="h-px flex-shrink-0 bg-black/30" style={{ width: 60 }} />
+              </div>
 
-            <div className="mt-3 font-mono text-[10px] uppercase tracking-[0.4em] text-black/50">
-              {winner.country}
-            </div>
+              <div className="mt-3 font-mono text-[10px] uppercase tracking-[0.4em] text-black/60">
+                {winner.academic_title} · {winner.department}
+              </div>
+              <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.4em] text-black/50">
+                {winner.institution} · {winner.country}
+              </div>
 
-            <div className="mt-9 font-mono text-[10px] uppercase tracking-[0.5em] text-black/40">
-              is hereby awarded
-            </div>
+              <div className="mt-5 font-mono text-[10px] uppercase tracking-[0.5em] text-black/40">
+                as Faculty Advisor to the following award-winning works
+              </div>
+              <div className="font-mono text-[10px] uppercase tracking-[0.4em] text-black/50">
+                at the AI Architecture Awards 2026
+              </div>
 
-            {/* Award block */}
-            <div className="mt-5 space-y-2 inline-block">
-              {rl && (
-                <div className="text-2xl md:text-[26px] font-bold uppercase tracking-tight">
-                  {rl}
-                </div>
-              )}
-              {winner.category && (
-                <div className="text-lg md:text-xl font-bold uppercase tracking-tight text-black/70">
-                  {winner.category} · CATEGORY RECOGNITION
-                </div>
-              )}
+              <div className="mt-4 mx-auto text-left" style={{ maxWidth: 820 }}>
+                <ol className="space-y-[4px]">
+                  {winner.supervised!.map((s, i) => (
+                    <li key={i} className="flex items-baseline gap-3 border-b border-black/10 pb-[4px]">
+                      <span className="font-mono text-[9px] text-black/40 w-5 flex-shrink-0">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-[12px] font-bold uppercase tracking-tight leading-tight">
+                          {s.title}
+                        </div>
+                        <div className="font-mono text-[9px] text-black/55 mt-[1px]">
+                          {s.members}
+                        </div>
+                      </div>
+                      <div className="font-mono text-[9px] uppercase tracking-[0.15em] text-black/70 text-right flex-shrink-0 whitespace-nowrap">
+                        {s.award}
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </div>
             </div>
+          ) : (
+            <div className="mt-14 text-center">
+              <div className="font-mono text-[10px] uppercase tracking-[0.5em] text-black/40">
+                This certifies that
+              </div>
 
-            <div className="mt-9 font-mono text-[10px] uppercase tracking-[0.5em] text-black/40">
-              for the project
-            </div>
+              {/* Author name with flanking rules */}
+              <div className="mt-7 flex items-center justify-center gap-6">
+                <span className="h-px flex-shrink-0 bg-black/30" style={{ width: 60 }} />
+                <h1
+                  className="font-bold uppercase tracking-tight leading-[0.95]"
+                  style={{ fontSize: winner.author_name.length > 30 ? 40 : 56 }}
+                >
+                  {winner.author_name}
+                </h1>
+                <span className="h-px flex-shrink-0 bg-black/30" style={{ width: 60 }} />
+              </div>
 
-            <div className="mt-4 text-lg md:text-xl italic font-medium leading-snug max-w-[800px] mx-auto">
-              「 {winner.project_title} 」
+              <div className="mt-3 font-mono text-[10px] uppercase tracking-[0.4em] text-black/50">
+                {winner.country}
+              </div>
+
+              <div className="mt-9 font-mono text-[10px] uppercase tracking-[0.5em] text-black/40">
+                is hereby awarded
+              </div>
+
+              {/* Award block */}
+              <div className="mt-5 space-y-2 inline-block">
+                {rl && (
+                  <div className="text-2xl md:text-[26px] font-bold uppercase tracking-tight">
+                    {rl}
+                  </div>
+                )}
+                {winner.category && (
+                  <div className="text-lg md:text-xl font-bold uppercase tracking-tight text-black/70">
+                    {winner.category} · CATEGORY RECOGNITION
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-9 font-mono text-[10px] uppercase tracking-[0.5em] text-black/40">
+                for the project
+              </div>
+
+              <div className="mt-4 text-lg md:text-xl italic font-medium leading-snug max-w-[800px] mx-auto">
+                「 {winner.project_title} 」
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Footer */}
           <div className="absolute left-0 right-0 bottom-0 px-[70px] pb-12">
@@ -328,10 +418,10 @@ export default function Certificate() {
       <div className="print:hidden mx-auto max-w-[1100px] px-6 mt-10 space-y-8">
         <div>
           <div className="font-mono text-[9px] uppercase tracking-[0.4em] text-black/40 mb-3">
-            Winners · {WINNERS.filter(w => !w.shortlist).length} certificates
+            Winners · {WINNERS.filter(w => !w.shortlist && !w.faculty).length} certificates
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-            {WINNERS.filter(w => !w.shortlist).map((w) => (
+            {WINNERS.filter(w => !w.shortlist && !w.faculty).map((w) => (
               <Link
                 key={w.slug}
                 to={`/certificate/${w.slug}`}
@@ -360,6 +450,25 @@ export default function Certificate() {
             ))}
           </div>
         </div>
+        {WINNERS.some(w => w.faculty) && (
+          <div>
+            <div className="font-mono text-[9px] uppercase tracking-[0.4em] text-black/40 mb-3">
+              Faculty Advisors · {WINNERS.filter(w => w.faculty).length} certificates
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              {WINNERS.filter(w => w.faculty).map((w) => (
+                <Link
+                  key={w.slug}
+                  to={`/certificate/${w.slug}`}
+                  className={`border border-black/10 px-3 py-2 text-[11px] font-medium hover:bg-black hover:text-white transition-colors ${w.slug === slug ? "bg-black text-white" : ""}`}
+                >
+                  <span className="font-mono text-[9px] text-black/40 mr-2">{w.cert_id}</span>
+                  {w.author_name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <style>{`
