@@ -29,7 +29,7 @@ export default function Navbar() {
           <Link to="/" className="flex items-center">
             <div className="flex flex-col leading-none">
               <span className="text-lg font-bold tracking-tighter uppercase">AI Architecture</span>
-              <span className="text-[9px] font-medium tracking-widest uppercase text-gray-500">Awards 2026</span>
+              <span className="text-[9px] font-medium tracking-widest uppercase text-gray-500">Awards 2027</span>
             </div>
           </Link>
 

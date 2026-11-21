@@ -191,6 +191,83 @@ function CustomCursor() {
   );
 }
 
+function HeroEmailCapture() {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
+  const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [error, setError] = useState<string | null>(null);
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const addr = email.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(addr)) {
+      setError("Please enter a valid email address.");
+      setStatus("error");
+      return;
+    }
+    setStatus("loading");
+    setError(null);
+    try {
+      const res = await fetch(`${supabaseUrl}/rest/v1/subscribers`, {
+        method: "POST",
+        headers: {
+          apikey: anonKey,
+          Authorization: `Bearer ${anonKey}`,
+          "Content-Type": "application/json",
+          Prefer: "return=minimal",
+        },
+        body: JSON.stringify({ email: addr, source: "hero_2027" }),
+      });
+      if (!res.ok && res.status !== 409) {
+        const txt = await res.text();
+        throw new Error(`${res.status}: ${txt}`);
+      }
+      setStatus("success");
+      setEmail("");
+    } catch (err: any) {
+      setStatus("error");
+      setError(err?.message || "Something went wrong. Please try again.");
+    }
+  };
+
+  if (status === "success") {
+    return (
+      <div className="flex items-center justify-center gap-3 border border-black bg-black text-white px-6 py-5">
+        <span className="text-sm font-bold uppercase tracking-[0.2em]">You're on the list.</span>
+        <span className="text-xs text-white/60">We'll be in touch the moment 2027 opens.</span>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={submit} className="flex flex-col sm:flex-row items-stretch gap-0 sm:gap-0 border border-black bg-white">
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => { setEmail(e.target.value); if (status === "error") setStatus("idle"); }}
+        placeholder="your@email.com"
+        aria-label="Email address"
+        className="flex-1 px-5 py-4 bg-transparent text-sm md:text-base outline-none placeholder:text-black/30 border-b sm:border-b-0 sm:border-r border-black/10"
+        required
+        disabled={status === "loading"}
+      />
+      <button
+        type="submit"
+        disabled={status === "loading"}
+        className="bg-black text-white px-8 py-4 text-xs font-bold uppercase tracking-[0.3em] transition-colors hover:bg-gray-800 disabled:opacity-60 disabled:cursor-not-allowed whitespace-nowrap"
+      >
+        {status === "loading" ? "Submitting…" : "Notify Me"}
+      </button>
+      {status === "error" && error && (
+        <div className="absolute mt-20 text-[11px] text-red-600 uppercase tracking-[0.15em] w-full text-center">
+          {error}
+        </div>
+      )}
+    </form>
+  );
+}
+
 export default function Home() {
   const { user } = useAuth();
   const submitPath = user ? "/submit" : "/login?redirect=/submit";
@@ -207,8 +284,8 @@ export default function Home() {
   }, []);
 
   usePageMeta({
-    title: "AI Architecture Awards 2026 — Global Recognition for AI-Driven Design",
-    description: "Submit your AI-driven architecture, landscape, urban, interior, visualization, and animation work to the 2026 AI Architecture Awards. Open for entries until September 15, 2026.",
+    title: "AI Architecture Awards 2027 — Coming Soon",
+    description: "The 2027 AI Architecture Awards are coming soon. Join our list to be the first to hear when submissions open.",
     canonicalPath: "/",
   });
 
@@ -219,53 +296,16 @@ export default function Home() {
       </div>
       <div className="grainy-overlay" />
       
-      {/* Hero Section */}
-      <section 
+      {/* Hero Section — 2027 Coming Soon */}
+      <section
         className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden hairline-grid"
       >
-        {/* Top Left Title */}
-        <div className="absolute top-6 left-6 md:top-12 md:left-12 z-30 max-w-[90vw] md:max-w-4xl pointer-events-none">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="monospace-label mb-4"
-            >
-              SYSTEM.INIT / 2026
-            </motion.div>
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.4 }}
-              className="text-5xl sm:text-7xl md:text-[10rem] font-bold uppercase tracking-tighter leading-[0.85] text-black"
-            >
-              AI <br />
-              ARCHITECTURE. <br />
-              <span className="text-black/20">AWARDS</span>
-            </motion.h1>
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="mt-6 md:mt-8 flex items-center space-x-4 md:space-x-6"
-            >
-              <div className="h-[1px] w-16 md:w-24 bg-black/20" />
-              <span className="monospace-label">NEURAL_SYNTHESIS // 01</span>
-            </motion.div>
-          </motion.div>
-        </div>
-
-        {/* Central Kinetic Model Container */}
-        <motion.div 
+        {/* Central Kinetic Model Container — background */}
+        <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 1.5, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="relative w-full h-screen flex items-center justify-center z-10"
+          animate={{ opacity: 0.35, scale: 1, y: 0 }}
+          transition={{ duration: 1.5, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute inset-0 flex items-center justify-center z-0"
         >
           <div className="w-full h-full">
             <CanvasErrorBoundary>
@@ -280,38 +320,78 @@ export default function Home() {
           </div>
         </motion.div>
 
-        {/* Centered CTA — AI Tools used by the 2026 shortlist */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.5, delay: 1.2 }}
-          className="absolute left-1/2 bottom-24 md:bottom-28 z-30 -translate-x-1/2 flex flex-col items-center space-y-4 pointer-events-none"
-        >
-          <div className="monospace-label text-center">2026 Winners · Announced</div>
-          <Link
-            to="/aitools"
-            className="pointer-events-auto flex items-center gap-3 bg-black px-10 py-5 text-xs font-bold uppercase tracking-[0.3em] text-white transition-all hover:bg-gray-800 hover:scale-[1.03]"
-          >
-            <Sparkles className="h-4 w-4" />
-            <span>AI Tools</span>
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-          <div className="text-[9px] uppercase tracking-[0.4em] text-black/40">Behind the Shortlist</div>
-        </motion.div>
-
-        {/* Status strip — bottom right (desktop only) */}
-        <div className="hidden md:block absolute bottom-12 right-12 z-30 text-right max-w-xs">
+        {/* Centered 2027 Announcement + Email Capture */}
+        <div className="relative z-30 w-full max-w-6xl px-6 flex flex-col items-center text-center pointer-events-none">
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1.5, delay: 1.4 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="monospace-label mb-6"
           >
-            <div className="monospace-label mb-2">STATUS.ACTIVE</div>
-            <p className="text-[10px] uppercase tracking-widest text-black/60 leading-relaxed">
-              The global platform for recognizing excellence in design facilitated by machine intelligence.
-            </p>
+            SYSTEM.INIT / 2027 · COMING SOON
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.4 }}
+            className="font-bold uppercase tracking-tighter leading-[0.9] text-black"
+            style={{ fontSize: "clamp(2.75rem, 10.5vw, 9rem)" }}
+          >
+            AI ARCHITECTURE <br />
+            <span className="text-black/20">AWARDS</span> <span>2027</span>
+          </motion.h1>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.6 }}
+            className="mt-6 md:mt-8 flex items-center gap-4 md:gap-6"
+          >
+            <div className="h-[1px] w-12 md:w-20 bg-black/30" />
+            <span className="monospace-label text-black/60">THE 2027 EDITION · COMING SOON</span>
+            <div className="h-[1px] w-12 md:w-20 bg-black/30" />
+          </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.8 }}
+            className="mt-8 md:mt-10 max-w-2xl text-sm md:text-base text-black/70 leading-relaxed"
+          >
+            Submissions for the 2027 AI Architecture Awards open soon.
+            Leave your email to be the first to hear when entries go live,
+            and to receive early-bird pricing access ahead of the public launch.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 1.0 }}
+            className="mt-8 md:mt-10 w-full max-w-xl pointer-events-auto"
+          >
+            <HeroEmailCapture />
+            <div className="mt-4 text-[10px] uppercase tracking-[0.3em] text-black/40">
+              No spam · Unsubscribe anytime · One email when 2027 opens
+            </div>
           </motion.div>
         </div>
+
+        {/* 2026 winners link — subtle, bottom right */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1.4 }}
+          className="absolute bottom-6 right-6 md:bottom-8 md:right-10 z-30"
+        >
+          <Link
+            to="/winners"
+            className="flex items-center gap-2 text-[10px] md:text-xs uppercase tracking-[0.35em] text-black/50 hover:text-black transition-colors"
+          >
+            <span>View the 2026 winners</span>
+            <ArrowRight className="h-3 w-3" />
+          </Link>
+        </motion.div>
       </section>
 
       {/* Flowing Sections */}
