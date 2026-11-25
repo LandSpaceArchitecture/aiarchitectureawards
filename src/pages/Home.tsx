@@ -208,6 +208,9 @@ function HeroEmailCapture() {
     }
     setStatus("loading");
     setError(null);
+    const sParam = new URLSearchParams(window.location.search).get("s") || "";
+    const sClean = sParam.replace(/[^a-z0-9_-]/gi, "").slice(0, 32);
+    const source = sClean ? `hero_2027_${sClean}` : "hero_2027";
     try {
       const res = await fetch(`${supabaseUrl}/rest/v1/subscribers`, {
         method: "POST",
@@ -217,7 +220,7 @@ function HeroEmailCapture() {
           "Content-Type": "application/json",
           Prefer: "return=minimal",
         },
-        body: JSON.stringify({ email: addr, source: "hero_2027" }),
+        body: JSON.stringify({ email: addr, source }),
       });
       if (!res.ok && res.status !== 409) {
         const txt = await res.text();
